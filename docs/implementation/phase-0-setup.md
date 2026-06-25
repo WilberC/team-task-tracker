@@ -25,6 +25,29 @@ and the frontend toolchain in place.
 - [ ] Document module creation in the README or a CONTRIBUTING note
 - [ ] Add code quality tooling (e.g. `ruff` for lint/format) and a pre-commit config
 
+## Docker & containers
+
+A `docker-compose` for local development (so devs get PostgreSQL with zero
+setup) and a `Dockerfile` for the app (to make future deployment easy).
+
+### Compose for local dev (database)
+
+- [ ] Add `docker-compose.yml` with a `db` service (PostgreSQL, pinned version)
+- [ ] Use a named volume for data persistence and expose port `5432`
+- [ ] Configure DB credentials/name via env vars matching `.env.example`
+- [ ] Document `docker compose up -d db` as the standard way to start the database
+- [ ] (Optional) add an `adminer`/`pgadmin` service for inspecting the DB
+- [ ] Confirm `migrate` works against the Compose database
+
+### Dockerfile for the app (future deployment)
+
+- [ ] Add a `Dockerfile` building the app with `uv` (multi-stage: build deps → slim runtime)
+- [ ] Build frontend assets (`pnpm` build) in the image and run `collectstatic`
+- [ ] Run via an ASGI server (for optional Channels) as a non-root user
+- [ ] Add a `.dockerignore` (`.git`, `node_modules`, `.venv`, build artifacts, `.env`)
+- [ ] (Optional) add an `app` service to `docker-compose.yml` for full local stack runs
+- [ ] Confirm the image builds and serves the base page
+
 ## Frontend toolchain
 
 - [ ] Initialize `pnpm` and the frontend build (e.g. Vite or esbuild)
@@ -43,6 +66,8 @@ and the frontend toolchain in place.
 
 ## Definition of done
 
+- [ ] `docker compose up -d db` starts PostgreSQL and the app connects to it
 - [ ] `uv run python manage.py runserver` serves a styled base page
 - [ ] Admin login works against PostgreSQL
 - [ ] `pnpm` build produces CSS/JS picked up by `base.html`
+- [ ] The app `Dockerfile` builds successfully
