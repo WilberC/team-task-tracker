@@ -366,11 +366,20 @@ button {
   grid-template-columns: repeat(3, minmax(0, 180px));
 }
 
+.summary-strip--dashboard {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
 .summary-strip article {
   padding: 16px;
   border: 1px solid var(--steel-200);
   border-radius: 2px;
   background: var(--paper-pure);
+}
+
+.summary-strip article.summary-card--alert {
+  border-color: var(--danger-soft);
+  background: var(--danger-soft);
 }
 
 .summary-strip__value,
@@ -1059,6 +1068,93 @@ tbody tr:last-child td {
   font-weight: 800;
 }
 
+.report-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 18px;
+  align-items: start;
+}
+
+.report-card {
+  display: grid;
+  gap: 14px;
+}
+
+.report-card--wide {
+  grid-column: 1 / -1;
+}
+
+.report-card h2 {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: 24px;
+}
+
+.report-note {
+  margin: 0;
+  color: var(--steel-600);
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 1.5;
+}
+
+.report-number {
+  display: block;
+  font-family: var(--font-display);
+  font-size: 48px;
+  line-height: 1;
+}
+
+.status-stack,
+.workload-list {
+  display: grid;
+  gap: 10px;
+}
+
+.status-row,
+.workload-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 10px 12px;
+  border: 1px solid var(--steel-100);
+  border-radius: 2px;
+  background: var(--paper-elevated);
+}
+
+.status-row > strong,
+.workload-row > strong {
+  min-width: 36px;
+  font-family: var(--font-display);
+  font-size: 24px;
+  text-align: right;
+}
+
+.workload-row span {
+  display: grid;
+  gap: 3px;
+}
+
+.workload-row small {
+  color: var(--steel-600);
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.compliance-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.compliance-grid > div {
+  padding: 16px;
+  border: 1px solid var(--steel-100);
+  border-radius: 2px;
+  background: var(--paper-elevated);
+}
+
 @media (max-width: 860px) {
   .site-header__inner {
     align-items: flex-start;
@@ -1091,6 +1187,12 @@ tbody tr:last-child td {
   }
 
   .summary-strip--three {
+    grid-template-columns: 1fr;
+  }
+
+  .summary-strip--dashboard,
+  .report-grid,
+  .compliance-grid {
     grid-template-columns: 1fr;
   }
 

@@ -1,0 +1,124 @@
+{% extends "base.html" %}
+
+{% block title %}Reportes | Jawinsa Repara{% endblock %}
+
+{% block content %}
+  <header class="page-header">
+    <p class="eyebrow">LECTURA OPERATIVA</p>
+    <h1>Reportes</h1>
+    <p class="page-intro">Cinco agregaciones de tareas para revisar estado, vencimientos, carga, productividad y cumplimiento.</p>
+  </header>
+
+  <form class="filter-panel" method="get" action="{% url 'reports:index' %}">
+    <div class="form-field">
+      <label for="start-date">Desde</label>
+      <input id="start-date" type="date" name="start_date" value="{{ start_date|date:'Y-m-d' }}">
+    </div>
+    <div class="form-field">
+      <label for="end-date">Hasta</label>
+      <input id="end-date" type="date" name="end_date" value="{{ end_date|date:'Y-m-d' }}">
+    </div>
+    <button class="button button--primary" type="submit">
+      <span data-lucide="filter" aria-hidden="true"></span>
+      Actualizar
+    </button>
+  </form>
+
+  <section class="report-grid">
+    <article class="detail-card report-card">
+      <h2>1. Tareas por estado</h2>
+      <p class="report-note">Cantidad total de tareas agrupadas por estado operativo.</p>
+      <div class="status-stack">
+        {% for item in status_counts %}
+          <div class="status-row">
+            <span class="status-badge status-badge--{{ item.status }}">{{ item.label }}</span>
+            <strong>{{ item.count }}</strong>
+          </div>
+        {% endfor %}
+      </div>
+    </article>
+
+    <article class="detail-card report-card">
+      <h2>2. Tareas vencidas</h2>
+      <p class="report-note">Trabajos que pasaron su fecha limite y siguen abiertos.</p>
+      <strong class="report-number">{{ overdue_tasks|length }}</strong>
+      {% if overdue_tasks %}
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Tarea</th>
+                <th>Vehiculo</th>
+                <th>Fecha limite</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for task in overdue_tasks %}
+                <tr>
+                  <td><strong>{{ task.title }}</strong></td>
+                  <td>{% if task.job_order %}{{ task.job_order.vehicle.plate }}{% else %}<span class="muted">Subtarea</span>{% endif %}</td>
+                  <td>{{ task.due_date|date:"d/m/Y" }}</td>
+                </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      {% endif %}
+    </article>
+
+    <article class="detail-card report-card">
+      <h2>3. Carga por mecanico o equipo</h2>
+      <p class="report-note">Tareas abiertas asignadas a cada responsable.</p>
+      {% if workload %}
+        <div class="workload-list">
+          {% for item in workload %}
+            <div class="workload-row">
+              <span>
+                <strong>{{ item.assignee }}</strong>
+                <small>{{ item.kind }}</small>
+              </span>
+              <strong>{{ item.count }}</strong>
+            </div>
+          {% endfor %}
+        </div>
+      {% else %}
+        <p class="muted">No hay tareas abiertas asignadas.</p>
+      {% endif %}
+    </article>
+
+    <article class="detail-card report-card">
+      <h2>4. Productividad por area</h2>
+      <p class="report-note">Tareas completadas por area dentro del rango seleccionado.</p>
+      {% if productivity %}
+        <div class="workload-list">
+          {% for item in productivity %}
+            <div class="workload-row">
+              <span><strong>{{ item.area }}</strong></span>
+              <strong>{{ item.completed }}</strong>
+            </div>
+          {% endfor %}
+        </div>
+      {% else %}
+        <p class="muted">No hay tareas completadas en este rango.</p>
+      {% endif %}
+    </article>
+
+    <article class="detail-card report-card report-card--wide">
+      <h2>5. Cumplimiento de fechas</h2>
+      <p class="report-note">Porcentaje de tareas completadas a tiempo frente a tareas completadas tarde.</p>
+      <div class="compliance-grid">
+        <div>
+          <strong class="report-number">{{ deadline.on_time_percent }}%</strong>
+          <span class="summary-strip__label">A tiempo ({{ deadline.on_time_count }})</span>
+        </div>
+        <div>
+          <strong class="report-number">{{ deadline.late_percent }}%</strong>
+          <span class="summary-strip__label">Tarde ({{ deadline.late_count }})</span>
+        </div>
+      </div>
+      <div class="progress-bar" aria-label="Porcentaje completado a tiempo">
+        <span style="width: {{ deadline.on_time_percent }}%;"></span>
+      </div>
+    </article>
+  </section>
+{% endblock %}

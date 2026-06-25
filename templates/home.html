@@ -49,6 +49,20 @@
         <small>Trabajos, subtareas, responsables y vencimientos.</small>
       </span>
     </a>
+    <a class="module-card" href="{% url 'dashboard:index' %}">
+      <span class="module-card__icon" data-lucide="layout-dashboard" aria-hidden="true"></span>
+      <span>
+        <strong>Dashboard</strong>
+        <small>Resumen de vehiculos, tareas criticas y carga activa.</small>
+      </span>
+    </a>
+    <a class="module-card" href="{% url 'reports:index' %}">
+      <span class="module-card__icon" data-lucide="chart-column" aria-hidden="true"></span>
+      <span>
+        <strong>Reportes</strong>
+        <small>Estado, vencimientos, carga, productividad y cumplimiento.</small>
+      </span>
+    </a>
     <a class="module-card" href="{% url 'areas:list' %}">
       <span class="module-card__icon" data-lucide="warehouse" aria-hidden="true"></span>
       <span>

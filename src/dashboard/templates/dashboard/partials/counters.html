@@ -1,0 +1,26 @@
+<section
+  id="dashboard-counters"
+  class="summary-strip summary-strip--dashboard"
+  hx-get="{% url 'dashboard:index' %}"
+  hx-trigger="every 30s"
+  hx-target="#dashboard-counters"
+  hx-swap="outerHTML"
+  aria-live="polite"
+>
+  <article>
+    <span class="summary-strip__value">{{ snapshot.vehicles_in_shop }}</span>
+    <span class="summary-strip__label">Vehiculos en taller</span>
+  </article>
+  <article>
+    <span class="summary-strip__value">{{ snapshot.active_job_orders }}</span>
+    <span class="summary-strip__label">Ordenes activas</span>
+  </article>
+  <article class="{% if snapshot.overdue_count %}summary-card--alert{% endif %}">
+    <span class="summary-strip__value">{{ snapshot.overdue_count }}</span>
+    <span class="summary-strip__label">Tareas vencidas</span>
+  </article>
+  <article class="{% if snapshot.critical_count %}summary-card--alert{% endif %}">
+    <span class="summary-strip__value">{{ snapshot.critical_count }}</span>
+    <span class="summary-strip__label">Criticas abiertas</span>
+  </article>
+</section>

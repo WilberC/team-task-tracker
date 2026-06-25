@@ -1,0 +1,85 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard | Jawinsa Repara{% endblock %}
+
+{% block content %}
+  <header class="page-header page-header--with-action">
+    <div>
+      <p class="eyebrow">CONTROL OPERATIVO</p>
+      <h1>Dashboard</h1>
+      <p class="page-intro">Resumen del taller, trabajo critico y carga actual por responsable.</p>
+    </div>
+    <div class="button-row">
+      <a class="button button--secondary" href="{% url 'tasks:kanban' %}">
+        <span data-lucide="columns-3" aria-hidden="true"></span>
+        Ver tablero
+      </a>
+      <a class="button button--primary" href="{% url 'reports:index' %}">
+        <span data-lucide="chart-column" aria-hidden="true"></span>
+        Reportes
+      </a>
+    </div>
+  </header>
+
+  {% include "dashboard/partials/counters.html" %}
+
+  <section class="report-grid stack-section">
+    <article class="detail-card">
+      <h2 class="section-title">Tareas por estado</h2>
+      <p class="report-note">Distribucion completa de tareas registradas.</p>
+      <div class="status-stack">
+        {% for item in snapshot.status_counts %}
+          <div class="status-row">
+            <span class="status-badge status-badge--{{ item.status }}">{{ item.label }}</span>
+            <strong>{{ item.count }}</strong>
+          </div>
+        {% endfor %}
+      </div>
+    </article>
+
+    <article class="detail-card">
+      <h2 class="section-title">Responsables activos</h2>
+      <p class="report-note">Carga actual por mecanico o equipo, sin tareas cerradas.</p>
+      {% if snapshot.workload %}
+        <div class="workload-list">
+          {% for item in snapshot.workload %}
+            <div class="workload-row">
+              <span>
+                <strong>{{ item.assignee }}</strong>
+                <small>{{ item.kind }}</small>
+              </span>
+              <strong>{{ item.count }}</strong>
+            </div>
+          {% endfor %}
+        </div>
+      {% else %}
+        <div class="empty-state empty-state--compact">
+          <span data-lucide="users" aria-hidden="true"></span>
+          <h2>Sin carga activa</h2>
+          <p>No hay tareas abiertas asignadas.</p>
+        </div>
+      {% endif %}
+    </article>
+
+    <article class="detail-card">
+      <h2 class="section-title">Carga por area</h2>
+      <p class="report-note">Tareas abiertas agrupadas por linea de trabajo.</p>
+      {% if area_load %}
+        <div class="workload-list">
+          {% for item in area_load %}
+            <div class="workload-row">
+              <span><strong>{{ item.area }}</strong></span>
+              <strong>{{ item.count }}</strong>
+            </div>
+          {% endfor %}
+        </div>
+      {% else %}
+        <div class="empty-state empty-state--compact">
+          <span data-lucide="warehouse" aria-hidden="true"></span>
+          <h2>Sin tareas abiertas</h2>
+          <p>Las areas no tienen trabajo pendiente.</p>
+        </div>
+      {% endif %}
+    </article>
+  </section>
+{% endblock %}

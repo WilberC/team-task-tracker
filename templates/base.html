@@ -27,6 +27,8 @@
             <a href="{% url 'sales:list' %}" {% if request.resolver_match.namespace == "sales" %}aria-current="page"{% endif %}>Ordenes</a>
             <a href="{% url 'workshop:list' %}" {% if request.resolver_match.namespace == "workshop" %}aria-current="page"{% endif %}>Taller</a>
             <a href="{% url 'tasks:list' %}" {% if request.resolver_match.namespace == "tasks" %}aria-current="page"{% endif %}>Tareas</a>
+            <a href="{% url 'dashboard:index' %}" {% if request.resolver_match.namespace == "dashboard" %}aria-current="page"{% endif %}>Dashboard</a>
+            <a href="{% url 'reports:index' %}" {% if request.resolver_match.namespace == "reports" %}aria-current="page"{% endif %}>Reportes</a>
             <a href="{% url 'areas:list' %}" {% if request.resolver_match.namespace == "areas" %}aria-current="page"{% endif %}>Areas</a>
             <a href="{% url 'employees:list' %}" {% if request.resolver_match.namespace == "employees" %}aria-current="page"{% endif %}>Empleados</a>
             <a href="{% url 'teams:list' %}" {% if request.resolver_match.namespace == "teams" %}aria-current="page"{% endif %}>Equipos</a>
