@@ -1,10 +1,11 @@
-# Phase 8 — Quality & deployment
+# Phase 9 — Quality & deployment
 
 [← Back to plan](README.md)
 
 **Goal:** harden the application and ship it.
 
-**Depends on:** all previous phases.
+**Depends on:** all previous phases, including
+[Phase 8](phase-8-user-roles-permissions.md).
 
 ## Testing
 

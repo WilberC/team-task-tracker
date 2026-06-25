@@ -19,14 +19,15 @@ generate job orders — see [Domain](../domain.md).
 | # | Phase | Goal | Status |
 | - | ----- | ---- | ------ |
 | 0 | [Project setup & tooling](phase-0-setup.md) | Repo, Django, PostgreSQL, `src/` layout, frontend tooling | ✅ Done |
-| 1 | [People & organization](phase-1-people.md) | Areas, employees, teams | ☐ Not started |
-| 2 | [Front desk (minimal)](phase-2-front-desk.md) | Clients, vehicles, service orders (Part 1) | ☐ Not started |
-| 3 | [Job orders](phase-3-job-orders.md) | Workshop hub for interned vehicles (Part 2) | ☐ Not started |
-| 4 | [Tasks & subtasks](phase-4-tasks.md) | The core: assignment, lifecycle, progress roll-up (Part 2) | ☐ Not started |
-| 5 | [Kanban board & htmx UI](phase-5-kanban-ui.md) | Drag-and-drop, inline updates, clear UX | ☐ Not started |
-| 6 | [Client status view](phase-6-client-view.md) | Public, read-only vehicle status | ☐ Not started |
-| 7 | [Dashboard & reports](phase-7-dashboard-reports.md) | Summary screen and the five reports | ☐ Not started |
-| 8 | [Quality & deployment](phase-8-quality-deploy.md) | Tests, accessibility, performance, deploy | ☐ Not started |
+| 1 | [People & organization](phase-1-people.md) | Areas, employees, teams | ✅ Done |
+| 2 | [Front desk (minimal)](phase-2-front-desk.md) | Clients, vehicles, service orders (Part 1) | ✅ Done |
+| 3 | [Job orders](phase-3-job-orders.md) | Workshop hub for interned vehicles (Part 2) | ✅ Done |
+| 4 | [Tasks & subtasks](phase-4-tasks.md) | The core: assignment, lifecycle, progress roll-up (Part 2) | ✅ Done |
+| 5 | [Kanban board & htmx UI](phase-5-kanban-ui.md) | Drag-and-drop, inline updates, clear UX | ✅ Done |
+| 6 | [Client status view](phase-6-client-view.md) | Public, read-only vehicle status | ✅ Done |
+| 7 | [Dashboard & reports](phase-7-dashboard-reports.md) | Summary screen and the five reports | ✅ Done |
+| 8 | [User roles & permissions](phase-8-user-roles-permissions.md) | Internal access control and role-gated workflows | ☐ Not started |
+| 9 | [Quality & deployment](phase-9-quality-deploy.md) | Tests, accessibility, performance, deploy | ☐ Not started |
 
 Update the **Status** column as phases progress (e.g. ☐ → 🔄 In progress → ✅ Done).
 
