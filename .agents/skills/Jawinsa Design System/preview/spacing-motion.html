@@ -1,0 +1,43 @@
+<!doctype html>
+<!-- @dsCard group="Spacing" name="Motion" subtitle="Easing + duration tokens (animated)" viewport="700x240" -->
+<html lang="es">
+<head>
+<meta charset="utf-8" />
+<link rel="stylesheet" href="_card.css" />
+<title>Motion</title>
+<style>
+  .track { position: relative; height: 28px; background: #F1F2F5; border-radius: 2px; overflow: hidden; }
+  .ball {
+    position: absolute; left: 0; top: 4px; width: 20px; height: 20px; border-radius: 2px;
+    background: #E8732C;
+    animation-duration: 2.2s;
+    animation-iteration-count: infinite;
+    animation-direction: alternate;
+  }
+  .a-fast    { animation: slide 0.6s cubic-bezier(0.2, 0.8, 0.2, 1) infinite alternate; }
+  .a-base    { animation: slide 1.4s cubic-bezier(0.2, 0.8, 0.2, 1) infinite alternate; }
+  .a-hero    { animation: slide 2.4s cubic-bezier(0.2, 0.8, 0.2, 1) infinite alternate; }
+  @keyframes slide { from { left: 0; } to { left: calc(100% - 20px); } }
+</style>
+</head>
+<body>
+  <div class="row" style="justify-content: space-between;">
+    <div class="label">Motion · easing &amp; durations</div>
+    <div class="mono">--ease-out · --dur-*</div>
+  </div>
+  <div style="display:flex; flex-direction:column; gap:10px;">
+    <div class="col" style="gap:4px;">
+      <div class="row" style="justify-content:space-between;"><span class="mono">--dur-fast · 150ms</span><span class="mono" style="color:#6E7682;">hover, focus</span></div>
+      <div class="track"><div class="ball a-fast"></div></div>
+    </div>
+    <div class="col" style="gap:4px;">
+      <div class="row" style="justify-content:space-between;"><span class="mono">--dur-base · 250ms</span><span class="mono" style="color:#6E7682;">entrances, dropdowns</span></div>
+      <div class="track"><div class="ball a-base"></div></div>
+    </div>
+    <div class="col" style="gap:4px;">
+      <div class="row" style="justify-content:space-between;"><span class="mono">--dur-hero · 800ms</span><span class="mono" style="color:#6E7682;">hero reveal, parallax</span></div>
+      <div class="track"><div class="ball a-hero"></div></div>
+    </div>
+  </div>
+</body>
+</html>

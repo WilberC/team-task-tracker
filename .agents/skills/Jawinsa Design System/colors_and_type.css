@@ -1,0 +1,304 @@
+/* ============================================================
+   Jawinsa Design System — Core Tokens
+   colors · type · spacing · radii · shadows · motion
+   ============================================================ */
+
+/* Webfonts — Google Fonts (substitution; replace if Jawinsa licenses a brand face) */
+@import url("https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700;800;900&family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap");
+
+:root {
+  /* ─── Brand · accent ─────────────────────────────────────── */
+  --accent:           #E8732C;   /* Signal amber — primary accent */
+  --accent-hover:     #D6651F;
+  --accent-press:     #BB5817;
+  --accent-soft:      #FBE7D6;   /* amber wash for backgrounds */
+  --accent-ink:       #4A2208;   /* legible text on amber */
+
+  /* ─── Neutrals · steel scale ─────────────────────────────── */
+  --ink:              #0E1014;   /* near-black, cool steel */
+  --steel-950:        #16191F;
+  --steel-900:        #1F232B;
+  --steel-800:        #2C313A;
+  --steel-700:        #3D434E;
+  --steel-600:        #535A66;
+  --steel-500:        #6E7682;
+  --steel-400:        #8A929E;
+  --steel-300:        #AAB1BB;
+  --steel-200:        #D2D6DD;
+  --steel-100:        #E7EAEE;
+  --steel-50:         #F1F2F5;
+  --paper:            #EFEDE8;   /* soft warm grey background — modern */
+  --paper-elevated:   #FAF8F4;   /* card / floating panel base */
+  --paper-pure:       #FFFFFF;   /* pure white for high-contrast cards */
+
+  /* ─── Foreground tokens (light surface) ──────────────────── */
+  --fg-1:             var(--ink);          /* primary text */
+  --fg-2:             var(--steel-700);    /* secondary text */
+  --fg-3:             var(--steel-500);    /* tertiary, captions */
+  --fg-mute:          var(--steel-400);    /* placeholders, disabled */
+  --fg-invert:        var(--paper);
+
+  /* ─── Background tokens (light surface) ──────────────────── */
+  --bg-1:             var(--paper);
+  --bg-2:             var(--paper-elevated);
+  --bg-3:             var(--steel-50);
+  --bg-overlay:       rgb(14 16 20 / 0.48);
+
+  /* ─── Borders ────────────────────────────────────────────── */
+  --border-1:         var(--steel-200);
+  --border-2:         var(--steel-300);
+  --border-strong:    var(--steel-800);
+  --border-accent:    var(--accent);
+
+  /* ─── Semantic colors (desaturated, steel-shifted) ───────── */
+  --success:          #2E8463;
+  --success-soft:     #DCEEE5;
+  --warning:          #C48312;
+  --warning-soft:     #F6EAD0;
+  --danger:           #B53A2E;
+  --danger-soft:      #F3D9D5;
+  --info:             #2B5A86;
+  --info-soft:        #D6E2EE;
+
+  /* ─── Typography · families ──────────────────────────────── */
+  --font-display:     "Archivo", "Helvetica Neue", Arial, sans-serif;
+  --font-body:        "Manrope", "Helvetica Neue", Arial, sans-serif;
+  --font-mono:        "JetBrains Mono", ui-monospace, "SF Mono", Menlo, monospace;
+
+  /* ─── Typography · base scale ────────────────────────────── */
+  --text-xs:          12px;
+  --text-sm:          14px;
+  --text-base:        16px;
+  --text-md:          18px;
+  --text-lg:          20px;
+  --text-xl:          24px;
+  --text-2xl:         32px;
+  --text-3xl:         40px;
+  --text-4xl:         56px;
+  --text-5xl:         72px;
+  --text-6xl:         96px;
+
+  /* ─── Line heights ───────────────────────────────────────── */
+  --leading-tight:    1.05;
+  --leading-snug:     1.2;
+  --leading-normal:   1.5;
+  --leading-relaxed:  1.65;
+
+  /* ─── Letter spacing ─────────────────────────────────────── */
+  --tracking-tight:   -0.02em;
+  --tracking-normal:  0;
+  --tracking-wide:    0.04em;
+  --tracking-eyebrow: 0.18em;   /* for ALL-CAPS eyebrow labels */
+
+  /* ─── Spacing scale (4 px base) ──────────────────────────── */
+  --space-0:          0;
+  --space-1:          4px;
+  --space-2:          8px;
+  --space-3:          12px;
+  --space-4:          16px;
+  --space-5:          20px;
+  --space-6:          24px;
+  --space-8:          32px;
+  --space-10:         40px;
+  --space-12:         48px;
+  --space-16:         64px;
+  --space-20:         80px;
+  --space-24:         96px;
+  --space-32:         128px;
+  --space-40:         160px;
+
+  --max-width:        1280px;
+  --max-width-prose:  720px;
+
+  /* ─── Radii — soft, modern bento ─────────────────────────── */
+  --radius-0:         0;
+  --radius-1:         8px;
+  --radius-2:         12px;       /* small chips / tags */
+  --radius-3:         18px;       /* default card */
+  --radius-4:         24px;       /* large bento card */
+  --radius-5:         32px;       /* hero panel */
+  --radius-pill:      999px;      /* nav pills, chips, badges */
+
+  /* ─── Shadows — soft, diffuse for floating cards ─────────── */
+  --shadow-1:         0 1px 2px rgb(14 16 20 / 0.04),
+                      0 4px 12px -2px rgb(14 16 20 / 0.04);
+  --shadow-2:         0 4px 16px -4px rgb(14 16 20 / 0.08),
+                      0 8px 32px -8px rgb(14 16 20 / 0.06);
+  --shadow-3:         0 16px 48px -8px rgb(14 16 20 / 0.16),
+                      0 32px 80px -16px rgb(14 16 20 / 0.08);
+  --shadow-soft:      0 2px 6px rgb(14 16 20 / 0.03),
+                      0 12px 28px -6px rgb(14 16 20 / 0.06);
+  --shadow-inset:     inset 0 1px 0 rgb(255 255 255 / 0.04);
+
+  /* ─── Motion ─────────────────────────────────────────────── */
+  --ease-in:          cubic-bezier(0.4, 0, 1, 1);
+  --ease-out:         cubic-bezier(0.2, 0.8, 0.2, 1);
+  --ease-inout:       cubic-bezier(0.4, 0, 0.6, 1);
+  --dur-fast:         150ms;
+  --dur-base:         250ms;
+  --dur-slow:         400ms;
+  --dur-hero:         800ms;
+
+  /* ─── Z-index scale ──────────────────────────────────────── */
+  --z-base:           1;
+  --z-sticky:         100;
+  --z-dropdown:       200;
+  --z-overlay:        300;
+  --z-modal:          400;
+  --z-toast:          500;
+}
+
+/* ============================================================
+   Dark surface tokens (full-bleed dark sections, hero)
+   Apply by adding `data-theme="dark"` to a section.
+   ============================================================ */
+[data-theme="dark"] {
+  --fg-1:        var(--paper);
+  --fg-2:        var(--steel-300);
+  --fg-3:        var(--steel-400);
+  --fg-mute:     var(--steel-500);
+  --bg-1:        var(--ink);
+  --bg-2:        var(--steel-900);
+  --bg-3:        var(--steel-800);
+  --border-1:    var(--steel-800);
+  --border-2:    var(--steel-700);
+}
+
+/* ============================================================
+   Base reset + body
+   ============================================================ */
+*, *::before, *::after { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+body {
+  font-family: var(--font-body);
+  font-size: var(--text-base);
+  line-height: var(--leading-normal);
+  color: var(--fg-1);
+  background: var(--bg-1);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+img, svg { display: block; max-width: 100%; }
+button { font: inherit; cursor: pointer; }
+
+/* ============================================================
+   Semantic type styles
+   Use as classes or inherit via :where()
+   ============================================================ */
+
+.h1, h1 {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: clamp(40px, 6vw, 72px);
+  line-height: var(--leading-tight);
+  letter-spacing: var(--tracking-tight);
+  color: var(--fg-1);
+  margin: 0;
+  text-wrap: balance;
+}
+
+.h2, h2 {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: clamp(32px, 4.5vw, 56px);
+  line-height: var(--leading-snug);
+  letter-spacing: var(--tracking-tight);
+  color: var(--fg-1);
+  margin: 0;
+  text-wrap: balance;
+}
+
+.h3, h3 {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: clamp(24px, 2.5vw, 32px);
+  line-height: var(--leading-snug);
+  letter-spacing: var(--tracking-tight);
+  color: var(--fg-1);
+  margin: 0;
+  text-wrap: balance;
+}
+
+.h4, h4 {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 20px;
+  line-height: var(--leading-snug);
+  letter-spacing: 0;
+  color: var(--fg-1);
+  margin: 0;
+}
+
+.eyebrow {
+  font-family: var(--font-body);
+  font-weight: 700;
+  font-size: var(--text-xs);
+  letter-spacing: var(--tracking-eyebrow);
+  text-transform: uppercase;
+  color: var(--fg-2);
+}
+
+.lede, .lead {
+  font-family: var(--font-body);
+  font-weight: 400;
+  font-size: var(--text-md);
+  line-height: var(--leading-relaxed);
+  color: var(--fg-2);
+  text-wrap: pretty;
+}
+
+.p, p {
+  font-family: var(--font-body);
+  font-size: var(--text-base);
+  line-height: var(--leading-relaxed);
+  color: var(--fg-1);
+  margin: 0;
+  text-wrap: pretty;
+}
+
+.small, small {
+  font-family: var(--font-body);
+  font-size: var(--text-sm);
+  line-height: var(--leading-normal);
+  color: var(--fg-2);
+}
+
+.caption {
+  font-family: var(--font-body);
+  font-size: var(--text-xs);
+  line-height: var(--leading-normal);
+  color: var(--fg-3);
+}
+
+.mono, code, kbd, samp {
+  font-family: var(--font-mono);
+  font-size: 0.92em;
+  letter-spacing: 0;
+}
+
+.data {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: clamp(48px, 6vw, 80px);
+  line-height: 1;
+  letter-spacing: var(--tracking-tight);
+  color: var(--fg-1);
+  font-variant-numeric: tabular-nums;
+}
+
+/* Stamped accent underline — signature element */
+.stamped {
+  position: relative;
+  display: inline-block;
+  padding-bottom: 8px;
+}
+.stamped::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 56px;
+  height: 3px;
+  background: var(--accent);
+}

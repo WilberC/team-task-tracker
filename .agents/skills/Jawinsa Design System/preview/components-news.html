@@ -1,0 +1,53 @@
+<!doctype html>
+<!-- @dsCard group="Components" name="News card" subtitle="Blog entry preview" viewport="700x220" -->
+<html lang="es">
+<head>
+<meta charset="utf-8" />
+<link rel="stylesheet" href="_card.css" />
+<title>News card</title>
+<style>
+  .ncard {
+    background:#fff;
+    border:1px solid #D2D6DD;
+    border-radius:2px;
+    display:grid;
+    grid-template-columns: 160px 1fr;
+    overflow:hidden;
+    box-shadow: 0 1px 2px rgb(14 16 20 / 0.06);
+  }
+  .ncover {
+    background:
+      linear-gradient(135deg, #2C313A 0%, #1F232B 100%);
+    position:relative;
+  }
+  .ncover::after {
+    content:""; position:absolute; inset:0;
+    background:
+      radial-gradient(circle at 30% 70%, rgba(232,115,44,0.45), transparent 55%),
+      radial-gradient(circle at 80% 30%, rgba(232,115,44,0.18), transparent 60%);
+  }
+  .nbody { padding: 16px 18px; display:flex; flex-direction:column; gap:8px; }
+  .nmeta { display:flex; gap:10px; align-items:center; font-family:var(--font-mono); font-size:11px; color:#6E7682; }
+  .ncat { font-family:var(--font-body); font-weight:700; font-size:11px; letter-spacing:0.18em; text-transform:uppercase; color:#E8732C; }
+  .ntitle { font-family:var(--font-display); font-weight:700; font-size:20px; line-height:1.2; letter-spacing:-0.02em; color:#0E1014; }
+  .nexc { font-family:var(--font-body); font-size:13px; line-height:1.5; color:#3D434E; }
+  .nread { font-family:var(--font-body); font-weight:700; font-size:12px; color:#0E1014; border-bottom: 2px solid #E8732C; align-self:flex-start; padding-bottom:2px; }
+</style>
+</head>
+<body>
+  <div class="row" style="justify-content: space-between;">
+    <div class="label">News card · blog entry preview</div>
+    <div class="mono">ui/NewsCard</div>
+  </div>
+  <div class="ncard">
+    <div class="ncover"></div>
+    <div class="nbody">
+      <div class="ncat">Mantenimiento</div>
+      <div class="ntitle">Cómo extender la vida útil de un grupo electrógeno en planta</div>
+      <div class="nexc">Cinco rutinas críticas que reducen averías y prolongan operación entre intervenciones mayores.</div>
+      <div class="nmeta"><span>18 May 2026</span><span>·</span><span>4 min de lectura</span></div>
+      <div class="nread">Leer artículo →</div>
+    </div>
+  </div>
+</body>
+</html>

@@ -1,0 +1,35 @@
+<!doctype html>
+<!-- @dsCard group="Colors" name="Surface tokens" subtitle="Foreground / background pairs · light + dark" viewport="700x230" -->
+<html lang="es">
+<head>
+<meta charset="utf-8" />
+<link rel="stylesheet" href="_card.css" />
+<title>Surfaces</title>
+</head>
+<body>
+  <div class="row" style="justify-content: space-between;">
+    <div class="label">Surface tokens · light + dark</div>
+    <div class="mono">--bg-*, --fg-*</div>
+  </div>
+  <div style="display:grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+    <div style="background:#F6F4F0; border:1px solid #D2D6DD; padding:14px; display:flex; flex-direction:column; gap:6px; border-radius:2px;">
+      <div style="font-family: var(--font-display); font-weight:700; font-size:16px; color:#0E1014;">Paper · light</div>
+      <div style="display:flex; flex-direction:column; gap:2px;">
+        <div style="display:flex; justify-content:space-between;"><span style="color:#0E1014; font-size:13px;">Primary text</span><span class="mono">--fg-1</span></div>
+        <div style="display:flex; justify-content:space-between;"><span style="color:#3D434E; font-size:13px;">Secondary text</span><span class="mono">--fg-2</span></div>
+        <div style="display:flex; justify-content:space-between;"><span style="color:#6E7682; font-size:13px;">Tertiary / caption</span><span class="mono">--fg-3</span></div>
+        <div style="display:flex; justify-content:space-between;"><span style="color:#8A929E; font-size:13px;">Muted / placeholder</span><span class="mono">--fg-mute</span></div>
+      </div>
+    </div>
+    <div style="background:#0E1014; border:1px solid #2C313A; padding:14px; display:flex; flex-direction:column; gap:6px; border-radius:2px;">
+      <div style="font-family: var(--font-display); font-weight:700; font-size:16px; color:#F6F4F0;">Graphite · dark</div>
+      <div style="display:flex; flex-direction:column; gap:2px;">
+        <div style="display:flex; justify-content:space-between;"><span style="color:#F6F4F0; font-size:13px;">Primary text</span><span style="font-family:var(--font-mono); font-size:11px; color:#8A929E;">--fg-1</span></div>
+        <div style="display:flex; justify-content:space-between;"><span style="color:#AAB1BB; font-size:13px;">Secondary text</span><span style="font-family:var(--font-mono); font-size:11px; color:#8A929E;">--fg-2</span></div>
+        <div style="display:flex; justify-content:space-between;"><span style="color:#8A929E; font-size:13px;">Tertiary / caption</span><span style="font-family:var(--font-mono); font-size:11px; color:#8A929E;">--fg-3</span></div>
+        <div style="display:flex; justify-content:space-between;"><span style="color:#6E7682; font-size:13px;">Muted / placeholder</span><span style="font-family:var(--font-mono); font-size:11px; color:#8A929E;">--fg-mute</span></div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

@@ -1,0 +1,61 @@
+<!doctype html>
+<!-- @dsCard group="UI Kit — Landing" name="Jawinsa Landing" subtitle="Full landing — hero, services, why, news, contact, footer" viewport="1280x900" -->
+<html lang="es">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Jawinsa · Taller multimarca e industrial</title>
+<link rel="stylesheet" href="kit.css" />
+</head>
+<body>
+  <div id="app"></div>
+
+  <a href="https://wa.me/51999123456" class="wapp" aria-label="WhatsApp">
+    <i data-lucide="message-circle" width="20" height="20" stroke-width="2"></i>
+    WhatsApp
+  </a>
+
+  <script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/lucide@0.475.0/dist/umd/lucide.min.js"></script>
+
+  <script type="text/babel" src="Navbar.jsx"></script>
+  <script type="text/babel" src="Hero.jsx"></script>
+  <script type="text/babel" src="ServiceLines.jsx"></script>
+  <script type="text/babel" src="WhyJawinsa.jsx"></script>
+  <script type="text/babel" src="News.jsx"></script>
+  <script type="text/babel" src="Contact.jsx"></script>
+  <script type="text/babel" src="Footer.jsx"></script>
+
+  <script type="text/babel">
+    const { useEffect } = React;
+
+    function App() {
+      useEffect(() => {
+        const tick = () => window.lucide && window.lucide.createIcons();
+        tick();
+        const t1 = setTimeout(tick, 200);
+        const t2 = setTimeout(tick, 600);
+        const t3 = setTimeout(tick, 1200);
+        return () => { clearTimeout(t1); clearTimeout(t2); clearTimeout(t3); };
+      });
+
+      return (
+        <>
+          <Nav />
+          <Hero />
+          <ServiceLines />
+          <WhyJawinsa />
+          <News />
+          <Contact />
+          <Footer />
+        </>
+      );
+    }
+
+    const root = ReactDOM.createRoot(document.getElementById("app"));
+    root.render(<App />);
+  </script>
+</body>
+</html>

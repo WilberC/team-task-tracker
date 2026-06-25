@@ -1,0 +1,41 @@
+<!doctype html>
+<!-- @dsCard group="Components" name="Iconography · Lucide" subtitle="16-icon starter set @ 24 px / 1.75 stroke" viewport="700x220" -->
+<html lang="es">
+<head>
+<meta charset="utf-8" />
+<link rel="stylesheet" href="_card.css" />
+<title>Iconography</title>
+<style>
+  .ig { display:grid; grid-template-columns: repeat(8, 1fr); gap:14px; align-items:center; }
+  .ig .c { display:flex; flex-direction:column; gap:6px; align-items:center; padding:10px 6px; border:1px solid #E7EAEE; border-radius:2px; background:#fff; }
+  .ig .c svg { color:#0E1014; }
+  .ig .c .n { font-family:var(--font-mono); font-size:10px; color:#6E7682; }
+</style>
+<script src="https://unpkg.com/lucide@0.475.0/dist/umd/lucide.min.js"></script>
+</head>
+<body>
+  <div class="row" style="justify-content: space-between;">
+    <div class="label">Iconography · Lucide (CDN) — 24 px, 1.75 stroke</div>
+    <div class="mono">lucide.dev</div>
+  </div>
+  <div class="ig">
+    <div class="c"><i data-lucide="wrench" width="22" height="22" stroke-width="1.75"></i><span class="n">wrench</span></div>
+    <div class="c"><i data-lucide="car" width="22" height="22" stroke-width="1.75"></i><span class="n">car</span></div>
+    <div class="c"><i data-lucide="truck" width="22" height="22" stroke-width="1.75"></i><span class="n">truck</span></div>
+    <div class="c"><i data-lucide="forklift" width="22" height="22" stroke-width="1.75"></i><span class="n">forklift</span></div>
+    <div class="c"><i data-lucide="zap" width="22" height="22" stroke-width="1.75"></i><span class="n">zap</span></div>
+    <div class="c"><i data-lucide="gauge" width="22" height="22" stroke-width="1.75"></i><span class="n">gauge</span></div>
+    <div class="c"><i data-lucide="cog" width="22" height="22" stroke-width="1.75"></i><span class="n">cog</span></div>
+    <div class="c"><i data-lucide="droplet" width="22" height="22" stroke-width="1.75"></i><span class="n">droplet</span></div>
+    <div class="c"><i data-lucide="phone" width="22" height="22" stroke-width="1.75"></i><span class="n">phone</span></div>
+    <div class="c"><i data-lucide="map-pin" width="22" height="22" stroke-width="1.75"></i><span class="n">map-pin</span></div>
+    <div class="c"><i data-lucide="clock" width="22" height="22" stroke-width="1.75"></i><span class="n">clock</span></div>
+    <div class="c"><i data-lucide="shield-check" width="22" height="22" stroke-width="1.75"></i><span class="n">shield</span></div>
+    <div class="c"><i data-lucide="badge-check" width="22" height="22" stroke-width="1.75"></i><span class="n">badge</span></div>
+    <div class="c"><i data-lucide="message-circle" width="22" height="22" stroke-width="1.75"></i><span class="n">message</span></div>
+    <div class="c"><i data-lucide="arrow-right" width="22" height="22" stroke-width="1.75"></i><span class="n">arrow</span></div>
+    <div class="c"><i data-lucide="file-text" width="22" height="22" stroke-width="1.75"></i><span class="n">file</span></div>
+  </div>
+  <script>lucide.createIcons();</script>
+</body>
+</html>

@@ -1,0 +1,53 @@
+<!doctype html>
+<!-- @dsCard group="Components" name="Form fields" subtitle="Default · focused · error · select" viewport="700x240" -->
+<html lang="es">
+<head>
+<meta charset="utf-8" />
+<link rel="stylesheet" href="_card.css" />
+<title>Form fields</title>
+<style>
+  .field { display:flex; flex-direction:column; gap:6px; }
+  .field label { font-family: var(--font-body); font-size:12px; font-weight:600; color:#3D434E; letter-spacing:0.04em; text-transform:uppercase; }
+  .field input, .field select {
+    font-family: var(--font-body);
+    font-size: 15px;
+    padding: 12px 14px;
+    border: 1px solid #D2D6DD;
+    border-radius: 2px;
+    background: #fff;
+    color: #0E1014;
+    outline: none;
+    transition: all 150ms cubic-bezier(0.2, 0.8, 0.2, 1);
+  }
+  .field input:focus { border-color: #E8732C; box-shadow: 0 0 0 3px rgba(232, 115, 44, 0.18); }
+  .field .hint { font-family: var(--font-body); font-size:12px; color:#6E7682; }
+  .field-err input { border-color: #B53A2E; }
+  .field-err .hint { color: #B53A2E; }
+</style>
+</head>
+<body>
+  <div class="row" style="justify-content: space-between;">
+    <div class="label">Form fields · text, select, focus, error</div>
+    <div class="mono">.field</div>
+  </div>
+  <div style="display:grid; grid-template-columns: 1fr 1fr; gap:14px;">
+    <div class="field">
+      <label>Nombre completo</label>
+      <input type="text" value="Andrés Tello" />
+    </div>
+    <div class="field">
+      <label>Tipo de servicio</label>
+      <select><option>Mantenimiento preventivo</option></select>
+    </div>
+    <div class="field">
+      <label>Correo · enfocado</label>
+      <input type="email" value="a.tello@logisticasur.pe" style="border-color:#E8732C; box-shadow:0 0 0 3px rgba(232,115,44,0.18);" />
+    </div>
+    <div class="field field-err">
+      <label>Placa</label>
+      <input type="text" value="ABC-7" />
+      <div class="hint">Formato esperado: AAA-000</div>
+    </div>
+  </div>
+</body>
+</html>

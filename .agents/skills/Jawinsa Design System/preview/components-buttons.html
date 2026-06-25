@@ -1,0 +1,51 @@
+<!doctype html>
+<!-- @dsCard group="Components" name="Buttons" subtitle="Primary · secondary · ghost · link" viewport="700x220" -->
+<html lang="es">
+<head>
+<meta charset="utf-8" />
+<link rel="stylesheet" href="_card.css" />
+<title>Buttons</title>
+<style>
+  .btn {
+    font-family: var(--font-body);
+    font-weight: 700;
+    font-size: 14px;
+    letter-spacing: 0.02em;
+    padding: 12px 22px;
+    border-radius: 2px;
+    border: 1px solid transparent;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 150ms cubic-bezier(0.2, 0.8, 0.2, 1);
+  }
+  .btn-primary { background: #E8732C; color: #fff; }
+  .btn-primary:hover { background: #D6651F; }
+  .btn-secondary { background: #0E1014; color: #fff; }
+  .btn-ghost { background: transparent; color: #0E1014; border-color: #D2D6DD; }
+  .btn-ghost:hover { background: #F1F2F5; border-color: #AAB1BB; }
+  .btn-link { background: transparent; color: #0E1014; padding-left: 0; padding-right: 0; border-bottom: 2px solid #E8732C; border-radius: 0; }
+  .btn .chev { width: 8px; height: 8px; border-right: 2px solid currentColor; border-top: 2px solid currentColor; transform: rotate(45deg); }
+  .btn-sm { padding: 8px 14px; font-size: 12px; }
+</style>
+</head>
+<body>
+  <div class="row" style="justify-content: space-between;">
+    <div class="label">Buttons · primary, secondary, ghost, link</div>
+    <div class="mono">.btn-*</div>
+  </div>
+  <div class="row" style="gap:10px;">
+    <button class="btn btn-primary">Solicitar cotización<span class="chev"></span></button>
+    <button class="btn btn-secondary">Agendar servicio</button>
+    <button class="btn btn-ghost">Ver servicios</button>
+    <button class="btn btn-link">Saber más<span class="chev"></span></button>
+  </div>
+  <div class="row" style="gap:10px;">
+    <button class="btn btn-primary btn-sm">Cotizar</button>
+    <button class="btn btn-secondary btn-sm">Agendar</button>
+    <button class="btn btn-ghost btn-sm">Cancelar</button>
+    <button class="btn btn-primary" disabled style="opacity:0.4; cursor:not-allowed;">Enviando…</button>
+  </div>
+</body>
+</html>

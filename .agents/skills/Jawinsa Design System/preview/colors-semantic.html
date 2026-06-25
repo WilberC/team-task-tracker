@@ -1,0 +1,41 @@
+<!doctype html>
+<!-- @dsCard group="Colors" name="Semantic colors" subtitle="Success · warning · danger · info (desaturated)" viewport="700x200" -->
+<html lang="es">
+<head>
+<meta charset="utf-8" />
+<link rel="stylesheet" href="_card.css" />
+<title>Semantic colors</title>
+</head>
+<body>
+  <div class="row" style="justify-content: space-between;">
+    <div class="label">Semantic · desaturated, steel-shifted</div>
+    <div class="mono">--success / --warning / --danger / --info</div>
+  </div>
+  <div style="display:grid; grid-template-columns: repeat(4, 1fr); gap: 10px;">
+    <div style="display:flex; flex-direction:column; gap:4px;">
+      <div style="background:#2E8463; height:48px; border-radius:2px;"></div>
+      <div style="background:#DCEEE5; height:24px; border-radius:2px;"></div>
+      <div style="font-size:12px; font-weight:600;">Success</div>
+      <div class="val mono" style="color:var(--fg-3); font-size:11px;">#2E8463</div>
+    </div>
+    <div style="display:flex; flex-direction:column; gap:4px;">
+      <div style="background:#C48312; height:48px; border-radius:2px;"></div>
+      <div style="background:#F6EAD0; height:24px; border-radius:2px;"></div>
+      <div style="font-size:12px; font-weight:600;">Warning</div>
+      <div class="val mono" style="color:var(--fg-3); font-size:11px;">#C48312</div>
+    </div>
+    <div style="display:flex; flex-direction:column; gap:4px;">
+      <div style="background:#B53A2E; height:48px; border-radius:2px;"></div>
+      <div style="background:#F3D9D5; height:24px; border-radius:2px;"></div>
+      <div style="font-size:12px; font-weight:600;">Danger</div>
+      <div class="val mono" style="color:var(--fg-3); font-size:11px;">#B53A2E</div>
+    </div>
+    <div style="display:flex; flex-direction:column; gap:4px;">
+      <div style="background:#2B5A86; height:48px; border-radius:2px;"></div>
+      <div style="background:#D6E2EE; height:24px; border-radius:2px;"></div>
+      <div style="font-size:12px; font-weight:600;">Info</div>
+      <div class="val mono" style="color:var(--fg-3); font-size:11px;">#2B5A86</div>
+    </div>
+  </div>
+</body>
+</html>

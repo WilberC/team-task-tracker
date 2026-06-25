@@ -1,0 +1,52 @@
+<!doctype html>
+<!-- @dsCard group="Components" name="Badges & chips" subtitle="Status badges, tags, technical chips" viewport="700x180" -->
+<html lang="es">
+<head>
+<meta charset="utf-8" />
+<link rel="stylesheet" href="_card.css" />
+<title>Badges &amp; chips</title>
+<style>
+  .badge {
+    font-family: var(--font-body); font-weight:600; font-size:11px;
+    padding: 4px 10px; border-radius:999px;
+    display:inline-flex; align-items:center; gap:6px;
+  }
+  .badge .dot { width:6px; height:6px; border-radius:999px; }
+  .b-default { background:#F1F2F5; color:#3D434E; }
+  .b-accent  { background:#FBE7D6; color:#4A2208; }
+  .b-success { background:#DCEEE5; color:#1F5E45; }
+  .b-warning { background:#F6EAD0; color:#7A4F0A; }
+  .b-danger  { background:#F3D9D5; color:#7A1F18; }
+  .b-info    { background:#D6E2EE; color:#1E3F5E; }
+  .b-dark    { background:#0E1014; color:#F6F4F0; }
+
+  .tag {
+    font-family: var(--font-mono); font-size:11px;
+    padding: 4px 8px; border-radius:2px;
+    background:#fff; border:1px solid #D2D6DD; color:#3D434E;
+  }
+</style>
+</head>
+<body>
+  <div class="row" style="justify-content: space-between;">
+    <div class="label">Badges &amp; chips</div>
+    <div class="mono">.badge · .tag</div>
+  </div>
+  <div class="row" style="gap:8px;">
+    <span class="badge b-default"><span class="dot" style="background:#6E7682;"></span>Disponible</span>
+    <span class="badge b-accent">Nuevo</span>
+    <span class="badge b-success"><span class="dot" style="background:#2E8463;"></span>En operación</span>
+    <span class="badge b-warning"><span class="dot" style="background:#C48312;"></span>Mantenimiento</span>
+    <span class="badge b-danger"><span class="dot" style="background:#B53A2E;"></span>Falla crítica</span>
+    <span class="badge b-info">B2B</span>
+    <span class="badge b-dark">PREMIUM</span>
+  </div>
+  <div class="row" style="gap:8px;">
+    <span class="tag">OBD-II</span>
+    <span class="tag">Multimarca</span>
+    <span class="tag">Cummins</span>
+    <span class="tag">Perkins</span>
+    <span class="tag">+12 años</span>
+  </div>
+</body>
+</html>
