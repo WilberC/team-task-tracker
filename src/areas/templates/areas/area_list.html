@@ -1,0 +1,74 @@
+{% extends "base.html" %}
+
+{% block title %}Areas | Jawinsa Repara{% endblock %}
+
+{% block content %}
+  <header class="page-header page-header--with-action">
+    <div>
+      <p class="eyebrow">PERSONAS Y ORGANIZACION</p>
+      <h1>Areas de trabajo</h1>
+      <p class="page-intro">Mantenga activas solo las areas que se pueden usar en nuevas asignaciones.</p>
+    </div>
+    <a class="button button--primary" href="{% url 'areas:create' %}">
+      <span data-lucide="plus" aria-hidden="true"></span>
+      Registrar area
+    </a>
+  </header>
+
+  <section class="summary-strip" aria-label="Resumen de areas">
+    <article>
+      <span class="summary-strip__value">{{ active_count }}</span>
+      <span class="summary-strip__label">Activas</span>
+    </article>
+    <article>
+      <span class="summary-strip__value">{{ inactive_count }}</span>
+      <span class="summary-strip__label">Inactivas</span>
+    </article>
+  </section>
+
+  <section class="data-panel">
+    {% if areas %}
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Area</th>
+              <th>Descripcion</th>
+              <th>Estado</th>
+              <th><span class="sr-only">Acciones</span></th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for area in areas %}
+              <tr>
+                <td><strong>{{ area.name }}</strong></td>
+                <td>{{ area.description|default:"Sin descripcion" }}</td>
+                <td>
+                  <span class="status-badge {% if area.active %}status-badge--active{% else %}status-badge--inactive{% endif %}">
+                    {% if area.active %}Activa{% else %}Inactiva{% endif %}
+                  </span>
+                </td>
+                <td class="table-actions">
+                  <a class="button button--secondary" href="{% url 'areas:edit' area.pk %}">
+                    <span data-lucide="pencil" aria-hidden="true"></span>
+                    Editar
+                  </a>
+                </td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    {% else %}
+      <div class="empty-state">
+        <span data-lucide="warehouse" aria-hidden="true"></span>
+        <h2>No hay areas registradas</h2>
+        <p>Empiece con Mecanica, Planchado, Pintura o Electricidad.</p>
+        <a class="button button--primary" href="{% url 'areas:create' %}">
+          <span data-lucide="plus" aria-hidden="true"></span>
+          Registrar primera area
+        </a>
+      </div>
+    {% endif %}
+  </section>
+{% endblock %}

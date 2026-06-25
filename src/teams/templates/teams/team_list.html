@@ -1,0 +1,82 @@
+{% extends "base.html" %}
+
+{% block title %}Equipos | Jawinsa Repara{% endblock %}
+
+{% block content %}
+  <header class="page-header page-header--with-action">
+    <div>
+      <p class="eyebrow">PERSONAS Y ORGANIZACION</p>
+      <h1>Equipos</h1>
+      <p class="page-intro">Agrupe empleados por area para asignar trabajo a un equipo completo cuando corresponda.</p>
+    </div>
+    <a class="button button--primary" href="{% url 'teams:create' %}">
+      <span data-lucide="plus" aria-hidden="true"></span>
+      Registrar equipo
+    </a>
+  </header>
+
+  <section class="summary-strip" aria-label="Resumen de equipos">
+    <article>
+      <span class="summary-strip__value">{{ active_count }}</span>
+      <span class="summary-strip__label">Disponibles</span>
+    </article>
+    <article>
+      <span class="summary-strip__value">{{ inactive_count }}</span>
+      <span class="summary-strip__label">No disponibles</span>
+    </article>
+  </section>
+
+  <section class="data-panel">
+    {% if teams %}
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Equipo</th>
+              <th>Area</th>
+              <th>Integrantes</th>
+              <th>Estado</th>
+              <th><span class="sr-only">Acciones</span></th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for team in teams %}
+              <tr>
+                <td><strong>{{ team.name }}</strong></td>
+                <td>{{ team.area.name }}</td>
+                <td>
+                  {% for member in team.members.all %}
+                    <span class="chip">{{ member.full_name }}</span>
+                  {% empty %}
+                    <span class="muted">Sin integrantes</span>
+                  {% endfor %}
+                </td>
+                <td>
+                  <span class="status-badge {% if team.active and team.area.active %}status-badge--active{% else %}status-badge--inactive{% endif %}">
+                    {% if team.active and team.area.active %}Disponible{% else %}No disponible{% endif %}
+                  </span>
+                </td>
+                <td class="table-actions">
+                  <a class="button button--secondary" href="{% url 'teams:edit' team.pk %}">
+                    <span data-lucide="pencil" aria-hidden="true"></span>
+                    Editar
+                  </a>
+                </td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    {% else %}
+      <div class="empty-state">
+        <span data-lucide="network" aria-hidden="true"></span>
+        <h2>No hay equipos registrados</h2>
+        <p>Cree equipos cuando un grupo de empleados deba recibir tareas en conjunto.</p>
+        <a class="button button--primary" href="{% url 'teams:create' %}">
+          <span data-lucide="plus" aria-hidden="true"></span>
+          Registrar primer equipo
+        </a>
+      </div>
+    {% endif %}
+  </section>
+{% endblock %}
