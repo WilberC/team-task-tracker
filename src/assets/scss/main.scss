@@ -24,6 +24,10 @@
   --paper-pure: #ffffff;
   --success: #2e8463;
   --success-soft: #dceee5;
+  --warning: #a46612;
+  --warning-soft: #f6ead0;
+  --info: #2b5a86;
+  --info-soft: #d6e2ee;
   --danger: #b53a2e;
   --danger-soft: #f3d9d5;
   --font-display: "Archivo", "Helvetica Neue", Arial, sans-serif;
@@ -269,7 +273,8 @@ button {
   display: grid;
   place-items: center;
   border-radius: 2px;
-  background: var(--steel-950);
+  border: 1px solid var(--steel-200);
+  background: var(--steel-50);
   color: var(--accent);
 }
 
@@ -344,6 +349,10 @@ button {
   grid-template-columns: repeat(2, minmax(0, 180px));
   gap: 12px;
   margin-bottom: 20px;
+}
+
+.summary-strip--three {
+  grid-template-columns: repeat(3, minmax(0, 180px));
 }
 
 .summary-strip article {
@@ -450,6 +459,24 @@ tbody tr:last-child td {
   color: var(--success);
 }
 
+.status-badge--open {
+  border-color: var(--info-soft);
+  background: var(--info-soft);
+  color: var(--info);
+}
+
+.status-badge--approved {
+  border-color: var(--warning-soft);
+  background: var(--warning-soft);
+  color: var(--warning);
+}
+
+.status-badge--closed {
+  border-color: var(--success-soft);
+  background: var(--success-soft);
+  color: var(--success);
+}
+
 .status-badge--inactive {
   border-color: var(--danger-soft);
   background: var(--danger-soft);
@@ -463,6 +490,11 @@ tbody tr:last-child td {
 
 .muted {
   color: var(--steel-500);
+}
+
+.mono {
+  font-family: var(--font-mono);
+  letter-spacing: 0;
 }
 
 .empty-state {
@@ -628,6 +660,10 @@ tbody tr:last-child td {
 
   .summary-strip {
     grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .summary-strip--three {
+    grid-template-columns: 1fr;
   }
 
   th,

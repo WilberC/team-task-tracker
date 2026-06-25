@@ -12,34 +12,34 @@ that can **generate a job order**. Keep it simple — detail comes later.
 
 ## Clients module (`src/clients`)
 
-- [ ] Scaffold module
-- [ ] `Client` model (`full_name`, `phone`, `email`)
-- [ ] Migration → confirm table `clients_client`
-- [ ] Admin + list/create/edit views + templates
-- [ ] Tests
+- [x] Scaffold module
+- [x] `Client` model (`full_name`, `phone`, `email`)
+- [x] Migration → confirm table `clients_client`
+- [x] Admin + list/create/edit views + templates
+- [x] Tests
 
 ## Vehicles module (`src/vehicles`)
 
-- [ ] Scaffold module
-- [ ] `Vehicle` model (`client` FK, `plate`, `make`, `model`, `year`)
-- [ ] Migration → confirm table `vehicles_vehicle`
-- [ ] Admin + list/create/edit views + templates
-- [ ] Selector: vehicles by client
-- [ ] Tests
+- [x] Scaffold module
+- [x] `Vehicle` model (`client` FK, `plate`, `make`, `model`, `year`)
+- [x] Migration → confirm table `vehicles_vehicle`
+- [x] Admin + list/create/edit views + templates
+- [x] Selector: vehicles by client
+- [x] Tests
 
 ## Sales / service orders module (`src/sales`)
 
-- [ ] Scaffold module
-- [ ] `ServiceOrder` model (`client`, `vehicle`, `advisor` FK nullable, `description`, `status`, `created_at`)
-- [ ] Status enum (Open / Approved / Closed)
-- [ ] Migration → confirm table `sales_serviceorder`
-- [ ] Admin + list/create/edit views + templates
-- [ ] `services.py`: `create_service_order(...)`
-- [ ] Tests
+- [x] Scaffold module
+- [x] `ServiceOrder` model (`client`, `vehicle`, `advisor` FK nullable, `description`, `status`, `created_at`)
+- [x] Status enum (Open / Approved / Closed)
+- [x] Migration → confirm table `sales_serviceorder`
+- [x] Admin + list/create/edit views + templates
+- [x] `services.py`: `create_service_order(...)`
+- [x] Tests
 
 ## Definition of done
 
-- [ ] An advisor can register a client + vehicle and create a service order
-- [ ] A service order shows its client, vehicle, and status
-- [ ] The data needed to generate a job order is captured (handed to [Phase 3](phase-3-job-orders.md))
-- [ ] Tests passing
+- [x] An advisor can register a client + vehicle and create a service order
+- [x] A service order shows its client, vehicle, and status
+- [x] The data needed to generate a job order is captured (handed to [Phase 3](phase-3-job-orders.md))
+- [x] Tests passing

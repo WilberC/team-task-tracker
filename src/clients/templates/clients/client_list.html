@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+
+{% block title %}Clientes | Jawinsa Repara{% endblock %}
+
+{% block content %}
+  <header class="page-header page-header--with-action">
+    <div>
+      <p class="eyebrow">RECEPCION</p>
+      <h1>Clientes</h1>
+      <p class="page-intro">Registre los datos minimos del propietario para crear vehiculos y ordenes de servicio.</p>
+    </div>
+    <a class="button button--primary" href="{% url 'clients:create' %}">
+      <span data-lucide="plus" aria-hidden="true"></span>
+      Registrar cliente
+    </a>
+  </header>
+
+  <section class="data-panel">
+    {% if clients %}
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Cliente</th>
+              <th>Telefono</th>
+              <th>Correo</th>
+              <th><span class="sr-only">Acciones</span></th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for client in clients %}
+              <tr>
+                <td><strong>{{ client.full_name }}</strong></td>
+                <td class="mono">{{ client.phone }}</td>
+                <td>{{ client.email|default:"Sin correo" }}</td>
+                <td class="table-actions">
+                  <a class="button button--secondary" href="{% url 'clients:edit' client.pk %}">
+                    <span data-lucide="pencil" aria-hidden="true"></span>
+                    Editar
+                  </a>
+                </td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    {% else %}
+      <div class="empty-state">
+        <span data-lucide="contact" aria-hidden="true"></span>
+        <h2>No hay clientes registrados</h2>
+        <p>Empiece por el propietario del vehiculo antes de crear la orden de servicio.</p>
+        <a class="button button--primary" href="{% url 'clients:create' %}">
+          <span data-lucide="plus" aria-hidden="true"></span>
+          Registrar primer cliente
+        </a>
+      </div>
+    {% endif %}
+  </section>
+{% endblock %}

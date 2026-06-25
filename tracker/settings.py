@@ -32,6 +32,9 @@ INSTALLED_APPS = [
     "src.areas.apps.AreasConfig",
     "src.employees.apps.EmployeesConfig",
     "src.teams.apps.TeamsConfig",
+    "src.clients.apps.ClientsConfig",
+    "src.vehicles.apps.VehiclesConfig",
+    "src.sales.apps.SalesConfig",
 ]
 
 MIDDLEWARE = [

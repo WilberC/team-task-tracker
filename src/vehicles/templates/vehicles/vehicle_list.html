@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+
+{% block title %}Vehiculos | Jawinsa Repara{% endblock %}
+
+{% block content %}
+  <header class="page-header page-header--with-action">
+    <div>
+      <p class="eyebrow">RECEPCION</p>
+      <h1>Vehiculos</h1>
+      <p class="page-intro">Cada vehiculo pertenece a un cliente. Esa relacion sera usada al crear la orden de servicio.</p>
+    </div>
+    <a class="button button--primary" href="{% url 'vehicles:create' %}">
+      <span data-lucide="plus" aria-hidden="true"></span>
+      Registrar vehiculo
+    </a>
+  </header>
+
+  <section class="data-panel">
+    {% if vehicles %}
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Placa</th>
+              <th>Cliente</th>
+              <th>Vehiculo</th>
+              <th>Anio</th>
+              <th><span class="sr-only">Acciones</span></th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for vehicle in vehicles %}
+              <tr>
+                <td><strong class="mono">{{ vehicle.plate }}</strong></td>
+                <td>{{ vehicle.client.full_name }}</td>
+                <td>{{ vehicle.make }} {{ vehicle.model }}</td>
+                <td>{{ vehicle.year }}</td>
+                <td class="table-actions">
+                  <a class="button button--secondary" href="{% url 'vehicles:edit' vehicle.pk %}">
+                    <span data-lucide="pencil" aria-hidden="true"></span>
+                    Editar
+                  </a>
+                </td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    {% else %}
+      <div class="empty-state">
+        <span data-lucide="car-front" aria-hidden="true"></span>
+        <h2>No hay vehiculos registrados</h2>
+        <p>Registre el vehiculo del cliente antes de crear una orden de servicio.</p>
+        <a class="button button--primary" href="{% url 'vehicles:create' %}">
+          <span data-lucide="plus" aria-hidden="true"></span>
+          Registrar primer vehiculo
+        </a>
+      </div>
+    {% endif %}
+  </section>
+{% endblock %}

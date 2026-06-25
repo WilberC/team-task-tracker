@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{% block title %}{{ page_title }} | Jawinsa Repara{% endblock %}
+
+{% block content %}
+  <header class="page-header">
+    <p class="eyebrow">ORDENES DE SERVICIO</p>
+    <h1>{{ page_title }}</h1>
+    <p class="page-intro">Seleccione cliente y vehiculo correctos. La orden de trabajo se generara desde estos datos en la siguiente fase.</p>
+  </header>
+
+  <form class="form-panel" method="post" novalidate>
+    {% csrf_token %}
+    {% include "partials/form_errors.html" %}
+    {% include "partials/form_fields.html" %}
+    <div class="form-actions">
+      <a class="button button--secondary" href="{% url 'sales:list' %}">
+        <span data-lucide="x" aria-hidden="true"></span>
+        Cancelar
+      </a>
+      <button class="button button--primary" type="submit">
+        <span data-lucide="save" aria-hidden="true"></span>
+        {{ submit_label }}
+      </button>
+    </div>
+  </form>
+{% endblock %}

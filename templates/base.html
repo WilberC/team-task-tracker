@@ -22,6 +22,9 @@
           </a>
           <nav class="site-nav" aria-label="Navegacion principal">
             <a href="/" {% if request.path == "/" %}aria-current="page"{% endif %}>Panel</a>
+            <a href="{% url 'clients:list' %}" {% if request.resolver_match.namespace == "clients" %}aria-current="page"{% endif %}>Clientes</a>
+            <a href="{% url 'vehicles:list' %}" {% if request.resolver_match.namespace == "vehicles" %}aria-current="page"{% endif %}>Vehiculos</a>
+            <a href="{% url 'sales:list' %}" {% if request.resolver_match.namespace == "sales" %}aria-current="page"{% endif %}>Ordenes</a>
             <a href="{% url 'areas:list' %}" {% if request.resolver_match.namespace == "areas" %}aria-current="page"{% endif %}>Areas</a>
             <a href="{% url 'employees:list' %}" {% if request.resolver_match.namespace == "employees" %}aria-current="page"{% endif %}>Empleados</a>
             <a href="{% url 'teams:list' %}" {% if request.resolver_match.namespace == "teams" %}aria-current="page"{% endif %}>Equipos</a>

@@ -5,14 +5,36 @@
 {% block content %}
   <header class="page-header">
     <p class="eyebrow">OPERACIONES DE TALLER</p>
-    <h1>Organice areas, personal y equipos antes de asignar trabajo.</h1>
+    <h1>Registre recepcion, personal y trabajo desde un solo panel.</h1>
     <p class="page-intro">
-      Registre la estructura base del taller. Luego podra crear ordenes,
-      tareas y responsables con datos consistentes.
+      Cree clientes, vehiculos y ordenes de servicio sin salir del flujo del
+      taller. Las pantallas de personal siguen disponibles para preparar
+      futuras asignaciones.
     </p>
   </header>
 
   <section class="action-grid" aria-label="Modulos principales">
+    <a class="module-card" href="{% url 'clients:list' %}">
+      <span class="module-card__icon" data-lucide="contact" aria-hidden="true"></span>
+      <span>
+        <strong>Clientes</strong>
+        <small>Datos basicos del propietario para recepcion y seguimiento.</small>
+      </span>
+    </a>
+    <a class="module-card" href="{% url 'vehicles:list' %}">
+      <span class="module-card__icon" data-lucide="car-front" aria-hidden="true"></span>
+      <span>
+        <strong>Vehiculos</strong>
+        <small>Placa, marca, modelo y anio asociados a cada cliente.</small>
+      </span>
+    </a>
+    <a class="module-card" href="{% url 'sales:list' %}">
+      <span class="module-card__icon" data-lucide="clipboard-list" aria-hidden="true"></span>
+      <span>
+        <strong>Ordenes de servicio</strong>
+        <small>Trabajo acordado antes de generar una orden de trabajo.</small>
+      </span>
+    </a>
     <a class="module-card" href="{% url 'areas:list' %}">
       <span class="module-card__icon" data-lucide="warehouse" aria-hidden="true"></span>
       <span>

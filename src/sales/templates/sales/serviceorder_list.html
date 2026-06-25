@@ -1,0 +1,88 @@
+{% extends "base.html" %}
+
+{% block title %}Ordenes de servicio | Jawinsa Repara{% endblock %}
+
+{% block content %}
+  <header class="page-header page-header--with-action">
+    <div>
+      <p class="eyebrow">RECEPCION</p>
+      <h1>Ordenes de servicio</h1>
+      <p class="page-intro">Registre el trabajo acordado con el cliente. Esta informacion queda lista para generar una orden de trabajo.</p>
+    </div>
+    <a class="button button--primary" href="{% url 'sales:create' %}">
+      <span data-lucide="plus" aria-hidden="true"></span>
+      Registrar orden
+    </a>
+  </header>
+
+  <section class="summary-strip summary-strip--three" aria-label="Resumen de ordenes">
+    <article>
+      <span class="summary-strip__value">{{ open_count }}</span>
+      <span class="summary-strip__label">Abiertas</span>
+    </article>
+    <article>
+      <span class="summary-strip__value">{{ approved_count }}</span>
+      <span class="summary-strip__label">Aprobadas</span>
+    </article>
+    <article>
+      <span class="summary-strip__value">{{ closed_count }}</span>
+      <span class="summary-strip__label">Cerradas</span>
+    </article>
+  </section>
+
+  <section class="data-panel">
+    {% if service_orders %}
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Orden</th>
+              <th>Cliente</th>
+              <th>Vehiculo</th>
+              <th>Estado</th>
+              <th>Asesor</th>
+              <th><span class="sr-only">Acciones</span></th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for order in service_orders %}
+              <tr>
+                <td>
+                  <strong class="mono">OS-{{ order.pk }}</strong>
+                  <small>{{ order.created_at|date:"d/m/Y H:i" }}</small>
+                </td>
+                <td>{{ order.client.full_name }}</td>
+                <td>
+                  <strong class="mono">{{ order.vehicle.plate }}</strong>
+                  <small>{{ order.vehicle.make }} {{ order.vehicle.model }}</small>
+                </td>
+                <td>
+                  <span class="status-badge status-badge--{{ order.status }}">
+                    {{ order.get_status_display }}
+                  </span>
+                </td>
+                <td>{{ order.advisor.full_name|default:"Sin asesor" }}</td>
+                <td class="table-actions">
+                  <a class="button button--secondary" href="{% url 'sales:edit' order.pk %}">
+                    <span data-lucide="pencil" aria-hidden="true"></span>
+                    Editar
+                  </a>
+                </td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    {% else %}
+      <div class="empty-state">
+        <span data-lucide="clipboard-list" aria-hidden="true"></span>
+        <h2>No hay ordenes de servicio</h2>
+        <p>Cree una orden cuando el cliente y su vehiculo ya esten registrados.</p>
+        <a class="button button--primary" href="{% url 'sales:create' %}">
+          <span data-lucide="plus" aria-hidden="true"></span>
+          Registrar primera orden
+        </a>
+      </div>
+    {% endif %}
+  </section>
+{% endblock %}
