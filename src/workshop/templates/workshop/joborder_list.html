@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+
+{% block title %}Taller | Jawinsa Repara{% endblock %}
+
+{% block content %}
+  <header class="page-header">
+    <p class="eyebrow">TALLER</p>
+    <h1>Vehiculos en taller</h1>
+    <p class="page-intro">Abra una orden de trabajo para revisar el vehiculo, cliente, estado y tareas asociadas.</p>
+  </header>
+
+  <section class="data-panel">
+    {% if job_orders %}
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Orden</th>
+              <th>Cliente</th>
+              <th>Vehiculo</th>
+              <th>Estado</th>
+              <th>Internado</th>
+              <th><span class="sr-only">Acciones</span></th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for job_order in job_orders %}
+              <tr>
+                <td><strong class="mono">OT-{{ job_order.pk }}</strong></td>
+                <td>{{ job_order.service_order.client.full_name }}</td>
+                <td>
+                  <strong class="mono">{{ job_order.vehicle.plate }}</strong>
+                  <small>{{ job_order.vehicle.make }} {{ job_order.vehicle.model }}</small>
+                </td>
+                <td>
+                  <span class="status-badge status-badge--{{ job_order.status }}">
+                    {{ job_order.get_status_display }}
+                  </span>
+                </td>
+                <td>{{ job_order.interned_at|date:"d/m/Y H:i" }}</td>
+                <td class="table-actions">
+                  <a class="button button--secondary" href="{% url 'workshop:detail' job_order.pk %}">
+                    <span data-lucide="folder-open" aria-hidden="true"></span>
+                    Abrir
+                  </a>
+                </td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    {% else %}
+      <div class="empty-state">
+        <span data-lucide="wrench" aria-hidden="true"></span>
+        <h2>No hay vehiculos en taller</h2>
+        <p>Apruebe una orden de servicio para generar la primera orden de trabajo.</p>
+        <a class="button button--primary" href="{% url 'sales:list' %}">
+          <span data-lucide="clipboard-list" aria-hidden="true"></span>
+          Ver ordenes de servicio
+        </a>
+      </div>
+    {% endif %}
+  </section>
+{% endblock %}

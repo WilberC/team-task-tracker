@@ -8,6 +8,7 @@ from src.clients.models import Client
 from src.employees.models import Employee
 from src.sales.models import ServiceOrder, ServiceOrderStatus
 from src.vehicles.models import Vehicle
+from src.workshop.models import JobOrder
 
 
 class ServiceOrderModelTests(TestCase):
@@ -87,6 +88,36 @@ class ServiceOrderViewTests(TestCase):
         self.assertTrue(
             ServiceOrder.objects.filter(description="Diagnostico inicial.").exists()
         )
+
+    def test_approved_service_order_create_generates_job_order(self):
+        response = self.client.post(
+            reverse("sales:create"),
+            {
+                "client": self.client_obj.pk,
+                "vehicle": self.vehicle.pk,
+                "advisor": self.advisor.pk,
+                "description": "Diagnostico inicial.",
+                "status": ServiceOrderStatus.APPROVED,
+            },
+        )
+
+        self.assertRedirects(response, reverse("sales:list"))
+        self.assertEqual(JobOrder.objects.count(), 1)
+        self.assertEqual(JobOrder.objects.get().vehicle, self.vehicle)
+
+    def test_approve_action_generates_job_order(self):
+        order = ServiceOrder.objects.create(
+            client=self.client_obj,
+            vehicle=self.vehicle,
+            description="Revision general.",
+        )
+
+        response = self.client.post(reverse("sales:approve", args=[order.pk]))
+
+        job_order = JobOrder.objects.get()
+        self.assertRedirects(response, reverse("workshop:detail", args=[job_order.pk]))
+        order.refresh_from_db()
+        self.assertEqual(order.status, ServiceOrderStatus.APPROVED)
 
     def test_service_order_form_rejects_vehicle_from_another_client(self):
         other_client = Client.objects.create(

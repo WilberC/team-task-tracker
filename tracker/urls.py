@@ -10,6 +10,7 @@ urlpatterns = [
     path("clients/", include("src.clients.urls")),
     path("vehicles/", include("src.vehicles.urls")),
     path("sales/", include("src.sales.urls")),
+    path("workshop/", include("src.workshop.urls")),
     path("areas/", include("src.areas.urls")),
     path("employees/", include("src.employees.urls")),
     path("teams/", include("src.teams.urls")),

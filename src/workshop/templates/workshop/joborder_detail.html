@@ -1,0 +1,90 @@
+{% extends "base.html" %}
+
+{% block title %}OT-{{ job_order.pk }} | Jawinsa Repara{% endblock %}
+
+{% block content %}
+  <header class="page-header page-header--with-action">
+    <div>
+      <p class="eyebrow">ORDEN DE TRABAJO</p>
+      <h1>OT-{{ job_order.pk }}</h1>
+      <p class="page-intro">Revise el vehiculo internado y el trabajo acordado antes de agregar tareas.</p>
+    </div>
+    <div class="button-row">
+      {% if job_order.status != "delivered" %}
+        <form method="post" action="{% url 'workshop:close' job_order.pk %}" onsubmit="return confirm('¿Cerrar esta orden de trabajo?');">
+          {% csrf_token %}
+          <button class="button button--secondary" type="submit">
+            <span data-lucide="check-circle" aria-hidden="true"></span>
+            Cerrar
+          </button>
+        </form>
+        <form method="post" action="{% url 'workshop:deliver' job_order.pk %}" onsubmit="return confirm('¿Marcar este vehiculo como entregado?');">
+          {% csrf_token %}
+          <button class="button button--primary" type="submit">
+            <span data-lucide="send" aria-hidden="true"></span>
+            Marcar entregado
+          </button>
+        </form>
+      {% endif %}
+    </div>
+  </header>
+
+  <section class="detail-grid">
+    <article class="detail-card">
+      <dl class="detail-list">
+        <div>
+          <dt>Estado</dt>
+          <dd>
+            <span class="status-badge status-badge--{{ job_order.status }}">
+              {{ job_order.get_status_display }}
+            </span>
+          </dd>
+        </div>
+        <div>
+          <dt>Cliente</dt>
+          <dd>{{ job_order.service_order.client.full_name }}</dd>
+        </div>
+        <div>
+          <dt>Vehiculo</dt>
+          <dd>
+            <span class="mono">{{ job_order.vehicle.plate }}</span>
+            · {{ job_order.vehicle.make }} {{ job_order.vehicle.model }} {{ job_order.vehicle.year }}
+          </dd>
+        </div>
+        <div>
+          <dt>Internado</dt>
+          <dd>{{ job_order.interned_at|date:"d/m/Y H:i" }}</dd>
+        </div>
+        <div>
+          <dt>Cierre</dt>
+          <dd>{{ job_order.closed_at|date:"d/m/Y H:i"|default:"Pendiente" }}</dd>
+        </div>
+      </dl>
+    </article>
+
+    <article class="detail-card">
+      <dl class="detail-list">
+        <div>
+          <dt>Orden de servicio</dt>
+          <dd><span class="mono">OS-{{ job_order.service_order.pk }}</span></dd>
+        </div>
+        <div>
+          <dt>Asesor</dt>
+          <dd>{{ job_order.service_order.advisor.full_name|default:"Sin asesor" }}</dd>
+        </div>
+        <div>
+          <dt>Trabajo acordado</dt>
+          <dd>{{ job_order.service_order.description }}</dd>
+        </div>
+      </dl>
+    </article>
+  </section>
+
+  <section class="data-panel stack-section">
+    <div class="empty-state">
+      <span data-lucide="list-checks" aria-hidden="true"></span>
+      <h2>Tareas pendientes de registrar</h2>
+      <p>Las tareas de esta orden se agregan en la siguiente fase.</p>
+    </div>
+  </section>
+{% endblock %}

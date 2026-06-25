@@ -10,4 +10,5 @@ urlpatterns = [
     path("", views.ServiceOrderListView.as_view(), name="list"),
     path("new/", views.ServiceOrderCreateView.as_view(), name="create"),
     path("<int:pk>/edit/", views.ServiceOrderUpdateView.as_view(), name="edit"),
+    path("<int:pk>/approve/", views.ServiceOrderApproveView.as_view(), name="approve"),
 ]

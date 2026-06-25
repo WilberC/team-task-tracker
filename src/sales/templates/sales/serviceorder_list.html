@@ -63,10 +63,26 @@
                 </td>
                 <td>{{ order.advisor.full_name|default:"Sin asesor" }}</td>
                 <td class="table-actions">
-                  <a class="button button--secondary" href="{% url 'sales:edit' order.pk %}">
-                    <span data-lucide="pencil" aria-hidden="true"></span>
-                    Editar
-                  </a>
+                  <div class="button-row">
+                    {% if order.job_order %}
+                      <a class="button button--secondary" href="{% url 'workshop:detail' order.job_order.pk %}">
+                        <span data-lucide="wrench" aria-hidden="true"></span>
+                        Ver OT
+                      </a>
+                    {% elif order.status != "closed" %}
+                      <form method="post" action="{% url 'sales:approve' order.pk %}">
+                        {% csrf_token %}
+                        <button class="button button--primary" type="submit">
+                          <span data-lucide="check" aria-hidden="true"></span>
+                          Aprobar
+                        </button>
+                      </form>
+                    {% endif %}
+                    <a class="button button--secondary" href="{% url 'sales:edit' order.pk %}">
+                      <span data-lucide="pencil" aria-hidden="true"></span>
+                      Editar
+                    </a>
+                  </div>
                 </td>
               </tr>
             {% endfor %}

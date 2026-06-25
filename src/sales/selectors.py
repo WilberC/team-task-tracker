@@ -6,6 +6,9 @@ from src.sales.models import ServiceOrder
 
 
 def service_orders_list() -> QuerySet[ServiceOrder]:
-    return ServiceOrder.objects.select_related("client", "vehicle", "advisor").order_by(
-        "-created_at"
-    )
+    return ServiceOrder.objects.select_related(
+        "client",
+        "vehicle",
+        "advisor",
+        "job_order",
+    ).order_by("-created_at")

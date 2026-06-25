@@ -344,6 +344,17 @@ button {
   background: var(--steel-50);
 }
 
+.button-row {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+.button-row form {
+  margin: 0;
+}
+
 .summary-strip {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 180px));
@@ -472,6 +483,19 @@ tbody tr:last-child td {
 }
 
 .status-badge--closed {
+  border-color: var(--success-soft);
+  background: var(--success-soft);
+  color: var(--success);
+}
+
+.status-badge--in_progress {
+  border-color: var(--warning-soft);
+  background: var(--warning-soft);
+  color: var(--warning);
+}
+
+.status-badge--done,
+.status-badge--delivered {
   border-color: var(--success-soft);
   background: var(--success-soft);
   color: var(--success);
@@ -631,6 +655,57 @@ tbody tr:last-child td {
   font-weight: 700;
 }
 
+.detail-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(280px, 360px);
+  gap: 20px;
+  align-items: start;
+}
+
+.stack-section {
+  margin-top: 20px;
+}
+
+.detail-card {
+  padding: 24px;
+  border: 1px solid var(--steel-200);
+  border-radius: 2px;
+  background: var(--paper-pure);
+  box-shadow: var(--shadow-1);
+}
+
+.detail-list {
+  display: grid;
+  gap: 14px;
+  margin: 0;
+}
+
+.detail-list div {
+  display: grid;
+  gap: 4px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid var(--steel-100);
+}
+
+.detail-list div:last-child {
+  padding-bottom: 0;
+  border-bottom: 0;
+}
+
+.detail-list dt {
+  color: var(--steel-600);
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.detail-list dd {
+  margin: 0;
+  color: var(--ink);
+  font-weight: 700;
+}
+
 @media (max-width: 860px) {
   .site-header__inner {
     align-items: flex-start;
@@ -677,6 +752,19 @@ tbody tr:last-child td {
 
   .form-actions .button,
   .page-header--with-action .button {
+    width: 100%;
+  }
+
+  .detail-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .button-row {
+    justify-content: stretch;
+  }
+
+  .button-row .button,
+  .button-row form {
     width: 100%;
   }
 }

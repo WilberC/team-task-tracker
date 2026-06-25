@@ -35,6 +35,7 @@ INSTALLED_APPS = [
     "src.clients.apps.ClientsConfig",
     "src.vehicles.apps.VehiclesConfig",
     "src.sales.apps.SalesConfig",
+    "src.workshop.apps.WorkshopConfig",
 ]
 
 MIDDLEWARE = [

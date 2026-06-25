@@ -13,34 +13,34 @@ order id); the vehicle is interned and tracked until delivery.
 
 ## Workshop module (`src/workshop`)
 
-- [ ] Scaffold module
-- [ ] `JobOrder` model (`service_order` FK, `vehicle` FK, `status`, `interned_at`, `closed_at`)
-- [ ] Status enum (Open / In progress / Done / Delivered)
-- [ ] Migration → confirm table `workshop_joborder`
-- [ ] Admin registration
+- [x] Scaffold module
+- [x] `JobOrder` model (`service_order` FK, `vehicle` FK, `status`, `interned_at`, `closed_at`)
+- [x] Status enum (Open / In progress / Done / Delivered)
+- [x] Migration → confirm table `workshop_joborder`
+- [x] Admin registration
 
 ## Generate job order from service order
 
-- [ ] `services.py`: `generate_job_order(service_order)` — creates the job order on approval
-- [ ] Guard: a service order generates **one** job order (no duplicates)
-- [ ] Wire the "Approve service order" action ([Phase 2](phase-2-front-desk.md)) to call it
-- [ ] Record `interned_at` when the vehicle is checked in
+- [x] `services.py`: `generate_job_order(service_order)` — creates the job order on approval
+- [x] Guard: a service order generates **one** job order (no duplicates)
+- [x] Wire the "Approve service order" action ([Phase 2](phase-2-front-desk.md)) to call it
+- [x] Record `interned_at` when the vehicle is checked in
 
 ## Job order screens
 
-- [ ] Job orders list (open / in-progress vehicles) with clear status labels
-- [ ] Job order detail page: vehicle, client, status, and its top-level tasks (tasks added in [Phase 4](phase-4-tasks.md))
-- [ ] "Close job order" / "Mark delivered" actions with confirmation
-- [ ] `selectors.py`: open job orders, job order with tasks
-- [ ] Templates (`workshop/...`)
+- [x] Job orders list (open / in-progress vehicles) with clear status labels
+- [x] Job order detail page: vehicle, client, status, and its top-level tasks (tasks added in [Phase 4](phase-4-tasks.md))
+- [x] "Close job order" / "Mark delivered" actions with confirmation
+- [x] `selectors.py`: open job orders, job order with tasks
+- [x] Templates (`workshop/...`)
 
 ## Status derivation
 
 - [ ] Job order status reflects its tasks (Open → In progress → Done) — finalize the roll-up in [Phase 4](phase-4-tasks.md#progress-roll-up)
-- [ ] Tests: generation guard, status transitions
+- [x] Tests: generation guard, status transitions
 
 ## Definition of done
 
-- [ ] Approving a service order creates exactly one job order with an id
-- [ ] Staff can see all vehicles currently in the shop and open any job order
-- [ ] Tests passing
+- [x] Approving a service order creates exactly one job order with an id
+- [x] Staff can see all vehicles currently in the shop and open any job order
+- [x] Tests passing
