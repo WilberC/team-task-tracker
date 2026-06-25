@@ -29,6 +29,9 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "src.common.apps.CommonConfig",
+    "src.areas.apps.AreasConfig",
+    "src.employees.apps.EmployeesConfig",
+    "src.teams.apps.TeamsConfig",
 ]
 
 MIDDLEWARE = [
@@ -83,12 +86,17 @@ USE_TZ = True
 STATIC_URL = "static/"
 STATIC_ROOT = BASE_DIR / "staticfiles"
 STATICFILES_DIRS = [BASE_DIR / "static"]
+staticfiles_storage = (
+    "django.contrib.staticfiles.storage.StaticFilesStorage"
+    if DEBUG
+    else "whitenoise.storage.CompressedManifestStaticFilesStorage"
+)
 STORAGES = {
     "default": {
         "BACKEND": "django.core.files.storage.FileSystemStorage",
     },
     "staticfiles": {
-        "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
+        "BACKEND": staticfiles_storage,
     },
 }
 

@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+
+{% block title %}Panel | Jawinsa Repara{% endblock %}
+
+{% block content %}
+  <header class="page-header">
+    <p class="eyebrow">OPERACIONES DE TALLER</p>
+    <h1>Organice areas, personal y equipos antes de asignar trabajo.</h1>
+    <p class="page-intro">
+      Registre la estructura base del taller. Luego podra crear ordenes,
+      tareas y responsables con datos consistentes.
+    </p>
+  </header>
+
+  <section class="action-grid" aria-label="Modulos principales">
+    <a class="module-card" href="{% url 'areas:list' %}">
+      <span class="module-card__icon" data-lucide="warehouse" aria-hidden="true"></span>
+      <span>
+        <strong>Areas</strong>
+        <small>Mecanica, pintura, electricidad y otras lineas de trabajo.</small>
+      </span>
+    </a>
+    <a class="module-card" href="{% url 'employees:list' %}">
+      <span class="module-card__icon" data-lucide="users" aria-hidden="true"></span>
+      <span>
+        <strong>Empleados</strong>
+        <small>Mecanicos, asesores y responsables por area.</small>
+      </span>
+    </a>
+    <a class="module-card" href="{% url 'teams:list' %}">
+      <span class="module-card__icon" data-lucide="network" aria-hidden="true"></span>
+      <span>
+        <strong>Equipos</strong>
+        <small>Grupos disponibles para futuras asignaciones de tareas.</small>
+      </span>
+    </a>
+  </section>
+{% endblock %}

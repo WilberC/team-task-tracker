@@ -1,0 +1,79 @@
+{% extends "base.html" %}
+
+{% block title %}Empleados | Jawinsa Repara{% endblock %}
+
+{% block content %}
+  <header class="page-header page-header--with-action">
+    <div>
+      <p class="eyebrow">PERSONAS Y ORGANIZACION</p>
+      <h1>Empleados</h1>
+      <p class="page-intro">Registre mecanicos y asesores por area. Solo empleados activos aparecen en futuras asignaciones.</p>
+    </div>
+    <a class="button button--primary" href="{% url 'employees:create' %}">
+      <span data-lucide="plus" aria-hidden="true"></span>
+      Registrar empleado
+    </a>
+  </header>
+
+  <section class="summary-strip" aria-label="Resumen de empleados">
+    <article>
+      <span class="summary-strip__value">{{ active_count }}</span>
+      <span class="summary-strip__label">Disponibles</span>
+    </article>
+    <article>
+      <span class="summary-strip__value">{{ inactive_count }}</span>
+      <span class="summary-strip__label">No disponibles</span>
+    </article>
+  </section>
+
+  <section class="data-panel">
+    {% if employees %}
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Empleado</th>
+              <th>Area</th>
+              <th>Cargo</th>
+              <th>Estado</th>
+              <th><span class="sr-only">Acciones</span></th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for employee in employees %}
+              <tr>
+                <td>
+                  <strong>{{ employee.full_name }}</strong>
+                  {% if employee.email %}<small>{{ employee.email }}</small>{% endif %}
+                </td>
+                <td>{{ employee.area.name }}</td>
+                <td>{{ employee.position }}</td>
+                <td>
+                  <span class="status-badge {% if employee.active and employee.area.active %}status-badge--active{% else %}status-badge--inactive{% endif %}">
+                    {% if employee.active and employee.area.active %}Disponible{% else %}No disponible{% endif %}
+                  </span>
+                </td>
+                <td class="table-actions">
+                  <a class="button button--secondary" href="{% url 'employees:edit' employee.pk %}">
+                    <span data-lucide="pencil" aria-hidden="true"></span>
+                    Editar
+                  </a>
+                </td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    {% else %}
+      <div class="empty-state">
+        <span data-lucide="users" aria-hidden="true"></span>
+        <h2>No hay empleados registrados</h2>
+        <p>Agregue primero al personal que recibira tareas o negociara ordenes.</p>
+        <a class="button button--primary" href="{% url 'employees:create' %}">
+          <span data-lucide="plus" aria-hidden="true"></span>
+          Registrar primer empleado
+        </a>
+      </div>
+    {% endif %}
+  </section>
+{% endblock %}

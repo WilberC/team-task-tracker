@@ -12,37 +12,37 @@ that tasks will later be assigned to.
 
 ## Areas module (`src/areas`)
 
-- [ ] Scaffold module: `uv run python manage.py startmodule areas`
-- [ ] `Area` model (`name`, `description`, `active`) with label `areas`
-- [ ] Migration → confirm table `areas_area`
-- [ ] Admin registration
-- [ ] List, create, edit views + app-qualified templates (`areas/...`)
-- [ ] Tests: model + views
-- [ ] Seed example areas (Mechanical, Bodywork, Paint, Electrical)
+- [x] Scaffold module: `uv run python manage.py startmodule areas`
+- [x] `Area` model (`name`, `description`, `active`) with label `areas`
+- [x] Migration → confirm table `areas_area`
+- [x] Admin registration
+- [x] List, create, edit views + app-qualified templates (`areas/...`)
+- [x] Tests: model + views
+- [x] Seed example areas (Mechanical, Bodywork, Paint, Electrical)
 
 ## Employees module (`src/employees`)
 
-- [ ] Scaffold module
-- [ ] `Employee` model (`full_name`, `email`, `area` FK, `position`, `active`)
-- [ ] Migration → confirm table `employees_employee`
-- [ ] Admin registration
-- [ ] List, create, edit views + templates
-- [ ] Selector: active employees by area (for assignment dropdowns)
-- [ ] Tests: model + views
+- [x] Scaffold module
+- [x] `Employee` model (`full_name`, `email`, `area` FK, `position`, `active`)
+- [x] Migration → confirm table `employees_employee`
+- [x] Admin registration
+- [x] List, create, edit views + templates
+- [x] Selector: active employees by area (for assignment dropdowns)
+- [x] Tests: model + views
 
 ## Teams module (`src/teams`)
 
-- [ ] Scaffold module
-- [ ] `Team` model (`name`, `area` FK, `members` M2M → Employee, `active`)
-- [ ] Migration → confirm table `teams_team`
-- [ ] Admin registration (inline members)
-- [ ] List, create, edit views + templates
-- [ ] Selector: active teams by area
-- [ ] Tests: model + views
+- [x] Scaffold module
+- [x] `Team` model (`name`, `area` FK, `members` M2M → Employee, `active`)
+- [x] Migration → confirm table `teams_team`
+- [x] Admin registration (inline members)
+- [x] List, create, edit views + templates
+- [x] Selector: active teams by area
+- [x] Tests: model + views
 
 ## Definition of done
 
-- [ ] Admin can register areas, employees, and teams via the UI
-- [ ] Inactive areas/employees/teams are excluded from assignment selectors
-- [ ] All screens follow the [UX principles](../ux-principles.md)
-- [ ] Tests passing
+- [x] Admin can register areas, employees, and teams via the UI
+- [x] Inactive areas/employees/teams are excluded from assignment selectors
+- [x] All screens follow the [UX principles](../ux-principles.md)
+- [x] Tests passing

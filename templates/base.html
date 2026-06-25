@@ -1,55 +1,53 @@
 {% load static %}
 <!doctype html>
-<html lang="en">
+<html lang="es">
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>{% block title %}Team Task Tracker{% endblock %}</title>
+    <title>{% block title %}Jawinsa Repara{% endblock %}</title>
     <link rel="stylesheet" href="{% static 'css/main.css' %}">
     <script type="module" src="{% static 'js/main.js' %}" defer></script>
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js" defer></script>
   </head>
   <body>
     <div class="site-shell">
       <header class="site-header">
         <div class="site-header__inner">
           <a class="site-brand" href="/">
-            <span class="site-brand__mark" aria-hidden="true">T</span>
-            <span>Team Task Tracker</span>
+            <span class="site-brand__mark" aria-hidden="true">J</span>
+            <span>
+              <strong>Jawinsa Repara</strong>
+              <small>Control de taller</small>
+            </span>
           </a>
-          <nav class="site-nav" aria-label="Main navigation">
-            <a href="/">Dashboard</a>
+          <nav class="site-nav" aria-label="Navegacion principal">
+            <a href="/" {% if request.path == "/" %}aria-current="page"{% endif %}>Panel</a>
+            <a href="{% url 'areas:list' %}" {% if request.resolver_match.namespace == "areas" %}aria-current="page"{% endif %}>Areas</a>
+            <a href="{% url 'employees:list' %}" {% if request.resolver_match.namespace == "employees" %}aria-current="page"{% endif %}>Empleados</a>
+            <a href="{% url 'teams:list' %}" {% if request.resolver_match.namespace == "teams" %}aria-current="page"{% endif %}>Equipos</a>
             <a href="/admin/">Admin</a>
           </nav>
         </div>
       </header>
 
       <main class="page">
-        {% block content %}
-          <header class="page__header">
-            <p class="page__eyebrow">Workshop operations</p>
-            <h1>Track every job from service order to task completion.</h1>
-            <p class="page__intro">
-              The project shell is ready. Upcoming phases will add areas,
-              employees, job orders, task boards, client status views, and reports.
-            </p>
-          </header>
+        {% if messages %}
+          <div class="message-stack" aria-live="polite">
+            {% for message in messages %}
+              <p class="message message--{{ message.tags|default:'info' }}">{{ message }}</p>
+            {% endfor %}
+          </div>
+        {% endif %}
 
-          <section class="status-grid" aria-label="Setup status">
-            <article class="status-card">
-              <h2>Django</h2>
-              <p>Server-rendered pages, admin, and PostgreSQL-backed models.</p>
-            </article>
-            <article class="status-card">
-              <h2>htmx</h2>
-              <p>Prepared for small server-driven interactions without a SPA.</p>
-            </article>
-            <article class="status-card">
-              <h2>Assets</h2>
-              <p>TypeScript and SCSS compile into Django static files.</p>
-            </article>
-          </section>
-        {% endblock %}
+        {% block content %}{% endblock %}
       </main>
     </div>
+    <script>
+      window.addEventListener("DOMContentLoaded", () => {
+        if (window.lucide) {
+          window.lucide.createIcons();
+        }
+      });
+    </script>
   </body>
 </html>
