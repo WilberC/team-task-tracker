@@ -1,12 +1,17 @@
 """Views for the workshop module."""
 
 from django.contrib import messages
+from django.http import Http404
 from django.shortcuts import get_object_or_404, redirect
 from django.views import View
-from django.views.generic import DetailView, ListView
+from django.views.generic import DetailView, ListView, TemplateView
 
 from src.workshop.models import JobOrder
-from src.workshop.selectors import job_order_with_tasks, open_job_orders
+from src.workshop.selectors import (
+    client_safe_job_order_status,
+    job_order_with_tasks,
+    open_job_orders,
+)
 from src.workshop.services import close_job_order, mark_job_order_delivered
 
 
@@ -26,6 +31,18 @@ class JobOrderDetailView(DetailView):
 
     def get_object(self, queryset=None):
         return job_order_with_tasks(self.kwargs["pk"])
+
+
+class ClientStatusView(TemplateView):
+    template_name = "workshop/client_status.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        try:
+            context["status_view"] = client_safe_job_order_status(kwargs["token"])
+        except JobOrder.DoesNotExist as error:
+            raise Http404("No encontramos el estado solicitado.") from error
+        return context
 
 
 class JobOrderCloseView(View):

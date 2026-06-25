@@ -1,0 +1,38 @@
+{% load static %}
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{% block title %}Jawinsa Repara{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'css/main.css' %}">
+    <script type="module" src="{% static 'js/main.js' %}" defer></script>
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js" defer></script>
+  </head>
+  <body>
+    <div class="site-shell public-shell">
+      <header class="site-header">
+        <div class="site-header__inner">
+          <span class="site-brand">
+            <span class="site-brand__mark" aria-hidden="true">J</span>
+            <span>
+              <strong>Jawinsa Repara</strong>
+              <small>Estado de vehiculo</small>
+            </span>
+          </span>
+        </div>
+      </header>
+
+      <main class="page public-page">
+        {% block content %}{% endblock %}
+      </main>
+    </div>
+    <script>
+      window.addEventListener("DOMContentLoaded", () => {
+        if (window.lucide) {
+          window.lucide.createIcons();
+        }
+      });
+    </script>
+  </body>
+</html>

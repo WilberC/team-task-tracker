@@ -1,5 +1,7 @@
 """Models for the workshop module."""
 
+import uuid
+
 from django.core.exceptions import ValidationError
 from django.db import models
 from django.urls import reverse
@@ -34,6 +36,12 @@ class JobOrder(TimeStampedModel):
         choices=JobOrderStatus.choices,
         default=JobOrderStatus.OPEN,
     )
+    client_status_token = models.UUIDField(
+        "token para vista de cliente",
+        default=uuid.uuid4,
+        unique=True,
+        editable=False,
+    )
     interned_at = models.DateTimeField("fecha de internamiento", default=timezone.now)
     closed_at = models.DateTimeField("fecha de cierre", blank=True, null=True)
 
@@ -58,3 +66,6 @@ class JobOrder(TimeStampedModel):
 
     def get_absolute_url(self) -> str:
         return reverse("workshop:detail", args=[self.pk])
+
+    def get_client_status_url(self) -> str:
+        return reverse("client_status", args=[self.client_status_token])

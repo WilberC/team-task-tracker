@@ -4,8 +4,11 @@ from django.contrib import admin
 from django.urls import include, path
 from django.views.generic import TemplateView
 
+from src.workshop.views import ClientStatusView
+
 urlpatterns = [
     path("", TemplateView.as_view(template_name="home.html"), name="home"),
+    path("status/<uuid:token>/", ClientStatusView.as_view(), name="client_status"),
     path("admin/", admin.site.urls),
     path("clients/", include("src.clients.urls")),
     path("vehicles/", include("src.vehicles.urls")),

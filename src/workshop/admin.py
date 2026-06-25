@@ -12,6 +12,7 @@ class JobOrderAdmin(admin.ModelAdmin):
         "service_order",
         "vehicle",
         "status",
+        "client_status_token",
         "interned_at",
         "closed_at",
     ]
@@ -22,3 +23,4 @@ class JobOrderAdmin(admin.ModelAdmin):
         "vehicle__plate",
     ]
     autocomplete_fields = ["service_order", "vehicle"]
+    readonly_fields = ["client_status_token"]

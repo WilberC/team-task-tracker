@@ -80,6 +80,14 @@
           <dt>Trabajo acordado</dt>
           <dd>{{ job_order.service_order.description }}</dd>
         </div>
+        <div>
+          <dt>Link para cliente</dt>
+          <dd>
+            <a href="{{ job_order.get_client_status_url }}">
+              {{ request.scheme }}://{{ request.get_host }}{{ job_order.get_client_status_url }}
+            </a>
+          </dd>
+        </div>
       </dl>
     </article>
   </section>

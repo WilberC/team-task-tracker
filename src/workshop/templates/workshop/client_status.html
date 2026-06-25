@@ -1,0 +1,69 @@
+{% extends "public_base.html" %}
+
+{% block title %}Estado de vehiculo | Jawinsa Repara{% endblock %}
+
+{% block content %}
+  <header class="page-header client-status-header">
+    <p class="eyebrow">SEGUIMIENTO</p>
+    <h1>{{ status_view.vehicle_plate }}</h1>
+    <p class="page-intro">{{ status_view.vehicle_make }} {{ status_view.vehicle_model }} {{ status_view.vehicle_year }}</p>
+  </header>
+
+  <section class="client-status-grid">
+    <article class="detail-card client-status-card">
+      <span class="status-badge status-badge--{{ status_view.overall_status_kind }}">
+        {% if status_view.overall_status_kind == "open" %}
+          <span data-lucide="clipboard-list" aria-hidden="true"></span>
+        {% elif status_view.overall_status_kind == "in_progress" %}
+          <span data-lucide="wrench" aria-hidden="true"></span>
+        {% elif status_view.overall_status_kind == "done" %}
+          <span data-lucide="check-circle-2" aria-hidden="true"></span>
+        {% else %}
+          <span data-lucide="send" aria-hidden="true"></span>
+        {% endif %}
+        {{ status_view.overall_status_label }}
+      </span>
+      <h2>{{ status_view.progress.summary }}</h2>
+      <div class="progress-meta">
+        <span>{{ status_view.progress.done }} de {{ status_view.progress.total }} trabajos listos</span>
+        <span>{{ status_view.progress.percent }}%</span>
+      </div>
+      <div class="progress-bar" aria-label="Avance del trabajo">
+        <span style="width: {{ status_view.progress.percent }}%;"></span>
+      </div>
+    </article>
+
+    <article class="detail-card">
+      <h2 class="section-title">Trabajos</h2>
+      {% if status_view.jobs %}
+        <ol class="client-job-list">
+          {% for job in status_view.jobs %}
+            <li>
+              <span class="status-badge status-badge--{{ job.status_kind }}">
+                {% if job.status_kind == "pending" %}
+                  <span data-lucide="circle" aria-hidden="true"></span>
+                {% elif job.status_kind == "in_progress" %}
+                  <span data-lucide="loader-circle" aria-hidden="true"></span>
+                {% elif job.status_kind == "completed" %}
+                  <span data-lucide="check-circle-2" aria-hidden="true"></span>
+                {% elif job.status_kind == "overdue" %}
+                  <span data-lucide="triangle-alert" aria-hidden="true"></span>
+                {% else %}
+                  <span data-lucide="ban" aria-hidden="true"></span>
+                {% endif %}
+                {{ job.status_label }}
+              </span>
+              <strong>{{ job.title }}</strong>
+            </li>
+          {% endfor %}
+        </ol>
+      {% else %}
+        <div class="empty-state empty-state--compact">
+          <span data-lucide="clipboard-list" aria-hidden="true"></span>
+          <h2>Trabajo en preparacion</h2>
+          <p>El equipo registrara los trabajos apenas termine la revision inicial.</p>
+        </div>
+      {% endif %}
+    </article>
+  </section>
+{% endblock %}

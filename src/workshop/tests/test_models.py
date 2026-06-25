@@ -2,12 +2,17 @@
 
 from django.test import TestCase
 from django.urls import reverse
+from django.utils import timezone
 
+from src.areas.models import Area
 from src.clients.models import Client
+from src.employees.models import Employee
 from src.sales.models import ServiceOrder, ServiceOrderStatus
+from src.tasks.models import TaskPriority, TaskStatus
+from src.tasks.services import create_top_level_task, update_status
 from src.vehicles.models import Vehicle
 from src.workshop.models import JobOrder, JobOrderStatus
-from src.workshop.selectors import open_job_orders
+from src.workshop.selectors import client_safe_job_order_status, open_job_orders
 from src.workshop.services import (
     close_job_order,
     generate_job_order,
@@ -46,6 +51,7 @@ class JobOrderModelTests(TestCase):
 
         self.assertEqual(first, second)
         self.assertEqual(JobOrder.objects.count(), 1)
+        self.assertIsNotNone(first.client_status_token)
 
     def test_generate_job_order_approves_open_service_order(self):
         self.service_order.status = ServiceOrderStatus.OPEN
@@ -78,6 +84,17 @@ class JobOrderModelTests(TestCase):
 
 class JobOrderViewTests(TestCase):
     def setUp(self):
+        self.area = Area.objects.create(name="Mecanica")
+        self.advisor = Employee.objects.create(
+            full_name="Luis Asesor",
+            area=self.area,
+            position="Asesor",
+        )
+        self.mechanic = Employee.objects.create(
+            full_name="Carlos Ramos",
+            area=self.area,
+            position="Mecanico",
+        )
         self.client_obj = Client.objects.create(
             full_name="Rosa Medina",
             phone="999111222",
@@ -92,6 +109,7 @@ class JobOrderViewTests(TestCase):
         self.service_order = ServiceOrder.objects.create(
             client=self.client_obj,
             vehicle=self.vehicle,
+            advisor=self.advisor,
             description="Revision general.",
             status=ServiceOrderStatus.APPROVED,
         )
@@ -130,3 +148,62 @@ class JobOrderViewTests(TestCase):
         self.assertRedirects(response, reverse("workshop:list"))
         self.job_order.refresh_from_db()
         self.assertEqual(self.job_order.status, JobOrderStatus.DELIVERED)
+
+    def test_client_status_view_resolves_token_without_login(self):
+        response = self.client.get(
+            reverse("client_status", args=[self.job_order.client_status_token])
+        )
+
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "ABC-123")
+        self.assertContains(response, "Toyota Corolla")
+        self.assertContains(response, "Vehiculo recibido")
+
+    def test_client_status_view_returns_404_for_invalid_token(self):
+        response = self.client.get(
+            reverse("client_status", args=["11111111-1111-1111-1111-111111111111"])
+        )
+
+        self.assertEqual(response.status_code, 404)
+
+    def test_client_status_view_exposes_only_client_safe_fields(self):
+        task = create_top_level_task(
+            self.job_order,
+            title="Diagnostico inicial",
+            area=self.area,
+            assigned_employee=self.mechanic,
+            priority=TaskPriority.MEDIUM,
+            due_date=timezone.localdate(),
+        )
+        update_status(task, TaskStatus.IN_PROGRESS)
+
+        response = self.client.get(
+            reverse("client_status", args=[self.job_order.client_status_token])
+        )
+
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "Diagnostico inicial")
+        self.assertContains(response, "En proceso")
+        self.assertNotContains(response, "Rosa Medina")
+        self.assertNotContains(response, "Luis Asesor")
+        self.assertNotContains(response, "Carlos Ramos")
+        self.assertNotContains(response, "Revision general.")
+
+    def test_client_safe_selector_returns_progress_without_internal_data(self):
+        task = create_top_level_task(
+            self.job_order,
+            title="Revision de frenos",
+            area=self.area,
+            assigned_employee=self.mechanic,
+            priority=TaskPriority.HIGH,
+            due_date=timezone.localdate(),
+        )
+        update_status(task, TaskStatus.IN_PROGRESS)
+        update_status(task, TaskStatus.COMPLETED)
+
+        snapshot = client_safe_job_order_status(self.job_order.client_status_token)
+
+        self.assertEqual(snapshot.vehicle_plate, "ABC-123")
+        self.assertEqual(snapshot.progress.done, 1)
+        self.assertEqual(snapshot.progress.percent, 100)
+        self.assertEqual(snapshot.jobs[0].title, "Revision de frenos")
