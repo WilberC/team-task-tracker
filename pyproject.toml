@@ -1,0 +1,30 @@
+[project]
+name = "team-task-tracker"
+version = "0.1.0"
+description = "A Django task tracker for mechanic workshop job orders."
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+    "django>=5.2,<6.0",
+    "django-environ>=0.12.0",
+    "psycopg[binary]>=3.2.0",
+    "uvicorn[standard]>=0.34.0",
+    "whitenoise>=6.9.0",
+]
+
+[dependency-groups]
+dev = [
+    "pre-commit>=4.0.0",
+    "ruff>=0.14.0",
+]
+
+[tool.ruff]
+line-length = 88
+target-version = "py313"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B"]
+
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"

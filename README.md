@@ -17,8 +17,8 @@ The work has two parts (see [Domain](docs/domain.md)):
 It is built for **non-technical users**, so the interface must be clear and the
 experience simple — see [UX & UI Principles](docs/ux-principles.md).
 
-> **Status:** early planning / scaffolding. The documents below describe the
-> intended system before implementation begins.
+> **Status:** Phase 0 scaffold is implemented. The app runs as an empty Django
+> project with PostgreSQL, admin, Docker, and the frontend build in place.
 
 ## Why this exists
 
@@ -41,6 +41,54 @@ Team Task Tracker centralizes that work in one place.
 | Optional     | Django Channels + WebSockets        |
 
 See [docs/tech-stack.md](docs/tech-stack.md) for the full rationale.
+
+## Local development
+
+Install dependencies:
+
+```bash
+uv sync
+pnpm install
+```
+
+Start PostgreSQL:
+
+```bash
+docker compose up -d db
+```
+
+Run migrations and create the local admin user:
+
+```bash
+uv run python manage.py migrate
+DJANGO_SUPERUSER_USERNAME=admin \
+DJANGO_SUPERUSER_EMAIL=admin@example.com \
+DJANGO_SUPERUSER_PASSWORD=admin \
+uv run python manage.py createsuperuser --noinput
+```
+
+Build frontend assets and run the app:
+
+```bash
+pnpm build
+uv run python manage.py runserver
+```
+
+The development commands are also available in the `justfile`, for example
+`just db`, `just migrate`, `just frontend`, and `just run`.
+
+## Creating modules
+
+Use the project scaffold command instead of Django's default `startapp`:
+
+```bash
+uv run python manage.py startmodule tasks
+```
+
+The command creates the module layout documented in
+[Architecture → Module scaffolding](docs/architecture.md#module-scaffolding).
+After creating a module, register its app config in `INSTALLED_APPS`, for
+example `src.tasks.apps.TasksConfig`.
 
 ## Documentation
 
