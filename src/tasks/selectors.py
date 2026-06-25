@@ -1,8 +1,10 @@
 """Read/query helpers for the tasks module."""
 
 from dataclasses import dataclass
+from datetime import timedelta
 
 from django.db.models import QuerySet
+from django.utils import timezone
 
 from src.tasks.models import Task, TaskStatus
 
@@ -39,6 +41,9 @@ def tasks_list(filters: dict | None = None) -> QuerySet[Task]:
         value = filters.get(key)
         if value:
             queryset = queryset.filter(**{lookup: value})
+    if filters.get("due_this_week"):
+        today = timezone.localdate()
+        queryset = queryset.filter(due_date__range=(today, today + timedelta(days=7)))
     return queryset
 
 
@@ -74,3 +79,10 @@ def subtask_progress(parent_task: Task) -> TaskProgress:
         percent=round((done / total) * 100),
         at_risk=at_risk,
     )
+
+
+def kanban_columns(filters: dict | None = None) -> dict[str, QuerySet[Task]]:
+    queryset = tasks_list(filters).filter(parent_task__isnull=True)
+    return {
+        status: queryset.filter(status=status) for status, _label in TaskStatus.choices
+    }

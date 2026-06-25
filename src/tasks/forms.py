@@ -115,6 +115,11 @@ class TaskFilterForm(forms.Form):
         required=False,
         widget=forms.DateInput(attrs={"type": "date"}),
     )
+    due_this_week = forms.BooleanField(
+        label="Vence esta semana",
+        required=False,
+        widget=forms.CheckboxInput,
+    )
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)

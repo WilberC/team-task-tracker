@@ -1,0 +1,25 @@
+<article id="task-status-panel" class="detail-card">
+  <form
+    class="form-field"
+    method="post"
+    action="{% url 'tasks:status' task.pk %}"
+    hx-post="{% url 'tasks:status' task.pk %}"
+    hx-target="#task-status-panel"
+    hx-swap="outerHTML"
+  >
+    {% csrf_token %}
+    <label for="task-status">Actualizar estado</label>
+    <select id="task-status" name="status">
+      {% for value, label in status_choices %}
+        <option value="{{ value }}" {% if task.status == value %}selected{% endif %}>{{ label }}</option>
+      {% endfor %}
+    </select>
+    {% if status_error %}
+      <p class="form-alert">{{ status_error }}</p>
+    {% endif %}
+    <button class="button button--primary" type="submit">
+      <span data-lucide="refresh-cw" aria-hidden="true"></span>
+      Guardar estado
+    </button>
+  </form>
+</article>

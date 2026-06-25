@@ -1,18 +1,18 @@
 {% extends "base.html" %}
 
-{% block title %}Tareas | Jawinsa Repara{% endblock %}
+{% block title %}Tablero de tareas | Jawinsa Repara{% endblock %}
 
 {% block content %}
   <header class="page-header page-header--with-action">
     <div>
       <p class="eyebrow">TALLER</p>
-      <h1>Tareas</h1>
-      <p class="page-intro">Filtre el trabajo por orden, area, responsable, estado, prioridad o fecha limite.</p>
+      <h1>Tablero de tareas</h1>
+      <p class="page-intro">Mueva las tareas por estado y filtre el trabajo operativo del taller sin recargar la pagina.</p>
     </div>
     <div class="button-row">
-      <a class="button button--secondary" href="{% url 'tasks:kanban' %}">
-        <span data-lucide="columns-3" aria-hidden="true"></span>
-        Ver tablero
+      <a class="button button--secondary" href="{% url 'tasks:list' %}">
+        <span data-lucide="list" aria-hidden="true"></span>
+        Ver lista
       </a>
       <a class="button button--primary" href="{% url 'workshop:list' %}">
         <span data-lucide="plus" aria-hidden="true"></span>
@@ -24,9 +24,9 @@
   <form
     class="filter-panel"
     method="get"
-    action="{% url 'tasks:list' %}"
-    hx-get="{% url 'tasks:list' %}"
-    hx-target="#task-results"
+    action="{% url 'tasks:kanban' %}"
+    hx-get="{% url 'tasks:kanban' %}"
+    hx-target="#kanban-board"
     hx-push-url="true"
     hx-trigger="change delay:200ms, submit"
   >
@@ -42,5 +42,5 @@
     </button>
   </form>
 
-  {% include "tasks/partials/task_table.html" %}
+  {% include "tasks/partials/kanban_board.html" %}
 {% endblock %}

@@ -1,0 +1,69 @@
+<section id="subtask-section" class="data-panel stack-section">
+  <div class="panel-body">
+    <div class="progress-meta">
+      <span>{{ progress.done }} de {{ progress.total }} subtareas cerradas</span>
+      {% if progress.at_risk %}<span>Hay subtareas vencidas</span>{% endif %}
+    </div>
+    <div class="progress-bar" aria-label="Avance de subtareas">
+      <span style="width: {{ progress.percent }}%;"></span>
+    </div>
+  </div>
+
+  {% if task.subtasks.all %}
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Subtarea</th>
+            <th>Responsable</th>
+            <th>Estado</th>
+            <th>Fecha limite</th>
+            <th><span class="sr-only">Acciones</span></th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for subtask in task.subtasks.all %}
+            {% include "tasks/partials/subtask_row.html" with subtask=subtask %}
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  {% else %}
+    <div class="empty-state empty-state--compact">
+      <span data-lucide="list-plus" aria-hidden="true"></span>
+      <h2>Sin subtareas</h2>
+      <p>Agregue pasos concretos para controlar el avance de esta tarea.</p>
+    </div>
+  {% endif %}
+
+  <div class="inline-panel" id="subtask-form">
+    <h2>Agregar subtarea</h2>
+    <form
+      class="inline-form"
+      method="post"
+      action="{% url 'tasks:create_subtask' task.pk %}"
+      hx-post="{% url 'tasks:create_subtask' task.pk %}"
+      hx-target="#subtask-section"
+      hx-swap="outerHTML"
+    >
+      {% csrf_token %}
+      {% if subtask_form.non_field_errors %}
+        <div class="form-alert">{{ subtask_form.non_field_errors }}</div>
+      {% endif %}
+      {% for field in subtask_form %}
+        <div class="form-field">
+          <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+          {{ field }}
+          {% if field.help_text %}<p class="help-text">{{ field.help_text }}</p>{% endif %}
+          {% if field.errors %}<div class="field-errors">{{ field.errors }}</div>{% endif %}
+        </div>
+      {% endfor %}
+      <div class="form-actions">
+        <button class="button button--primary" type="submit">
+          <span data-lucide="plus" aria-hidden="true"></span>
+          Guardar subtarea
+        </button>
+      </div>
+    </form>
+  </div>
+</section>

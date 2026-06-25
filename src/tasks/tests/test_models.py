@@ -309,3 +309,113 @@ class TaskViewTests(TaskTestCase):
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, "Vencida")
         self.assertNotContains(response, "<strong>Pendiente</strong>", html=True)
+
+    def test_kanban_board_groups_tasks_by_status(self):
+        self.make_task(title="Tarea pendiente")
+        self.make_task(title="Tarea vencida", status=TaskStatus.OVERDUE)
+
+        response = self.client.get(reverse("tasks:kanban"))
+
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "Pendiente")
+        self.assertContains(response, "Vencida")
+        self.assertContains(response, "Tarea pendiente")
+        self.assertContains(response, "Tarea vencida")
+
+    def test_htmx_task_list_filters_without_full_page(self):
+        self.make_task(title="Pendiente")
+        self.make_task(title="Vencida", status=TaskStatus.OVERDUE)
+
+        response = self.client.get(
+            reverse("tasks:list"),
+            {"status": TaskStatus.OVERDUE},
+            HTTP_HX_REQUEST="true",
+        )
+
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, 'id="task-results"')
+        self.assertContains(response, "Vencida")
+        self.assertNotContains(response, "site-shell")
+        self.assertNotContains(response, "<strong>Pendiente</strong>", html=True)
+
+    def test_status_update_json_persists(self):
+        task = self.make_task()
+
+        response = self.client.post(
+            reverse("tasks:status", args=[task.pk]),
+            {"status": TaskStatus.IN_PROGRESS},
+            HTTP_ACCEPT="application/json",
+        )
+
+        task.refresh_from_db()
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json()["status"], TaskStatus.IN_PROGRESS)
+        self.assertEqual(task.status, TaskStatus.IN_PROGRESS)
+
+    def test_invalid_kanban_drop_returns_rollback_status(self):
+        task = self.make_task()
+
+        response = self.client.post(
+            reverse("tasks:status", args=[task.pk]),
+            {"status": TaskStatus.COMPLETED, "response": "card"},
+            HTTP_HX_REQUEST="true",
+            HTTP_X_KANBAN_DROP="true",
+        )
+
+        task.refresh_from_db()
+        self.assertEqual(response.status_code, 422)
+        self.assertEqual(task.status, TaskStatus.PENDING)
+
+    def test_subtask_create_htmx_refreshes_parent_section(self):
+        parent = self.make_task()
+
+        response = self.client.post(
+            reverse("tasks:create_subtask", args=[parent.pk]),
+            {
+                "title": "Escaneo",
+                "description": "",
+                "area": "",
+                "assigned_employee": self.employee.pk,
+                "assigned_team": "",
+                "priority": TaskPriority.MEDIUM,
+                "start_date": "",
+                "due_date": timezone.localdate(),
+            },
+            HTTP_HX_REQUEST="true",
+        )
+
+        self.assertEqual(response.status_code, 200)
+        self.assertTrue(parent.subtasks.filter(title="Escaneo").exists())
+        self.assertContains(response, 'id="subtask-section"')
+        self.assertContains(response, "Escaneo")
+
+    def test_subtask_inline_edit_htmx_updates_row(self):
+        parent = self.make_task()
+        subtask = create_subtask(
+            parent,
+            title="Escaneo",
+            assigned_employee=self.employee,
+            priority=TaskPriority.MEDIUM,
+            due_date=timezone.localdate(),
+        )
+
+        response = self.client.post(
+            reverse("tasks:edit", args=[subtask.pk]),
+            {
+                "title": "Escaneo completo",
+                "description": "",
+                "area": "",
+                "assigned_employee": self.employee.pk,
+                "assigned_team": "",
+                "priority": TaskPriority.HIGH,
+                "start_date": "",
+                "due_date": timezone.localdate(),
+            },
+            HTTP_HX_REQUEST="true",
+        )
+
+        subtask.refresh_from_db()
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(subtask.title, "Escaneo completo")
+        self.assertContains(response, 'id="subtask-row-')
+        self.assertContains(response, "Escaneo completo")

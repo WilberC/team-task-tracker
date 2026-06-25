@@ -1,0 +1,77 @@
+<article
+  id="task-card-{{ task.pk }}"
+  class="kanban-card kanban-card--{{ task.status }}"
+  draggable="true"
+  data-kanban-card
+  data-task-id="{{ task.pk }}"
+  data-task-status="{{ task.status }}"
+  data-status-url="{% url 'tasks:status' task.pk %}"
+>
+  <div class="kanban-card__top">
+    <span class="status-badge status-badge--{{ task.priority }}">
+      {{ task.get_priority_display }}
+    </span>
+    <span class="status-badge status-badge--{{ task.status }}" data-kanban-status-label>
+      {% if task.status == "pending" %}
+        <span data-lucide="circle" aria-hidden="true"></span>
+      {% elif task.status == "in_progress" %}
+        <span data-lucide="loader-circle" aria-hidden="true"></span>
+      {% elif task.status == "completed" %}
+        <span data-lucide="check-circle-2" aria-hidden="true"></span>
+      {% elif task.status == "overdue" %}
+        <span data-lucide="triangle-alert" aria-hidden="true"></span>
+      {% else %}
+        <span data-lucide="ban" aria-hidden="true"></span>
+      {% endif %}
+      {{ task.get_status_display }}
+    </span>
+  </div>
+
+  <h2>{{ task.title }}</h2>
+  <dl class="kanban-card__meta">
+    <div>
+      <dt>Responsable</dt>
+      <dd>
+        {% if task.assigned_employee %}
+          {{ task.assigned_employee.full_name }}
+        {% else %}
+          {{ task.assigned_team.name }}
+        {% endif %}
+      </dd>
+    </div>
+    <div>
+      <dt>Fecha limite</dt>
+      <dd>{{ task.due_date|date:"d/m/Y" }}</dd>
+    </div>
+  </dl>
+
+  <form
+    class="kanban-card__status"
+    method="post"
+    action="{% url 'tasks:status' task.pk %}"
+    hx-post="{% url 'tasks:status' task.pk %}"
+    hx-target="closest article"
+    hx-swap="outerHTML"
+  >
+    {% csrf_token %}
+    <input type="hidden" name="response" value="card">
+    <label for="card-status-{{ task.pk }}">Cambiar estado</label>
+    <select id="card-status-{{ task.pk }}" name="status">
+      {% for value, label in status_choices %}
+        <option value="{{ value }}" {% if task.status == value %}selected{% endif %}>{{ label }}</option>
+      {% endfor %}
+    </select>
+    {% if card_error %}
+      <p class="form-alert">{{ card_error }}</p>
+    {% endif %}
+    <button class="button button--secondary" type="submit">
+      <span data-lucide="save" aria-hidden="true"></span>
+      Guardar
+    </button>
+  </form>
+
+  <a class="kanban-card__link" href="{% url 'tasks:detail' task.pk %}">
+    <span data-lucide="folder-open" aria-hidden="true"></span>
+    Abrir tarea
+  </a>
+</article>

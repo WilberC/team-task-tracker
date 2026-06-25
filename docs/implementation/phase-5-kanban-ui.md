@@ -13,31 +13,31 @@ reloads.
 
 ## Kanban board
 
-- [ ] Board view with a column per status (Pending / In progress / Completed / Overdue / Cancelled)
-- [ ] Task cards show title, assignee (mechanic/team), priority, due date
-- [ ] Status shown with **color *and* label/icon** (not color alone)
-- [ ] TypeScript drag-and-drop (`src/tasks/assets/ts/kanban.ts`)
-- [ ] Dropping a card calls the status-update endpoint (htmx) and persists
-- [ ] Optimistic UI with rollback on error
+- [x] Board view with a column per status (Pending / In progress / Completed / Overdue / Cancelled)
+- [x] Task cards show title, assignee (mechanic/team), priority, due date
+- [x] Status shown with **color *and* label/icon** (not color alone)
+- [x] TypeScript drag-and-drop (`src/tasks/assets/ts/kanban.ts`)
+- [x] Dropping a card calls the status-update endpoint (htmx) and persists
+- [x] Optimistic UI with rollback on error
 
 ## htmx interactions
 
-- [ ] Update task status inline without full page reload
-- [ ] Filter tasks (job order, area, mechanic/team, status, priority, due date) via htmx
-- [ ] Add/edit subtasks inline; refresh the parent progress indicator
-- [ ] Inline form validation with plain-language errors
+- [x] Update task status inline without full page reload
+- [x] Filter tasks (job order, area, mechanic/team, status, priority, due date) via htmx
+- [x] Add/edit subtasks inline; refresh the parent progress indicator
+- [x] Inline form validation with plain-language errors
 
 ## UX polish
 
-- [ ] One clear primary action per screen (e.g. **+ New task**)
-- [ ] Empty states that explain what to do first
-- [ ] Confirmation dialogs for destructive/irreversible actions
-- [ ] Smart defaults (status = Pending auto-set; "My tasks" / "Due this week" filters)
-- [ ] List view alternative to the board
+- [x] One clear primary action per screen (e.g. **+ New task**)
+- [x] Empty states that explain what to do first
+- [x] Confirmation dialogs for destructive/irreversible actions
+- [x] Smart defaults (status = Pending auto-set; "My tasks" / "Due this week" filters)
+- [x] List view alternative to the board
 
 ## Definition of done
 
-- [ ] A mechanic can drag a card between columns and the status persists
-- [ ] Filters and subtask edits update inline without a full reload
-- [ ] Keyboard and screen-reader accessible; works on mobile
-- [ ] Reviewed against the [UX principles](../ux-principles.md)
+- [x] A mechanic can drag a card between columns and the status persists
+- [x] Filters and subtask edits update inline without a full reload
+- [x] Keyboard and screen-reader accessible; works on mobile
+- [x] Reviewed against the [UX principles](../ux-principles.md)

@@ -1,0 +1,34 @@
+<tr id="subtask-row-{{ subtask.pk }}">
+  <td colspan="5">
+    <form
+      class="inline-form inline-form--row"
+      method="post"
+      action="{% url 'tasks:edit' subtask.pk %}"
+      hx-post="{% url 'tasks:edit' subtask.pk %}"
+      hx-target="#subtask-row-{{ subtask.pk }}"
+      hx-swap="outerHTML"
+    >
+      {% csrf_token %}
+      {% if form.non_field_errors %}
+        <div class="form-alert">{{ form.non_field_errors }}</div>
+      {% endif %}
+      {% for field in form %}
+        <div class="form-field">
+          <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+          {{ field }}
+          {% if field.errors %}<div class="field-errors">{{ field.errors }}</div>{% endif %}
+        </div>
+      {% endfor %}
+      <div class="form-actions">
+        <button class="button button--secondary" type="button" hx-get="{% url 'tasks:detail' task.pk %}" hx-target="#subtask-section" hx-select="#subtask-section" hx-swap="outerHTML">
+          <span data-lucide="x" aria-hidden="true"></span>
+          Cancelar
+        </button>
+        <button class="button button--primary" type="submit">
+          <span data-lucide="save" aria-hidden="true"></span>
+          Guardar cambios
+        </button>
+      </div>
+    </form>
+  </td>
+</tr>

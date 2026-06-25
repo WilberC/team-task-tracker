@@ -1,0 +1,36 @@
+<section id="kanban-board" class="kanban-board" aria-label="Tablero de tareas">
+  {% for column in columns %}
+    <div class="kanban-column" data-kanban-column="{{ column.status }}">
+      <header class="kanban-column__header">
+        <div>
+          <span class="status-badge status-badge--{{ column.status }}">
+            {% if column.status == "pending" %}
+              <span data-lucide="circle" aria-hidden="true"></span>
+            {% elif column.status == "in_progress" %}
+              <span data-lucide="loader-circle" aria-hidden="true"></span>
+            {% elif column.status == "completed" %}
+              <span data-lucide="check-circle-2" aria-hidden="true"></span>
+            {% elif column.status == "overdue" %}
+              <span data-lucide="triangle-alert" aria-hidden="true"></span>
+            {% else %}
+              <span data-lucide="ban" aria-hidden="true"></span>
+            {% endif %}
+            {{ column.label }}
+          </span>
+        </div>
+        <strong>{{ column.tasks|length }}</strong>
+      </header>
+
+      <div class="kanban-column__body" data-kanban-dropzone="{{ column.status }}">
+        {% for task in column.tasks %}
+          {% include "tasks/partials/kanban_card.html" with task=task %}
+        {% empty %}
+          <div class="kanban-empty">
+            <span data-lucide="inbox" aria-hidden="true"></span>
+            <p>No hay tareas en este estado.</p>
+          </div>
+        {% endfor %}
+      </div>
+    </div>
+  {% endfor %}
+</section>
