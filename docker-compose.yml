@@ -1,0 +1,32 @@
+services:
+  db:
+    image: postgres:17-alpine
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-tracker}
+      POSTGRES_USER: ${POSTGRES_USER:-tracker}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-tracker}
+    ports:
+      - "${POSTGRES_PORT:-5432}:5432"
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-tracker} -d ${POSTGRES_DB:-tracker}"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  app:
+    build: .
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      DJANGO_SECRET_KEY: ${DJANGO_SECRET_KEY:-dev-only-change-me}
+      DJANGO_DEBUG: ${DJANGO_DEBUG:-True}
+      DJANGO_ALLOWED_HOSTS: ${DJANGO_ALLOWED_HOSTS:-localhost,127.0.0.1,0.0.0.0}
+      DATABASE_URL: postgres://${POSTGRES_USER:-tracker}:${POSTGRES_PASSWORD:-tracker}@db:5432/${POSTGRES_DB:-tracker}
+    ports:
+      - "8000:8000"
+
+volumes:
+  postgres-data:

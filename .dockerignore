@@ -1,0 +1,17 @@
+.git
+.venv
+node_modules
+staticfiles
+dist
+.vite
+.ruff_cache
+.pytest_cache
+.env
+.env.*
+__pycache__
+*.pyc
+*.pyo
+*.pyd
+*.sqlite3
+Dockerfile
+docker-compose.yml

@@ -18,7 +18,7 @@ generate job orders — see [Domain](../domain.md).
 
 | # | Phase | Goal | Status |
 | - | ----- | ---- | ------ |
-| 0 | [Project setup & tooling](phase-0-setup.md) | Repo, Django, PostgreSQL, `src/` layout, frontend tooling | ☐ Not started |
+| 0 | [Project setup & tooling](phase-0-setup.md) | Repo, Django, PostgreSQL, `src/` layout, frontend tooling | ✅ Done |
 | 1 | [People & organization](phase-1-people.md) | Areas, employees, teams | ☐ Not started |
 | 2 | [Front desk (minimal)](phase-2-front-desk.md) | Clients, vehicles, service orders (Part 1) | ☐ Not started |
 | 3 | [Job orders](phase-3-job-orders.md) | Workshop hub for interned vehicles (Part 2) | ☐ Not started |
