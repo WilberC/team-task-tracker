@@ -17,4 +17,4 @@ def open_job_orders() -> QuerySet[JobOrder]:
 
 
 def job_order_with_tasks(pk: int | str) -> JobOrder:
-    return job_orders_list().get(pk=pk)
+    return job_orders_list().prefetch_related("tasks__subtasks").get(pk=pk)

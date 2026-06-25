@@ -706,6 +706,75 @@ tbody tr:last-child td {
   font-weight: 700;
 }
 
+.filter-panel {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(160px, 1fr));
+  gap: 12px;
+  margin-bottom: 20px;
+  padding: 16px;
+  border: 1px solid var(--steel-200);
+  border-radius: 2px;
+  background: var(--paper-pure);
+}
+
+.filter-panel .form-field {
+  gap: 6px;
+}
+
+.filter-panel .button {
+  align-self: end;
+}
+
+.progress-bar {
+  height: 8px;
+  overflow: hidden;
+  border-radius: 999px;
+  background: var(--steel-100);
+}
+
+.progress-bar span {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: var(--success);
+}
+
+.progress-meta {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  color: var(--steel-600);
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.panel-body {
+  padding: 16px;
+}
+
+.status-badge--pending,
+.status-badge--medium,
+.status-badge--low {
+  border-color: var(--steel-100);
+  background: var(--steel-50);
+  color: var(--steel-700);
+}
+
+.status-badge--high,
+.status-badge--critical,
+.status-badge--overdue {
+  border-color: var(--danger-soft);
+  background: var(--danger-soft);
+  color: var(--danger);
+}
+
+.status-badge--completed,
+.status-badge--cancelled {
+  border-color: var(--success-soft);
+  background: var(--success-soft);
+  color: var(--success);
+}
+
 @media (max-width: 860px) {
   .site-header__inner {
     align-items: flex-start;
@@ -756,6 +825,10 @@ tbody tr:last-child td {
   }
 
   .detail-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .filter-panel {
     grid-template-columns: 1fr;
   }
 

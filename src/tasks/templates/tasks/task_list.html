@@ -1,0 +1,97 @@
+{% extends "base.html" %}
+
+{% block title %}Tareas | Jawinsa Repara{% endblock %}
+
+{% block content %}
+  <header class="page-header">
+    <p class="eyebrow">TALLER</p>
+    <h1>Tareas</h1>
+    <p class="page-intro">Filtre el trabajo por orden, area, responsable, estado, prioridad o fecha limite.</p>
+  </header>
+
+  <form class="filter-panel" method="get">
+    {% for field in filter_form %}
+      <div class="form-field">
+        <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+        {{ field }}
+      </div>
+    {% endfor %}
+    <button class="button button--primary" type="submit">
+      <span data-lucide="filter" aria-hidden="true"></span>
+      Filtrar
+    </button>
+  </form>
+
+  <section class="data-panel">
+    {% if tasks %}
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Tarea</th>
+              <th>Orden</th>
+              <th>Area</th>
+              <th>Responsable</th>
+              <th>Estado</th>
+              <th>Prioridad</th>
+              <th>Fecha limite</th>
+              <th><span class="sr-only">Acciones</span></th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for task in tasks %}
+              <tr>
+                <td>
+                  <strong>{{ task.title }}</strong>
+                  {% if task.parent_task %}<small>Subtarea de {{ task.parent_task.title }}</small>{% endif %}
+                </td>
+                <td>
+                  {% if task.job_order %}
+                    <span class="mono">OT-{{ task.job_order.pk }}</span>
+                  {% else %}
+                    <span class="muted">Heredada</span>
+                  {% endif %}
+                </td>
+                <td>{{ task.area.name }}</td>
+                <td>
+                  {% if task.assigned_employee %}
+                    {{ task.assigned_employee.full_name }}
+                  {% else %}
+                    {{ task.assigned_team.name }}
+                  {% endif %}
+                </td>
+                <td>
+                  <span class="status-badge status-badge--{{ task.status }}">
+                    {{ task.get_status_display }}
+                  </span>
+                </td>
+                <td>
+                  <span class="status-badge status-badge--{{ task.priority }}">
+                    {{ task.get_priority_display }}
+                  </span>
+                </td>
+                <td>{{ task.due_date|date:"d/m/Y" }}</td>
+                <td class="table-actions">
+                  <a class="button button--secondary" href="{% url 'tasks:detail' task.pk %}">
+                    <span data-lucide="folder-open" aria-hidden="true"></span>
+                    Abrir
+                  </a>
+                </td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    {% else %}
+      <div class="empty-state">
+        <span data-lucide="list-checks" aria-hidden="true"></span>
+        <h2>No hay tareas con esos filtros</h2>
+        <p>Abra una orden de trabajo para registrar la primera tarea.</p>
+        <a class="button button--primary" href="{% url 'workshop:list' %}">
+          <span data-lucide="wrench" aria-hidden="true"></span>
+          Ver taller
+        </a>
+      </div>
+    {% endif %}
+  </section>
+{% endblock %}

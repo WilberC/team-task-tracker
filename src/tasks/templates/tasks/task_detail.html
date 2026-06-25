@@ -1,0 +1,140 @@
+{% extends "base.html" %}
+
+{% block title %}{{ task.title }} | Jawinsa Repara{% endblock %}
+
+{% block content %}
+  <header class="page-header page-header--with-action">
+    <div>
+      <p class="eyebrow">TAREA</p>
+      <h1>{{ task.title }}</h1>
+      <p class="page-intro">{{ task.description|default:"Sin descripcion adicional." }}</p>
+    </div>
+    <div class="button-row">
+      {% if not task.parent_task_id %}
+        <a class="button button--primary" href="{% url 'tasks:create_subtask' task.pk %}">
+          <span data-lucide="plus" aria-hidden="true"></span>
+          Agregar subtarea
+        </a>
+      {% endif %}
+      <form method="post" action="{% url 'tasks:cancel' task.pk %}" onsubmit="return confirm('¿Cancelar esta tarea?');">
+        {% csrf_token %}
+        <button class="button button--secondary" type="submit">
+          <span data-lucide="ban" aria-hidden="true"></span>
+          Cancelar
+        </button>
+      </form>
+    </div>
+  </header>
+
+  <section class="detail-grid">
+    <article class="detail-card">
+      <dl class="detail-list">
+        <div>
+          <dt>Estado</dt>
+          <dd>
+            <span class="status-badge status-badge--{{ task.status }}">
+              {{ task.get_status_display }}
+            </span>
+          </dd>
+        </div>
+        <div>
+          <dt>Prioridad</dt>
+          <dd>
+            <span class="status-badge status-badge--{{ task.priority }}">
+              {{ task.get_priority_display }}
+            </span>
+          </dd>
+        </div>
+        <div>
+          <dt>Responsable</dt>
+          <dd>
+            {% if task.assigned_employee %}
+              {{ task.assigned_employee.full_name }}
+            {% else %}
+              {{ task.assigned_team.name }}
+            {% endif %}
+          </dd>
+        </div>
+        <div>
+          <dt>Area</dt>
+          <dd>{{ task.area.name }}</dd>
+        </div>
+        <div>
+          <dt>Fechas</dt>
+          <dd>Inicio: {{ task.start_date|date:"d/m/Y"|default:"Sin fecha" }} · Limite: {{ task.due_date|date:"d/m/Y" }}</dd>
+        </div>
+      </dl>
+    </article>
+
+    <article class="detail-card">
+      <form class="form-field" method="post" action="{% url 'tasks:status' task.pk %}">
+        {% csrf_token %}
+        <label for="task-status">Actualizar estado</label>
+        <select id="task-status" name="status">
+          {% for value, label in status_choices %}
+            <option value="{{ value }}" {% if task.status == value %}selected{% endif %}>{{ label }}</option>
+          {% endfor %}
+        </select>
+        <button class="button button--primary" type="submit">
+          <span data-lucide="refresh-cw" aria-hidden="true"></span>
+          Guardar estado
+        </button>
+      </form>
+    </article>
+  </section>
+
+  {% if not task.parent_task_id %}
+    <section class="data-panel stack-section">
+      <div class="panel-body">
+        <div class="progress-meta">
+          <span>{{ progress.done }} de {{ progress.total }} subtareas cerradas</span>
+          {% if progress.at_risk %}<span>Hay subtareas vencidas</span>{% endif %}
+        </div>
+        <div class="progress-bar" aria-hidden="true">
+          <span style="width: {{ progress.percent }}%;"></span>
+        </div>
+      </div>
+      {% if task.subtasks.all %}
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Subtarea</th>
+                <th>Responsable</th>
+                <th>Estado</th>
+                <th>Fecha limite</th>
+                <th><span class="sr-only">Acciones</span></th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for subtask in task.subtasks.all %}
+                <tr>
+                  <td><strong>{{ subtask.title }}</strong></td>
+                  <td>
+                    {% if subtask.assigned_employee %}
+                      {{ subtask.assigned_employee.full_name }}
+                    {% else %}
+                      {{ subtask.assigned_team.name }}
+                    {% endif %}
+                  </td>
+                  <td>
+                    <span class="status-badge status-badge--{{ subtask.status }}">
+                      {{ subtask.get_status_display }}
+                    </span>
+                  </td>
+                  <td>{{ subtask.due_date|date:"d/m/Y" }}</td>
+                  <td class="table-actions">
+                    <a class="button button--secondary" href="{% url 'tasks:detail' subtask.pk %}">
+                      <span data-lucide="folder-open" aria-hidden="true"></span>
+                      Abrir
+                    </a>
+                  </td>
+                </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      {% endif %}
+    </section>
+  {% endif %}
+{% endblock %}

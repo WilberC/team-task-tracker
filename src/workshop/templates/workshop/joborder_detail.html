@@ -10,6 +10,10 @@
       <p class="page-intro">Revise el vehiculo internado y el trabajo acordado antes de agregar tareas.</p>
     </div>
     <div class="button-row">
+      <a class="button button--primary" href="{% url 'tasks:create' job_order.pk %}">
+        <span data-lucide="plus" aria-hidden="true"></span>
+        Agregar tarea
+      </a>
       {% if job_order.status != "delivered" %}
         <form method="post" action="{% url 'workshop:close' job_order.pk %}" onsubmit="return confirm('¿Cerrar esta orden de trabajo?');">
           {% csrf_token %}
@@ -81,10 +85,56 @@
   </section>
 
   <section class="data-panel stack-section">
-    <div class="empty-state">
-      <span data-lucide="list-checks" aria-hidden="true"></span>
-      <h2>Tareas pendientes de registrar</h2>
-      <p>Las tareas de esta orden se agregan en la siguiente fase.</p>
-    </div>
+    {% if job_order.tasks.all %}
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Tarea</th>
+              <th>Area</th>
+              <th>Responsable</th>
+              <th>Estado</th>
+              <th>Fecha limite</th>
+              <th><span class="sr-only">Acciones</span></th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for task in job_order.tasks.all %}
+              {% if not task.parent_task_id %}
+                <tr>
+                  <td><strong>{{ task.title }}</strong></td>
+                  <td>{{ task.area.name }}</td>
+                  <td>
+                    {% if task.assigned_employee %}
+                      {{ task.assigned_employee.full_name }}
+                    {% else %}
+                      {{ task.assigned_team.name }}
+                    {% endif %}
+                  </td>
+                  <td>
+                    <span class="status-badge status-badge--{{ task.status }}">
+                      {{ task.get_status_display }}
+                    </span>
+                  </td>
+                  <td>{{ task.due_date|date:"d/m/Y" }}</td>
+                  <td class="table-actions">
+                    <a class="button button--secondary" href="{% url 'tasks:detail' task.pk %}">
+                      <span data-lucide="folder-open" aria-hidden="true"></span>
+                      Abrir
+                    </a>
+                  </td>
+                </tr>
+              {% endif %}
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    {% else %}
+      <div class="empty-state">
+        <span data-lucide="list-checks" aria-hidden="true"></span>
+        <h2>No hay tareas registradas</h2>
+        <p>Agregue la primera tarea principal para empezar el control del trabajo.</p>
+      </div>
+    {% endif %}
   </section>
 {% endblock %}

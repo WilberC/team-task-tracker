@@ -36,7 +36,7 @@ order id); the vehicle is interned and tracked until delivery.
 
 ## Status derivation
 
-- [ ] Job order status reflects its tasks (Open → In progress → Done) — finalize the roll-up in [Phase 4](phase-4-tasks.md#progress-roll-up)
+- [x] Job order status reflects its tasks (Open → In progress → Done) — finalize the roll-up in [Phase 4](phase-4-tasks.md#progress-roll-up)
 - [x] Tests: generation guard, status transitions
 
 ## Definition of done
