@@ -1,0 +1,48 @@
+# Phase 8 — Quality & deployment
+
+[← Back to plan](README.md)
+
+**Goal:** harden the application and ship it.
+
+**Depends on:** all previous phases.
+
+## Testing
+
+- [ ] Unit tests for models, selectors, and services across all modules
+- [ ] View/integration tests for the main flows (service order → job order → tasks)
+- [ ] Test the overdue-marking job and progress roll-up edge cases
+- [ ] Test the client view exposes only safe data
+- [ ] Set a coverage target and wire it into CI
+
+## Accessibility & UX review
+
+- [ ] Audit every screen against the [UX principles](../ux-principles.md)
+- [ ] Color contrast, focus order, keyboard navigation, screen-reader labels
+- [ ] Verify status is conveyed by color **and** text everywhere
+- [ ] Mobile/responsive pass (especially the client view and Kanban)
+
+## Performance
+
+- [ ] Add DB indexes (job_order, parent_task, status, due_date, assignees)
+- [ ] Eliminate N+1 queries in lists/board (`select_related` / `prefetch_related`)
+- [ ] Compress and cache static assets
+
+## Security
+
+- [ ] CSRF, auth on internal screens, permissions for internal vs public routes
+- [ ] Client tokens are unguessable and scoped to one job order
+- [ ] Secrets via env vars; `DEBUG=False` in production
+
+## Deployment
+
+- [ ] Production settings (allowed hosts, static via `collectstatic`, logging)
+- [ ] ASGI server (for optional Channels) and PostgreSQL provisioning
+- [ ] CI pipeline: lint, test, build frontend
+- [ ] Run migrations on deploy; smoke-test the live app
+- [ ] Document the deploy and rollback steps
+
+## Definition of done
+
+- [ ] All tests green in CI
+- [ ] Accessibility and UX review signed off
+- [ ] App deployed and reachable, with the full flow working end to end
