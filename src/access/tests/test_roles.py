@@ -103,11 +103,11 @@ class RoleAccessTests(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, "ABC-123")
 
-    def test_root_page_does_not_force_login_redirect(self):
+    def test_root_page_redirects_to_login(self):
         response = self.client.get(reverse("home"))
 
-        self.assertEqual(response.status_code, 200)
-        self.assertContains(response, "Acceso interno")
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(response["Location"], reverse("login"))
 
     def test_login_without_next_uses_role_appropriate_target(self):
         self.client.force_login(self.mechanic_user)

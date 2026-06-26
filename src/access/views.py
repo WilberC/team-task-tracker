@@ -1,5 +1,6 @@
 """Views for authentication flow helpers."""
 
+from django.core.exceptions import PermissionDenied
 from django.shortcuts import redirect
 from django.views import View
 
@@ -17,4 +18,4 @@ class PostLoginRedirectView(View):
             return redirect("sales:list")
         if flags.can_view_workshop:
             return redirect("workshop:list")
-        return redirect("home")
+        raise PermissionDenied("Su usuario no tiene un rol interno asignado.")

@@ -1,38 +1,60 @@
-{% extends "base.html" %}
+{% load static %}
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Ingresar | Jawinsa</title>
+    <link rel="stylesheet" href="{% static 'css/main.css' %}">
+    <script type="module" src="{% static 'js/main.js' %}" defer></script>
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js" defer></script>
+  </head>
+  <body>
+    <main class="auth-page">
+      <section class="auth-panel" aria-labelledby="login-title">
+        <div class="auth-brand">
+          <span class="site-brand__mark" aria-hidden="true">J</span>
+          <span>
+            <strong>Jawinsa</strong>
+            <small>Control de taller</small>
+          </span>
+        </div>
 
-{% block title %}Ingresar | Jawinsa Repara{% endblock %}
+        <div class="auth-card">
+          <header class="auth-header">
+            <h1 id="login-title">Ingreso interno</h1>
+            <p>Acceda con su usuario asignado.</p>
+          </header>
 
-{% block content %}
-  <header class="page-header">
-    <p class="eyebrow">ACCESO INTERNO</p>
-    <h1>Ingresar</h1>
-    <p class="page-intro">Use su usuario interno para trabajar con clientes, ordenes, tareas y reportes.</p>
-  </header>
-
-  <form class="form-panel" method="post">
-    {% csrf_token %}
-    {% if form.non_field_errors %}
-      <div class="form-alert">{{ form.non_field_errors }}</div>
-    {% endif %}
-    <div class="form-field">
-      <label for="{{ form.username.id_for_label }}">Usuario</label>
-      {{ form.username }}
-      {% if form.username.errors %}<div class="field-errors">{{ form.username.errors }}</div>{% endif %}
-    </div>
-    <div class="form-field">
-      <label for="{{ form.password.id_for_label }}">Contrasena</label>
-      {{ form.password }}
-      {% if form.password.errors %}<div class="field-errors">{{ form.password.errors }}</div>{% endif %}
-    </div>
-    <div class="form-actions">
-      <a class="button button--secondary" href="{% url 'home' %}">
-        <span data-lucide="arrow-left" aria-hidden="true"></span>
-        Volver
-      </a>
-      <button class="button button--primary" type="submit">
-        <span data-lucide="log-in" aria-hidden="true"></span>
-        Ingresar
-      </button>
-    </div>
-  </form>
-{% endblock %}
+          <form class="auth-form" method="post">
+            {% csrf_token %}
+            {% if form.non_field_errors %}
+              <div class="form-alert">{{ form.non_field_errors }}</div>
+            {% endif %}
+            <div class="form-field">
+              <label for="{{ form.username.id_for_label }}">Usuario</label>
+              {{ form.username }}
+              {% if form.username.errors %}<div class="field-errors">{{ form.username.errors }}</div>{% endif %}
+            </div>
+            <div class="form-field">
+              <label for="{{ form.password.id_for_label }}">Contrasena</label>
+              {{ form.password }}
+              {% if form.password.errors %}<div class="field-errors">{{ form.password.errors }}</div>{% endif %}
+            </div>
+            <button class="button button--primary auth-submit" type="submit">
+              <span data-lucide="log-in" aria-hidden="true"></span>
+              Ingresar
+            </button>
+          </form>
+        </div>
+      </section>
+    </main>
+    <script>
+      window.addEventListener("DOMContentLoaded", () => {
+        if (window.lucide) {
+          window.lucide.createIcons();
+        }
+      });
+    </script>
+  </body>
+</html>

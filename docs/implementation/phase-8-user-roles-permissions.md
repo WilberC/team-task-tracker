@@ -14,7 +14,7 @@ client status page public, read-only, and token-based.
 - [x] Use Django authentication for internal users.
 - [x] Use Django groups/permissions for role assignment.
 - [x] Keep `/status/<token>/` public and read-only for clients.
-- [x] Do not redirect the root landing page directly to login.
+- [x] Redirect the root path `/` directly to login; no landing page.
 - [x] Internal pages require login and fail closed when a user lacks permission.
 - [x] Permission errors use plain language and never expose hidden data.
 - [x] Templates hide actions the current role cannot perform.
@@ -139,7 +139,7 @@ No internal account is required.
 
 ## UX requirements
 
-- [x] Root page remains a normal project entry screen, not a forced login redirect.
+- [x] Root path redirects directly to login; no landing screen.
 - [x] Unauthenticated access to internal modules redirects to login with a next URL.
 - [x] After login, users land on the requested page or a role-appropriate dashboard.
 - [x] Unauthorized actions show a short explanation and a safe next action.
