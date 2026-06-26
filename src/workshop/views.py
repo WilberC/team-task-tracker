@@ -6,6 +6,16 @@ from django.shortcuts import get_object_or_404, redirect
 from django.views import View
 from django.views.generic import DetailView, ListView, TemplateView
 
+from src.access.mixins import JobOrderObjectAccessMixin, RoleRequiredMixin
+from src.access.roles import (
+    ADMINISTRATOR,
+    FRONT_DESK,
+    MECHANIC,
+    REPORTS_VIEWER,
+    SERVICE_ADVISOR,
+    WORKSHOP_SUPERVISOR,
+    job_order_queryset_for_user,
+)
 from src.workshop.models import JobOrder
 from src.workshop.selectors import (
     client_safe_job_order_status,
@@ -15,16 +25,25 @@ from src.workshop.selectors import (
 from src.workshop.services import close_job_order, mark_job_order_delivered
 
 
-class JobOrderListView(ListView):
+class JobOrderListView(RoleRequiredMixin, ListView):
+    allowed_roles = (
+        ADMINISTRATOR,
+        FRONT_DESK,
+        SERVICE_ADVISOR,
+        WORKSHOP_SUPERVISOR,
+        MECHANIC,
+        REPORTS_VIEWER,
+    )
     model = JobOrder
     template_name = "workshop/joborder_list.html"
     context_object_name = "job_orders"
 
     def get_queryset(self):
-        return open_job_orders()
+        allowed_ids = job_order_queryset_for_user(self.request.user).values("pk")
+        return open_job_orders().filter(pk__in=allowed_ids)
 
 
-class JobOrderDetailView(DetailView):
+class JobOrderDetailView(JobOrderObjectAccessMixin, DetailView):
     model = JobOrder
     template_name = "workshop/joborder_detail.html"
     context_object_name = "job_order"
@@ -45,7 +64,9 @@ class ClientStatusView(TemplateView):
         return context
 
 
-class JobOrderCloseView(View):
+class JobOrderCloseView(RoleRequiredMixin, View):
+    allowed_roles = (ADMINISTRATOR, WORKSHOP_SUPERVISOR)
+
     def post(self, request, pk):
         job_order = get_object_or_404(JobOrder, pk=pk)
         close_job_order(job_order)
@@ -53,7 +74,9 @@ class JobOrderCloseView(View):
         return redirect("workshop:detail", pk=job_order.pk)
 
 
-class JobOrderDeliverView(View):
+class JobOrderDeliverView(RoleRequiredMixin, View):
+    allowed_roles = (ADMINISTRATOR, WORKSHOP_SUPERVISOR)
+
     def post(self, request, pk):
         job_order = get_object_or_404(JobOrder, pk=pk)
         mark_job_order_delivered(job_order)

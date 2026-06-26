@@ -2,6 +2,7 @@
 
 from datetime import timedelta
 
+from django.contrib.auth.models import User
 from django.test import TestCase
 from django.urls import reverse
 from django.utils import timezone
@@ -25,6 +26,12 @@ from src.workshop.services import generate_job_order
 
 class ReportSelectorTests(TestCase):
     def setUp(self):
+        self.user = User.objects.create_superuser(
+            username="admin",
+            password="password",
+            email="admin@example.com",
+        )
+        self.client.force_login(self.user)
         self.today = timezone.localdate()
         self.area = Area.objects.create(name="Mecanica")
         self.paint_area = Area.objects.create(name="Pintura")

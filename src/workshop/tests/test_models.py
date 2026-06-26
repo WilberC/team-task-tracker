@@ -1,5 +1,6 @@
 """Model tests for the workshop module."""
 
+from django.contrib.auth.models import User
 from django.test import TestCase
 from django.urls import reverse
 from django.utils import timezone
@@ -84,6 +85,12 @@ class JobOrderModelTests(TestCase):
 
 class JobOrderViewTests(TestCase):
     def setUp(self):
+        self.user = User.objects.create_superuser(
+            username="admin",
+            password="password",
+            email="admin@example.com",
+        )
+        self.client.force_login(self.user)
         self.area = Area.objects.create(name="Mecanica")
         self.advisor = Employee.objects.create(
             full_name="Luis Asesor",
@@ -150,6 +157,7 @@ class JobOrderViewTests(TestCase):
         self.assertEqual(self.job_order.status, JobOrderStatus.DELIVERED)
 
     def test_client_status_view_resolves_token_without_login(self):
+        self.client.logout()
         response = self.client.get(
             reverse("client_status", args=[self.job_order.client_status_token])
         )
@@ -160,6 +168,7 @@ class JobOrderViewTests(TestCase):
         self.assertContains(response, "Vehiculo recibido")
 
     def test_client_status_view_returns_404_for_invalid_token(self):
+        self.client.logout()
         response = self.client.get(
             reverse("client_status", args=["11111111-1111-1111-1111-111111111111"])
         )
@@ -176,6 +185,7 @@ class JobOrderViewTests(TestCase):
             due_date=timezone.localdate(),
         )
         update_status(task, TaskStatus.IN_PROGRESS)
+        self.client.logout()
 
         response = self.client.get(
             reverse("client_status", args=[self.job_order.client_status_token])

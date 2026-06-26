@@ -1,4 +1,6 @@
+{% load access_tags %}
 <article id="task-status-panel" class="detail-card">
+  {% if request.user|can_update_task:task %}
   <form
     class="form-field"
     method="post"
@@ -22,4 +24,16 @@
       Guardar estado
     </button>
   </form>
+  {% else %}
+    <dl class="detail-list">
+      <div>
+        <dt>Estado</dt>
+        <dd>
+          <span class="status-badge status-badge--{{ task.status }}">
+            {{ task.get_status_display }}
+          </span>
+        </dd>
+      </div>
+    </dl>
+  {% endif %}
 </article>

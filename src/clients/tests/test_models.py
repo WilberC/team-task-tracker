@@ -1,5 +1,6 @@
 """Model tests for the clients module."""
 
+from django.contrib.auth.models import User
 from django.test import TestCase
 from django.urls import reverse
 
@@ -17,6 +18,14 @@ class ClientModelTests(TestCase):
 
 
 class ClientViewTests(TestCase):
+    def setUp(self):
+        self.user = User.objects.create_superuser(
+            username="admin",
+            password="password",
+            email="admin@example.com",
+        )
+        self.client.force_login(self.user)
+
     def test_client_list_renders_registered_clients(self):
         Client.objects.create(full_name="Rosa Medina", phone="999111222")
 

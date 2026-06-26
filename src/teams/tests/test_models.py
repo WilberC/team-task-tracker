@@ -1,5 +1,6 @@
 """Model tests for the teams module."""
 
+from django.contrib.auth.models import User
 from django.test import TestCase
 from django.urls import reverse
 
@@ -28,6 +29,12 @@ class TeamModelTests(TestCase):
 
 class TeamViewTests(TestCase):
     def setUp(self):
+        self.user = User.objects.create_superuser(
+            username="admin",
+            password="password",
+            email="admin@example.com",
+        )
+        self.client.force_login(self.user)
         self.area = Area.objects.create(name="Mecanica")
         self.employee = Employee.objects.create(
             full_name="Carlos Ramos",

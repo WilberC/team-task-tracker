@@ -1,5 +1,6 @@
 """Model tests for the areas module."""
 
+from django.contrib.auth.models import User
 from django.test import TestCase
 from django.urls import reverse
 
@@ -24,6 +25,14 @@ class AreaModelTests(TestCase):
 
 
 class AreaViewTests(TestCase):
+    def setUp(self):
+        self.user = User.objects.create_superuser(
+            username="admin",
+            password="password",
+            email="admin@example.com",
+        )
+        self.client.force_login(self.user)
+
     def test_area_list_renders_registered_areas(self):
         Area.objects.create(name="Electricidad")
 

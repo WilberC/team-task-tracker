@@ -2,6 +2,7 @@
 
 from datetime import timedelta
 
+from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
 from django.test import TestCase
 from django.urls import reverse
@@ -250,6 +251,15 @@ class TaskServiceTests(TaskTestCase):
 
 
 class TaskViewTests(TaskTestCase):
+    def setUp(self):
+        super().setUp()
+        self.user = User.objects.create_superuser(
+            username="admin",
+            password="password",
+            email="admin@example.com",
+        )
+        self.client.force_login(self.user)
+
     def test_top_level_task_create_view_creates_task(self):
         response = self.client.post(
             reverse("tasks:create", args=[self.job_order.pk]),

@@ -1,5 +1,6 @@
 """Model tests for the employees module."""
 
+from django.contrib.auth.models import User
 from django.test import TestCase
 from django.urls import reverse
 
@@ -48,6 +49,12 @@ class EmployeeModelTests(TestCase):
 
 class EmployeeViewTests(TestCase):
     def setUp(self):
+        self.user = User.objects.create_superuser(
+            username="admin",
+            password="password",
+            email="admin@example.com",
+        )
+        self.client.force_login(self.user)
         self.area = Area.objects.create(name="Mecanica")
 
     def test_employee_list_renders_registered_employees(self):

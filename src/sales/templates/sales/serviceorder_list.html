@@ -9,10 +9,10 @@
       <h1>Ordenes de servicio</h1>
       <p class="page-intro">Registre el trabajo acordado con el cliente. Esta informacion queda lista para generar una orden de trabajo.</p>
     </div>
-    <a class="button button--primary" href="{% url 'sales:create' %}">
+    {% if access.can_edit_sales %}<a class="button button--primary" href="{% url 'sales:create' %}">
       <span data-lucide="plus" aria-hidden="true"></span>
       Registrar orden
-    </a>
+    </a>{% endif %}
   </header>
 
   <section class="summary-strip summary-strip--three" aria-label="Resumen de ordenes">
@@ -69,7 +69,7 @@
                         <span data-lucide="wrench" aria-hidden="true"></span>
                         Ver OT
                       </a>
-                    {% elif order.status != "closed" %}
+                    {% elif order.status != "closed" and access.can_approve_service_orders %}
                       <form method="post" action="{% url 'sales:approve' order.pk %}">
                         {% csrf_token %}
                         <button class="button button--primary" type="submit">
@@ -78,10 +78,10 @@
                         </button>
                       </form>
                     {% endif %}
-                    <a class="button button--secondary" href="{% url 'sales:edit' order.pk %}">
+                    {% if access.can_edit_sales %}<a class="button button--secondary" href="{% url 'sales:edit' order.pk %}">
                       <span data-lucide="pencil" aria-hidden="true"></span>
                       Editar
-                    </a>
+                    </a>{% endif %}
                   </div>
                 </td>
               </tr>
@@ -94,10 +94,10 @@
         <span data-lucide="clipboard-list" aria-hidden="true"></span>
         <h2>No hay ordenes de servicio</h2>
         <p>Cree una orden cuando el cliente y su vehiculo ya esten registrados.</p>
-        <a class="button button--primary" href="{% url 'sales:create' %}">
+        {% if access.can_edit_sales %}<a class="button button--primary" href="{% url 'sales:create' %}">
           <span data-lucide="plus" aria-hidden="true"></span>
           Registrar primera orden
-        </a>
+        </a>{% endif %}
       </div>
     {% endif %}
   </section>

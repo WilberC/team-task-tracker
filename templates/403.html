@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+
+{% block title %}Sin permiso | Jawinsa Repara{% endblock %}
+
+{% block content %}
+  <section class="empty-state">
+    <span data-lucide="lock" aria-hidden="true"></span>
+    <h1>Sin permiso</h1>
+    <p>No tiene acceso para realizar esta accion. Revise su rol con el administrador del sistema.</p>
+    <a class="button button--primary" href="{% url 'home' %}">
+      <span data-lucide="layout-dashboard" aria-hidden="true"></span>
+      Volver al panel
+    </a>
+  </section>
+{% endblock %}

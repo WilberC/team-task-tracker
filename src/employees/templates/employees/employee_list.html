@@ -9,10 +9,10 @@
       <h1>Empleados</h1>
       <p class="page-intro">Registre mecanicos y asesores por area. Solo empleados activos aparecen en futuras asignaciones.</p>
     </div>
-    <a class="button button--primary" href="{% url 'employees:create' %}">
+    {% if access.can_manage_people %}<a class="button button--primary" href="{% url 'employees:create' %}">
       <span data-lucide="plus" aria-hidden="true"></span>
       Registrar empleado
-    </a>
+    </a>{% endif %}
   </header>
 
   <section class="summary-strip" aria-label="Resumen de empleados">
@@ -53,12 +53,12 @@
                     {% if employee.active and employee.area.active %}Disponible{% else %}No disponible{% endif %}
                   </span>
                 </td>
-                <td class="table-actions">
+                {% if access.can_manage_people %}<td class="table-actions">
                   <a class="button button--secondary" href="{% url 'employees:edit' employee.pk %}">
                     <span data-lucide="pencil" aria-hidden="true"></span>
                     Editar
                   </a>
-                </td>
+                </td>{% endif %}
               </tr>
             {% endfor %}
           </tbody>
@@ -69,10 +69,10 @@
         <span data-lucide="users" aria-hidden="true"></span>
         <h2>No hay empleados registrados</h2>
         <p>Agregue primero al personal que recibira tareas o negociara ordenes.</p>
-        <a class="button button--primary" href="{% url 'employees:create' %}">
+        {% if access.can_manage_people %}<a class="button button--primary" href="{% url 'employees:create' %}">
           <span data-lucide="plus" aria-hidden="true"></span>
           Registrar primer empleado
-        </a>
+        </a>{% endif %}
       </div>
     {% endif %}
   </section>

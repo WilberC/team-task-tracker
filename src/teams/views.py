@@ -3,11 +3,24 @@
 from django.urls import reverse_lazy
 from django.views.generic import CreateView, ListView, UpdateView
 
+from src.access.mixins import RoleRequiredMixin
+from src.access.roles import (
+    ADMINISTRATOR,
+    REPORTS_VIEWER,
+    SERVICE_ADVISOR,
+    WORKSHOP_SUPERVISOR,
+)
 from src.teams.forms import TeamForm
 from src.teams.models import Team
 
 
-class TeamListView(ListView):
+class TeamListView(RoleRequiredMixin, ListView):
+    allowed_roles = (
+        ADMINISTRATOR,
+        SERVICE_ADVISOR,
+        WORKSHOP_SUPERVISOR,
+        REPORTS_VIEWER,
+    )
     model = Team
     template_name = "teams/team_list.html"
     context_object_name = "teams"
@@ -32,7 +45,8 @@ class TeamListView(ListView):
         return context
 
 
-class TeamCreateView(CreateView):
+class TeamCreateView(RoleRequiredMixin, CreateView):
+    allowed_roles = (ADMINISTRATOR,)
     model = Team
     form_class = TeamForm
     template_name = "teams/team_form.html"
@@ -45,7 +59,8 @@ class TeamCreateView(CreateView):
         return context
 
 
-class TeamUpdateView(UpdateView):
+class TeamUpdateView(RoleRequiredMixin, UpdateView):
+    allowed_roles = (ADMINISTRATOR,)
     model = Team
     form_class = TeamForm
     template_name = "teams/team_form.html"

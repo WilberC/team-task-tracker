@@ -6,13 +6,28 @@ from django.urls import reverse_lazy
 from django.views import View
 from django.views.generic import CreateView, ListView, UpdateView
 
+from src.access.mixins import RoleRequiredMixin
+from src.access.roles import (
+    ADMINISTRATOR,
+    FRONT_DESK,
+    REPORTS_VIEWER,
+    SERVICE_ADVISOR,
+    WORKSHOP_SUPERVISOR,
+)
 from src.sales.forms import ServiceOrderForm
 from src.sales.models import ServiceOrder, ServiceOrderStatus
 from src.sales.selectors import service_orders_list
 from src.workshop.services import generate_job_order
 
 
-class ServiceOrderListView(ListView):
+class ServiceOrderListView(RoleRequiredMixin, ListView):
+    allowed_roles = (
+        ADMINISTRATOR,
+        FRONT_DESK,
+        SERVICE_ADVISOR,
+        WORKSHOP_SUPERVISOR,
+        REPORTS_VIEWER,
+    )
     model = ServiceOrder
     template_name = "sales/serviceorder_list.html"
     context_object_name = "service_orders"
@@ -34,7 +49,8 @@ class ServiceOrderListView(ListView):
         return context
 
 
-class ServiceOrderCreateView(CreateView):
+class ServiceOrderCreateView(RoleRequiredMixin, CreateView):
+    allowed_roles = (ADMINISTRATOR, FRONT_DESK, SERVICE_ADVISOR)
     model = ServiceOrder
     form_class = ServiceOrderForm
     template_name = "sales/serviceorder_form.html"
@@ -53,7 +69,8 @@ class ServiceOrderCreateView(CreateView):
         return response
 
 
-class ServiceOrderUpdateView(UpdateView):
+class ServiceOrderUpdateView(RoleRequiredMixin, UpdateView):
+    allowed_roles = (ADMINISTRATOR, FRONT_DESK, SERVICE_ADVISOR)
     model = ServiceOrder
     form_class = ServiceOrderForm
     template_name = "sales/serviceorder_form.html"
@@ -72,7 +89,9 @@ class ServiceOrderUpdateView(UpdateView):
         return response
 
 
-class ServiceOrderApproveView(View):
+class ServiceOrderApproveView(RoleRequiredMixin, View):
+    allowed_roles = (ADMINISTRATOR, SERVICE_ADVISOR)
+
     def post(self, request, pk):
         service_order = get_object_or_404(ServiceOrder, pk=pk)
         job_order = generate_job_order(service_order)

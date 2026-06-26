@@ -3,11 +3,24 @@
 from django.urls import reverse_lazy
 from django.views.generic import CreateView, ListView, UpdateView
 
+from src.access.mixins import RoleRequiredMixin
+from src.access.roles import (
+    ADMINISTRATOR,
+    REPORTS_VIEWER,
+    SERVICE_ADVISOR,
+    WORKSHOP_SUPERVISOR,
+)
 from src.employees.forms import EmployeeForm
 from src.employees.models import Employee
 
 
-class EmployeeListView(ListView):
+class EmployeeListView(RoleRequiredMixin, ListView):
+    allowed_roles = (
+        ADMINISTRATOR,
+        SERVICE_ADVISOR,
+        WORKSHOP_SUPERVISOR,
+        REPORTS_VIEWER,
+    )
     model = Employee
     template_name = "employees/employee_list.html"
     context_object_name = "employees"
@@ -28,7 +41,8 @@ class EmployeeListView(ListView):
         return context
 
 
-class EmployeeCreateView(CreateView):
+class EmployeeCreateView(RoleRequiredMixin, CreateView):
+    allowed_roles = (ADMINISTRATOR,)
     model = Employee
     form_class = EmployeeForm
     template_name = "employees/employee_form.html"
@@ -41,7 +55,8 @@ class EmployeeCreateView(CreateView):
         return context
 
 
-class EmployeeUpdateView(UpdateView):
+class EmployeeUpdateView(RoleRequiredMixin, UpdateView):
+    allowed_roles = (ADMINISTRATOR,)
     model = Employee
     form_class = EmployeeForm
     template_name = "employees/employee_form.html"

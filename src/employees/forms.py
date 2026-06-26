@@ -9,8 +9,9 @@ from src.employees.models import Employee
 class EmployeeForm(forms.ModelForm):
     class Meta:
         model = Employee
-        fields = ["full_name", "email", "area", "position", "active"]
+        fields = ["user", "full_name", "email", "area", "position", "active"]
         labels = {
+            "user": "Usuario interno",
             "full_name": "Nombre completo",
             "email": "Correo",
             "area": "Area de trabajo",
@@ -18,6 +19,7 @@ class EmployeeForm(forms.ModelForm):
             "active": "Disponible para nuevas asignaciones",
         }
         help_texts = {
+            "user": "Use este vinculo para permisos de mecanico o asesor.",
             "active": (
                 "Los empleados inactivos no aparecen en selectores de asignacion."
             ),

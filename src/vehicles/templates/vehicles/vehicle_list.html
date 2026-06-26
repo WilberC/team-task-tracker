@@ -9,10 +9,10 @@
       <h1>Vehiculos</h1>
       <p class="page-intro">Cada vehiculo pertenece a un cliente. Esa relacion sera usada al crear la orden de servicio.</p>
     </div>
-    <a class="button button--primary" href="{% url 'vehicles:create' %}">
+    {% if access.can_edit_vehicles %}<a class="button button--primary" href="{% url 'vehicles:create' %}">
       <span data-lucide="plus" aria-hidden="true"></span>
       Registrar vehiculo
-    </a>
+    </a>{% endif %}
   </header>
 
   <section class="data-panel">
@@ -35,12 +35,12 @@
                 <td>{{ vehicle.client.full_name }}</td>
                 <td>{{ vehicle.make }} {{ vehicle.model }}</td>
                 <td>{{ vehicle.year }}</td>
-                <td class="table-actions">
+                {% if access.can_edit_vehicles %}<td class="table-actions">
                   <a class="button button--secondary" href="{% url 'vehicles:edit' vehicle.pk %}">
                     <span data-lucide="pencil" aria-hidden="true"></span>
                     Editar
                   </a>
-                </td>
+                </td>{% endif %}
               </tr>
             {% endfor %}
           </tbody>
@@ -51,10 +51,10 @@
         <span data-lucide="car-front" aria-hidden="true"></span>
         <h2>No hay vehiculos registrados</h2>
         <p>Registre el vehiculo del cliente antes de crear una orden de servicio.</p>
-        <a class="button button--primary" href="{% url 'vehicles:create' %}">
+        {% if access.can_edit_vehicles %}<a class="button button--primary" href="{% url 'vehicles:create' %}">
           <span data-lucide="plus" aria-hidden="true"></span>
           Registrar primer vehiculo
-        </a>
+        </a>{% endif %}
       </div>
     {% endif %}
   </section>

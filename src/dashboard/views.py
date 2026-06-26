@@ -3,10 +3,23 @@
 from django.shortcuts import render
 from django.views.generic import TemplateView
 
+from src.access.mixins import RoleRequiredMixin
+from src.access.roles import (
+    ADMINISTRATOR,
+    REPORTS_VIEWER,
+    SERVICE_ADVISOR,
+    WORKSHOP_SUPERVISOR,
+)
 from src.dashboard.selectors import current_area_load, dashboard_snapshot
 
 
-class DashboardView(TemplateView):
+class DashboardView(RoleRequiredMixin, TemplateView):
+    allowed_roles = (
+        ADMINISTRATOR,
+        SERVICE_ADVISOR,
+        WORKSHOP_SUPERVISOR,
+        REPORTS_VIEWER,
+    )
     template_name = "dashboard/index.html"
 
     def get(self, request, *args, **kwargs):

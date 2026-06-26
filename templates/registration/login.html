@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+
+{% block title %}Ingresar | Jawinsa Repara{% endblock %}
+
+{% block content %}
+  <header class="page-header">
+    <p class="eyebrow">ACCESO INTERNO</p>
+    <h1>Ingresar</h1>
+    <p class="page-intro">Use su usuario interno para trabajar con clientes, ordenes, tareas y reportes.</p>
+  </header>
+
+  <form class="form-panel" method="post">
+    {% csrf_token %}
+    {% if form.non_field_errors %}
+      <div class="form-alert">{{ form.non_field_errors }}</div>
+    {% endif %}
+    <div class="form-field">
+      <label for="{{ form.username.id_for_label }}">Usuario</label>
+      {{ form.username }}
+      {% if form.username.errors %}<div class="field-errors">{{ form.username.errors }}</div>{% endif %}
+    </div>
+    <div class="form-field">
+      <label for="{{ form.password.id_for_label }}">Contrasena</label>
+      {{ form.password }}
+      {% if form.password.errors %}<div class="field-errors">{{ form.password.errors }}</div>{% endif %}
+    </div>
+    <div class="form-actions">
+      <a class="button button--secondary" href="{% url 'home' %}">
+        <span data-lucide="arrow-left" aria-hidden="true"></span>
+        Volver
+      </a>
+      <button class="button button--primary" type="submit">
+        <span data-lucide="log-in" aria-hidden="true"></span>
+        Ingresar
+      </button>
+    </div>
+  </form>
+{% endblock %}

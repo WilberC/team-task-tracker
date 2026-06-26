@@ -6,6 +6,8 @@ from django.utils import timezone
 from django.utils.dateparse import parse_date
 from django.views.generic import TemplateView
 
+from src.access.mixins import RoleRequiredMixin
+from src.access.roles import ADMINISTRATOR, REPORTS_VIEWER, WORKSHOP_SUPERVISOR
 from src.reports.selectors import (
     deadline_compliance,
     overdue_tasks,
@@ -15,7 +17,8 @@ from src.reports.selectors import (
 )
 
 
-class ReportsView(TemplateView):
+class ReportsView(RoleRequiredMixin, TemplateView):
+    allowed_roles = (ADMINISTRATOR, WORKSHOP_SUPERVISOR, REPORTS_VIEWER)
     template_name = "reports/index.html"
 
     def get_context_data(self, **kwargs):

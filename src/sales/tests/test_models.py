@@ -1,5 +1,6 @@
 """Model tests for the sales module."""
 
+from django.contrib.auth.models import User
 from django.test import TestCase
 from django.urls import reverse
 
@@ -38,6 +39,12 @@ class ServiceOrderModelTests(TestCase):
 
 class ServiceOrderViewTests(TestCase):
     def setUp(self):
+        self.user = User.objects.create_superuser(
+            username="admin",
+            password="password",
+            email="admin@example.com",
+        )
+        self.client.force_login(self.user)
         self.area = Area.objects.create(name="Recepcion")
         self.advisor = Employee.objects.create(
             full_name="Ana Torres",

@@ -1,3 +1,4 @@
+{% load access_tags %}
 <tr id="subtask-row-{{ subtask.pk }}">
   <td><strong>{{ subtask.title }}</strong></td>
   <td>
@@ -15,7 +16,7 @@
   <td>{{ subtask.due_date|date:"d/m/Y" }}</td>
   <td class="table-actions">
     <div class="button-row">
-      <button
+      {% if request.user|can_edit_task_object:subtask %}<button
         class="button button--secondary"
         type="button"
         hx-get="{% url 'tasks:edit' subtask.pk %}?inline=1"
@@ -24,7 +25,7 @@
       >
         <span data-lucide="pencil" aria-hidden="true"></span>
         Editar
-      </button>
+      </button>{% endif %}
       <a class="button button--secondary" href="{% url 'tasks:detail' subtask.pk %}">
         <span data-lucide="folder-open" aria-hidden="true"></span>
         Abrir

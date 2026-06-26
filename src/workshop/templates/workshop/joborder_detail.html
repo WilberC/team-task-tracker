@@ -10,11 +10,11 @@
       <p class="page-intro">Revise el vehiculo internado y el trabajo acordado antes de agregar tareas.</p>
     </div>
     <div class="button-row">
-      <a class="button button--primary" href="{% url 'tasks:create' job_order.pk %}">
+      {% if access.can_manage_tasks %}<a class="button button--primary" href="{% url 'tasks:create' job_order.pk %}">
         <span data-lucide="plus" aria-hidden="true"></span>
         Agregar tarea
-      </a>
-      {% if job_order.status != "delivered" %}
+      </a>{% endif %}
+      {% if job_order.status != "delivered" and access.can_manage_job_orders %}
         <form method="post" action="{% url 'workshop:close' job_order.pk %}" onsubmit="return confirm('¿Cerrar esta orden de trabajo?');">
           {% csrf_token %}
           <button class="button button--secondary" type="submit">
@@ -80,14 +80,14 @@
           <dt>Trabajo acordado</dt>
           <dd>{{ job_order.service_order.description }}</dd>
         </div>
-        <div>
+        {% if access.can_manage_job_orders or access.can_edit_sales %}<div>
           <dt>Link para cliente</dt>
           <dd>
             <a href="{{ job_order.get_client_status_url }}">
               {{ request.scheme }}://{{ request.get_host }}{{ job_order.get_client_status_url }}
             </a>
           </dd>
-        </div>
+        </div>{% endif %}
       </dl>
     </article>
   </section>

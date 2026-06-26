@@ -1,3 +1,4 @@
+{% load access_tags %}
 <section id="subtask-section" class="data-panel stack-section">
   <div class="panel-body">
     <div class="progress-meta">
@@ -36,7 +37,7 @@
     </div>
   {% endif %}
 
-  <div class="inline-panel" id="subtask-form">
+  {% if request.user|can_add_subtask:task %}<div class="inline-panel" id="subtask-form">
     <h2>Agregar subtarea</h2>
     <form
       class="inline-form"
@@ -65,5 +66,5 @@
         </button>
       </div>
     </form>
-  </div>
+  </div>{% endif %}
 </section>

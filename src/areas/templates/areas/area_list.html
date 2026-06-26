@@ -9,10 +9,10 @@
       <h1>Areas de trabajo</h1>
       <p class="page-intro">Mantenga activas solo las areas que se pueden usar en nuevas asignaciones.</p>
     </div>
-    <a class="button button--primary" href="{% url 'areas:create' %}">
+    {% if access.can_manage_people %}<a class="button button--primary" href="{% url 'areas:create' %}">
       <span data-lucide="plus" aria-hidden="true"></span>
       Registrar area
-    </a>
+    </a>{% endif %}
   </header>
 
   <section class="summary-strip" aria-label="Resumen de areas">
@@ -48,12 +48,12 @@
                     {% if area.active %}Activa{% else %}Inactiva{% endif %}
                   </span>
                 </td>
-                <td class="table-actions">
+                {% if access.can_manage_people %}<td class="table-actions">
                   <a class="button button--secondary" href="{% url 'areas:edit' area.pk %}">
                     <span data-lucide="pencil" aria-hidden="true"></span>
                     Editar
                   </a>
-                </td>
+                </td>{% endif %}
               </tr>
             {% endfor %}
           </tbody>
@@ -64,10 +64,10 @@
         <span data-lucide="warehouse" aria-hidden="true"></span>
         <h2>No hay areas registradas</h2>
         <p>Empiece con Mecanica, Planchado, Pintura o Electricidad.</p>
-        <a class="button button--primary" href="{% url 'areas:create' %}">
+        {% if access.can_manage_people %}<a class="button button--primary" href="{% url 'areas:create' %}">
           <span data-lucide="plus" aria-hidden="true"></span>
           Registrar primera area
-        </a>
+        </a>{% endif %}
       </div>
     {% endif %}
   </section>

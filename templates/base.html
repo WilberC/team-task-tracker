@@ -22,17 +22,25 @@
           </a>
           <nav class="site-nav" aria-label="Navegacion principal">
             <a href="/" {% if request.path == "/" %}aria-current="page"{% endif %}>Panel</a>
-            <a href="{% url 'clients:list' %}" {% if request.resolver_match.namespace == "clients" %}aria-current="page"{% endif %}>Clientes</a>
-            <a href="{% url 'vehicles:list' %}" {% if request.resolver_match.namespace == "vehicles" %}aria-current="page"{% endif %}>Vehiculos</a>
-            <a href="{% url 'sales:list' %}" {% if request.resolver_match.namespace == "sales" %}aria-current="page"{% endif %}>Ordenes</a>
-            <a href="{% url 'workshop:list' %}" {% if request.resolver_match.namespace == "workshop" %}aria-current="page"{% endif %}>Taller</a>
-            <a href="{% url 'tasks:list' %}" {% if request.resolver_match.namespace == "tasks" %}aria-current="page"{% endif %}>Tareas</a>
-            <a href="{% url 'dashboard:index' %}" {% if request.resolver_match.namespace == "dashboard" %}aria-current="page"{% endif %}>Dashboard</a>
-            <a href="{% url 'reports:index' %}" {% if request.resolver_match.namespace == "reports" %}aria-current="page"{% endif %}>Reportes</a>
-            <a href="{% url 'areas:list' %}" {% if request.resolver_match.namespace == "areas" %}aria-current="page"{% endif %}>Areas</a>
-            <a href="{% url 'employees:list' %}" {% if request.resolver_match.namespace == "employees" %}aria-current="page"{% endif %}>Empleados</a>
-            <a href="{% url 'teams:list' %}" {% if request.resolver_match.namespace == "teams" %}aria-current="page"{% endif %}>Equipos</a>
-            <a href="/admin/">Admin</a>
+            {% if access.can_view_clients %}<a href="{% url 'clients:list' %}" {% if request.resolver_match.namespace == "clients" %}aria-current="page"{% endif %}>Clientes</a>{% endif %}
+            {% if access.can_view_vehicles %}<a href="{% url 'vehicles:list' %}" {% if request.resolver_match.namespace == "vehicles" %}aria-current="page"{% endif %}>Vehiculos</a>{% endif %}
+            {% if access.can_view_sales %}<a href="{% url 'sales:list' %}" {% if request.resolver_match.namespace == "sales" %}aria-current="page"{% endif %}>Ordenes</a>{% endif %}
+            {% if access.can_view_workshop %}<a href="{% url 'workshop:list' %}" {% if request.resolver_match.namespace == "workshop" %}aria-current="page"{% endif %}>Taller</a>{% endif %}
+            {% if access.can_view_tasks %}<a href="{% url 'tasks:list' %}" {% if request.resolver_match.namespace == "tasks" %}aria-current="page"{% endif %}>Tareas</a>{% endif %}
+            {% if access.can_view_dashboard %}<a href="{% url 'dashboard:index' %}" {% if request.resolver_match.namespace == "dashboard" %}aria-current="page"{% endif %}>Dashboard</a>{% endif %}
+            {% if access.can_view_reports %}<a href="{% url 'reports:index' %}" {% if request.resolver_match.namespace == "reports" %}aria-current="page"{% endif %}>Reportes</a>{% endif %}
+            {% if access.can_view_people %}<a href="{% url 'areas:list' %}" {% if request.resolver_match.namespace == "areas" %}aria-current="page"{% endif %}>Areas</a>{% endif %}
+            {% if access.can_view_people %}<a href="{% url 'employees:list' %}" {% if request.resolver_match.namespace == "employees" %}aria-current="page"{% endif %}>Empleados</a>{% endif %}
+            {% if access.can_view_people %}<a href="{% url 'teams:list' %}" {% if request.resolver_match.namespace == "teams" %}aria-current="page"{% endif %}>Equipos</a>{% endif %}
+            {% if access.can_access_admin %}<a href="/admin/">Admin</a>{% endif %}
+            {% if request.user.is_authenticated %}
+              <form method="post" action="{% url 'logout' %}">
+                {% csrf_token %}
+                <button type="submit">Salir</button>
+              </form>
+            {% else %}
+              <a href="{% url 'login' %}">Ingresar</a>
+            {% endif %}
           </nav>
         </div>
       </header>

@@ -14,10 +14,10 @@
         <span data-lucide="columns-3" aria-hidden="true"></span>
         Ver tablero
       </a>
-      <a class="button button--primary" href="{% url 'workshop:list' %}">
+      {% if access.can_manage_tasks %}<a class="button button--primary" href="{% url 'workshop:list' %}">
         <span data-lucide="plus" aria-hidden="true"></span>
         Nueva tarea
-      </a>
+      </a>{% endif %}
     </div>
   </header>
 

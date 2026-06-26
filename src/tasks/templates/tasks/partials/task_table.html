@@ -63,10 +63,10 @@
       <span data-lucide="list-checks" aria-hidden="true"></span>
       <h2>No hay tareas con esos filtros</h2>
       <p>Abra una orden de trabajo para registrar la primera tarea.</p>
-      <a class="button button--primary" href="{% url 'workshop:list' %}">
+      {% if access.can_manage_tasks %}<a class="button button--primary" href="{% url 'workshop:list' %}">
         <span data-lucide="wrench" aria-hidden="true"></span>
         Ver taller
-      </a>
+      </a>{% endif %}
     </div>
   {% endif %}
 </section>

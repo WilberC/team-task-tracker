@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load access_tags %}
 
 {% block title %}{{ task.title }} | Jawinsa Repara{% endblock %}
 
@@ -10,19 +11,19 @@
       <p class="page-intro">{{ task.description|default:"Sin descripcion adicional." }}</p>
     </div>
     <div class="button-row">
-      {% if not task.parent_task_id %}
+      {% if not task.parent_task_id and request.user|can_add_subtask:task %}
         <a class="button button--primary" href="#subtask-form">
           <span data-lucide="plus" aria-hidden="true"></span>
           Agregar subtarea
         </a>
       {% endif %}
-      <form method="post" action="{% url 'tasks:cancel' task.pk %}" onsubmit="return confirm('¿Cancelar esta tarea?');">
+      {% if request.user|can_cancel_task_object:task %}<form method="post" action="{% url 'tasks:cancel' task.pk %}" onsubmit="return confirm('¿Cancelar esta tarea?');">
         {% csrf_token %}
         <button class="button button--secondary" type="submit">
           <span data-lucide="ban" aria-hidden="true"></span>
           Cancelar
         </button>
-      </form>
+      </form>{% endif %}
     </div>
   </header>
 

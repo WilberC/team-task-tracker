@@ -1,13 +1,27 @@
 """Views for the tasks module."""
 
 from django.contrib import messages
-from django.core.exceptions import ValidationError
+from django.core.exceptions import PermissionDenied, ValidationError
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
 from django.views import View
 from django.views.generic import DetailView, FormView, ListView, UpdateView
 
+from src.access.mixins import RoleRequiredMixin
+from src.access.roles import (
+    ADMINISTRATOR,
+    MECHANIC,
+    REPORTS_VIEWER,
+    SERVICE_ADVISOR,
+    WORKSHOP_SUPERVISOR,
+    can_cancel_task,
+    can_create_subtask,
+    can_edit_task,
+    can_update_task_status,
+    can_view_task,
+    task_queryset_for_user,
+)
 from src.tasks.forms import TaskFilterForm, TaskForm
 from src.tasks.models import Task, TaskStatus
 from src.tasks.selectors import (
@@ -67,14 +81,22 @@ def _kanban_column_context(filters: dict) -> list[dict]:
     ]
 
 
-class TaskListView(ListView):
+class TaskListView(RoleRequiredMixin, ListView):
+    allowed_roles = (
+        ADMINISTRATOR,
+        SERVICE_ADVISOR,
+        WORKSHOP_SUPERVISOR,
+        MECHANIC,
+        REPORTS_VIEWER,
+    )
     model = Task
     template_name = "tasks/task_list.html"
     context_object_name = "tasks"
 
     def get_queryset(self):
         self.filter_form = TaskFilterForm(self.request.GET or None)
-        return tasks_list(_task_filters(self.filter_form))
+        allowed_ids = task_queryset_for_user(self.request.user).values("pk")
+        return tasks_list(_task_filters(self.filter_form)).filter(pk__in=allowed_ids)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -87,12 +109,30 @@ class TaskListView(ListView):
         return [self.template_name]
 
 
-class TaskKanbanView(View):
+class TaskKanbanView(RoleRequiredMixin, View):
+    allowed_roles = (
+        ADMINISTRATOR,
+        SERVICE_ADVISOR,
+        WORKSHOP_SUPERVISOR,
+        MECHANIC,
+        REPORTS_VIEWER,
+    )
+
     def get(self, request):
         filter_form = TaskFilterForm(request.GET or None)
+        allowed_ids = task_queryset_for_user(request.user).values("pk")
+        filters = _task_filters(filter_form)
+        columns = kanban_columns(filters)
+        restricted_columns = {
+            status: queryset.filter(pk__in=allowed_ids)
+            for status, queryset in columns.items()
+        }
         context = {
             "filter_form": filter_form,
-            "columns": _kanban_column_context(_task_filters(filter_form)),
+            "columns": [
+                {"status": status, "label": label, "tasks": restricted_columns[status]}
+                for status, label in TaskStatus.choices
+            ],
             "status_choices": TaskStatus.choices,
         }
         template_name = (
@@ -103,13 +143,23 @@ class TaskKanbanView(View):
         return render(request, template_name, context)
 
 
-class TaskDetailView(DetailView):
+class TaskDetailView(RoleRequiredMixin, DetailView):
+    allowed_roles = (
+        ADMINISTRATOR,
+        SERVICE_ADVISOR,
+        WORKSHOP_SUPERVISOR,
+        MECHANIC,
+        REPORTS_VIEWER,
+    )
     model = Task
     template_name = "tasks/task_detail.html"
     context_object_name = "task"
 
     def get_object(self, queryset=None):
-        return task_with_subtasks(self.kwargs["pk"])
+        task = task_with_subtasks(self.kwargs["pk"])
+        if not can_view_task(self.request.user, task):
+            raise PermissionDenied("No tiene permiso para usar esta tarea.")
+        return task
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -120,7 +170,8 @@ class TaskDetailView(DetailView):
         return context
 
 
-class TopLevelTaskCreateView(FormView):
+class TopLevelTaskCreateView(RoleRequiredMixin, FormView):
+    allowed_roles = (ADMINISTRATOR, WORKSHOP_SUPERVISOR)
     template_name = "tasks/task_form.html"
     form_class = TaskForm
 
@@ -146,12 +197,17 @@ class TopLevelTaskCreateView(FormView):
         return context
 
 
-class SubtaskCreateView(FormView):
+class SubtaskCreateView(RoleRequiredMixin, FormView):
+    allowed_roles = (ADMINISTRATOR, WORKSHOP_SUPERVISOR, MECHANIC)
     template_name = "tasks/task_form.html"
     form_class = TaskForm
 
     def dispatch(self, request, *args, **kwargs):
+        if not request.user.is_authenticated:
+            return self.handle_no_permission()
         self.parent_task = get_object_or_404(Task, pk=kwargs["parent_pk"])
+        if not can_create_subtask(request.user, self.parent_task):
+            raise PermissionDenied("No tiene permiso para agregar subtareas aqui.")
         return super().dispatch(request, *args, **kwargs)
 
     def get_form_kwargs(self):
@@ -188,7 +244,8 @@ class SubtaskCreateView(FormView):
         return context
 
 
-class TaskUpdateView(UpdateView):
+class TaskUpdateView(RoleRequiredMixin, UpdateView):
+    allowed_roles = (ADMINISTRATOR, WORKSHOP_SUPERVISOR, MECHANIC)
     model = Task
     form_class = TaskForm
     template_name = "tasks/task_form.html"
@@ -202,6 +259,12 @@ class TaskUpdateView(UpdateView):
         else:
             kwargs["job_order"] = task.job_order
         return kwargs
+
+    def get_object(self, queryset=None):
+        task = super().get_object(queryset)
+        if not can_edit_task(self.request.user, task):
+            raise PermissionDenied("No tiene permiso para editar esta tarea.")
+        return task
 
     def get(self, request, *args, **kwargs):
         self.object = self.get_object()
@@ -254,9 +317,13 @@ class TaskUpdateView(UpdateView):
         return context
 
 
-class TaskStatusUpdateView(View):
+class TaskStatusUpdateView(RoleRequiredMixin, View):
+    allowed_roles = (ADMINISTRATOR, WORKSHOP_SUPERVISOR, MECHANIC)
+
     def post(self, request, pk):
         task = get_object_or_404(Task, pk=pk)
+        if not can_update_task_status(request.user, task):
+            raise PermissionDenied("No tiene permiso para actualizar esta tarea.")
         new_status = request.POST.get("status")
         try:
             task = update_status(task, new_status)
@@ -324,9 +391,13 @@ class TaskStatusUpdateView(View):
         return redirect("tasks:detail", pk=task.pk)
 
 
-class TaskCancelView(View):
+class TaskCancelView(RoleRequiredMixin, View):
+    allowed_roles = (ADMINISTRATOR, WORKSHOP_SUPERVISOR)
+
     def post(self, request, pk):
         task = get_object_or_404(Task, pk=pk)
+        if not can_cancel_task(request.user, task):
+            raise PermissionDenied("No tiene permiso para cancelar esta tarea.")
         cancel_task(task)
         messages.success(request, "Tarea cancelada.")
         return redirect("tasks:detail", pk=task.pk)

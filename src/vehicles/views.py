@@ -3,12 +3,27 @@
 from django.urls import reverse_lazy
 from django.views.generic import CreateView, ListView, UpdateView
 
+from src.access.mixins import RoleRequiredMixin
+from src.access.roles import (
+    ADMINISTRATOR,
+    FRONT_DESK,
+    REPORTS_VIEWER,
+    SERVICE_ADVISOR,
+    WORKSHOP_SUPERVISOR,
+)
 from src.vehicles.forms import VehicleForm
 from src.vehicles.models import Vehicle
 from src.vehicles.selectors import vehicles_list
 
 
-class VehicleListView(ListView):
+class VehicleListView(RoleRequiredMixin, ListView):
+    allowed_roles = (
+        ADMINISTRATOR,
+        FRONT_DESK,
+        SERVICE_ADVISOR,
+        WORKSHOP_SUPERVISOR,
+        REPORTS_VIEWER,
+    )
     model = Vehicle
     template_name = "vehicles/vehicle_list.html"
     context_object_name = "vehicles"
@@ -17,7 +32,8 @@ class VehicleListView(ListView):
         return vehicles_list()
 
 
-class VehicleCreateView(CreateView):
+class VehicleCreateView(RoleRequiredMixin, CreateView):
+    allowed_roles = (ADMINISTRATOR, FRONT_DESK, SERVICE_ADVISOR)
     model = Vehicle
     form_class = VehicleForm
     template_name = "vehicles/vehicle_form.html"
@@ -30,7 +46,8 @@ class VehicleCreateView(CreateView):
         return context
 
 
-class VehicleUpdateView(UpdateView):
+class VehicleUpdateView(RoleRequiredMixin, UpdateView):
+    allowed_roles = (ADMINISTRATOR, FRONT_DESK, SERVICE_ADVISOR)
     model = Vehicle
     form_class = VehicleForm
     template_name = "vehicles/vehicle_form.html"

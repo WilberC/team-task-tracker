@@ -9,10 +9,10 @@
       <h1>Equipos</h1>
       <p class="page-intro">Agrupe empleados por area para asignar trabajo a un equipo completo cuando corresponda.</p>
     </div>
-    <a class="button button--primary" href="{% url 'teams:create' %}">
+    {% if access.can_manage_people %}<a class="button button--primary" href="{% url 'teams:create' %}">
       <span data-lucide="plus" aria-hidden="true"></span>
       Registrar equipo
-    </a>
+    </a>{% endif %}
   </header>
 
   <section class="summary-strip" aria-label="Resumen de equipos">
@@ -56,12 +56,12 @@
                     {% if team.active and team.area.active %}Disponible{% else %}No disponible{% endif %}
                   </span>
                 </td>
-                <td class="table-actions">
+                {% if access.can_manage_people %}<td class="table-actions">
                   <a class="button button--secondary" href="{% url 'teams:edit' team.pk %}">
                     <span data-lucide="pencil" aria-hidden="true"></span>
                     Editar
                   </a>
-                </td>
+                </td>{% endif %}
               </tr>
             {% endfor %}
           </tbody>
@@ -72,10 +72,10 @@
         <span data-lucide="network" aria-hidden="true"></span>
         <h2>No hay equipos registrados</h2>
         <p>Cree equipos cuando un grupo de empleados deba recibir tareas en conjunto.</p>
-        <a class="button button--primary" href="{% url 'teams:create' %}">
+        {% if access.can_manage_people %}<a class="button button--primary" href="{% url 'teams:create' %}">
           <span data-lucide="plus" aria-hidden="true"></span>
           Registrar primer equipo
-        </a>
+        </a>{% endif %}
       </div>
     {% endif %}
   </section>

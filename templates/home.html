@@ -14,75 +14,84 @@
   </header>
 
   <section class="action-grid" aria-label="Modulos principales">
-    <a class="module-card" href="{% url 'clients:list' %}">
+    {% if access.can_view_clients %}<a class="module-card" href="{% url 'clients:list' %}">
       <span class="module-card__icon" data-lucide="contact" aria-hidden="true"></span>
       <span>
         <strong>Clientes</strong>
         <small>Datos basicos del propietario para recepcion y seguimiento.</small>
       </span>
-    </a>
-    <a class="module-card" href="{% url 'vehicles:list' %}">
+    </a>{% endif %}
+    {% if access.can_view_vehicles %}<a class="module-card" href="{% url 'vehicles:list' %}">
       <span class="module-card__icon" data-lucide="car-front" aria-hidden="true"></span>
       <span>
         <strong>Vehiculos</strong>
         <small>Placa, marca, modelo y anio asociados a cada cliente.</small>
       </span>
-    </a>
-    <a class="module-card" href="{% url 'sales:list' %}">
+    </a>{% endif %}
+    {% if access.can_view_sales %}<a class="module-card" href="{% url 'sales:list' %}">
       <span class="module-card__icon" data-lucide="clipboard-list" aria-hidden="true"></span>
       <span>
         <strong>Ordenes de servicio</strong>
         <small>Trabajo acordado antes de generar una orden de trabajo.</small>
       </span>
-    </a>
-    <a class="module-card" href="{% url 'workshop:list' %}">
+    </a>{% endif %}
+    {% if access.can_view_workshop %}<a class="module-card" href="{% url 'workshop:list' %}">
       <span class="module-card__icon" data-lucide="wrench" aria-hidden="true"></span>
       <span>
         <strong>Taller</strong>
         <small>Vehiculos internados y ordenes de trabajo activas.</small>
       </span>
-    </a>
-    <a class="module-card" href="{% url 'tasks:list' %}">
+    </a>{% endif %}
+    {% if access.can_view_tasks %}<a class="module-card" href="{% url 'tasks:list' %}">
       <span class="module-card__icon" data-lucide="list-checks" aria-hidden="true"></span>
       <span>
         <strong>Tareas</strong>
         <small>Trabajos, subtareas, responsables y vencimientos.</small>
       </span>
-    </a>
-    <a class="module-card" href="{% url 'dashboard:index' %}">
+    </a>{% endif %}
+    {% if access.can_view_dashboard %}<a class="module-card" href="{% url 'dashboard:index' %}">
       <span class="module-card__icon" data-lucide="layout-dashboard" aria-hidden="true"></span>
       <span>
         <strong>Dashboard</strong>
         <small>Resumen de vehiculos, tareas criticas y carga activa.</small>
       </span>
-    </a>
-    <a class="module-card" href="{% url 'reports:index' %}">
+    </a>{% endif %}
+    {% if access.can_view_reports %}<a class="module-card" href="{% url 'reports:index' %}">
       <span class="module-card__icon" data-lucide="chart-column" aria-hidden="true"></span>
       <span>
         <strong>Reportes</strong>
         <small>Estado, vencimientos, carga, productividad y cumplimiento.</small>
       </span>
-    </a>
-    <a class="module-card" href="{% url 'areas:list' %}">
+    </a>{% endif %}
+    {% if access.can_view_people %}<a class="module-card" href="{% url 'areas:list' %}">
       <span class="module-card__icon" data-lucide="warehouse" aria-hidden="true"></span>
       <span>
         <strong>Areas</strong>
         <small>Mecanica, pintura, electricidad y otras lineas de trabajo.</small>
       </span>
-    </a>
-    <a class="module-card" href="{% url 'employees:list' %}">
+    </a>{% endif %}
+    {% if access.can_view_people %}<a class="module-card" href="{% url 'employees:list' %}">
       <span class="module-card__icon" data-lucide="users" aria-hidden="true"></span>
       <span>
         <strong>Empleados</strong>
         <small>Mecanicos, asesores y responsables por area.</small>
       </span>
-    </a>
-    <a class="module-card" href="{% url 'teams:list' %}">
+    </a>{% endif %}
+    {% if access.can_view_people %}<a class="module-card" href="{% url 'teams:list' %}">
       <span class="module-card__icon" data-lucide="network" aria-hidden="true"></span>
       <span>
         <strong>Equipos</strong>
         <small>Grupos disponibles para futuras asignaciones de tareas.</small>
       </span>
-    </a>
+    </a>{% endif %}
+    {% if not request.user.is_authenticated %}
+      <a class="module-card" href="{% url 'login' %}">
+        <span class="module-card__icon" data-lucide="log-in" aria-hidden="true"></span>
+        <span>
+          <strong>Acceso interno</strong>
+          <small>Ingrese para ver los modulos autorizados segun su rol.</small>
+        </span>
+      </a>
+    {% endif %}
   </section>
 {% endblock %}

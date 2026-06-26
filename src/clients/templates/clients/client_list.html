@@ -9,10 +9,10 @@
       <h1>Clientes</h1>
       <p class="page-intro">Registre los datos minimos del propietario para crear vehiculos y ordenes de servicio.</p>
     </div>
-    <a class="button button--primary" href="{% url 'clients:create' %}">
+    {% if access.can_edit_clients %}<a class="button button--primary" href="{% url 'clients:create' %}">
       <span data-lucide="plus" aria-hidden="true"></span>
       Registrar cliente
-    </a>
+    </a>{% endif %}
   </header>
 
   <section class="data-panel">
@@ -33,12 +33,12 @@
                 <td><strong>{{ client.full_name }}</strong></td>
                 <td class="mono">{{ client.phone }}</td>
                 <td>{{ client.email|default:"Sin correo" }}</td>
-                <td class="table-actions">
+                {% if access.can_edit_clients %}<td class="table-actions">
                   <a class="button button--secondary" href="{% url 'clients:edit' client.pk %}">
                     <span data-lucide="pencil" aria-hidden="true"></span>
                     Editar
                   </a>
-                </td>
+                </td>{% endif %}
               </tr>
             {% endfor %}
           </tbody>
@@ -49,10 +49,10 @@
         <span data-lucide="contact" aria-hidden="true"></span>
         <h2>No hay clientes registrados</h2>
         <p>Empiece por el propietario del vehiculo antes de crear la orden de servicio.</p>
-        <a class="button button--primary" href="{% url 'clients:create' %}">
+        {% if access.can_edit_clients %}<a class="button button--primary" href="{% url 'clients:create' %}">
           <span data-lucide="plus" aria-hidden="true"></span>
           Registrar primer cliente
-        </a>
+        </a>{% endif %}
       </div>
     {% endif %}
   </section>

@@ -1,5 +1,6 @@
 """Model tests for the vehicles module."""
 
+from django.contrib.auth.models import User
 from django.test import TestCase
 from django.urls import reverse
 
@@ -51,6 +52,12 @@ class VehicleModelTests(TestCase):
 
 class VehicleViewTests(TestCase):
     def setUp(self):
+        self.user = User.objects.create_superuser(
+            username="admin",
+            password="password",
+            email="admin@example.com",
+        )
+        self.client.force_login(self.user)
         self.client_obj = Client.objects.create(
             full_name="Rosa Medina",
             phone="999111222",
