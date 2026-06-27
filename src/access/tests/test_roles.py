@@ -4,7 +4,7 @@ from datetime import timedelta
 
 from django.contrib.auth.models import Group, User
 from django.core.management import call_command
-from django.test import TestCase
+from django.test import TestCase, override_settings
 from django.urls import reverse
 from django.utils import timezone
 
@@ -210,3 +210,70 @@ class RoleAccessTests(TestCase):
         self.assigned_task.refresh_from_db()
         self.assertEqual(response.status_code, 403)
         self.assertEqual(self.assigned_task.status, TaskStatus.PENDING)
+
+
+@override_settings(
+    SEED_USER_PASSWORD="ClaveCompartida123!",
+    TEST_ACCOUNT_EMAILS=[
+        "administrador@jawinsa.test",
+        "mecanico@jawinsa.test",
+    ],
+    TEST_ACCOUNTS_UNLOCK_PASSWORD="abrir-demo",
+)
+class LoginTestAccountsTests(TestCase):
+    def test_login_page_hides_accounts_until_unlocked(self):
+        response = self.client.get(reverse("login"))
+
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "Cuentas de prueba")
+        self.assertContains(response, "Clave de acceso")
+        self.assertNotContains(response, "administrador@jawinsa.test")
+        self.assertNotContains(response, "ClaveCompartida123!")
+
+    def test_unlock_rejects_wrong_password(self):
+        response = self.client.post(
+            reverse("test_accounts_unlock"),
+            {"unlock_password": "incorrecta"},
+            follow=True,
+        )
+
+        self.assertContains(response, "Clave de acceso incorrecta.")
+        self.assertNotContains(response, "administrador@jawinsa.test")
+
+    def test_unlock_shows_accounts_and_shared_password(self):
+        response = self.client.post(
+            reverse("test_accounts_unlock"),
+            {"unlock_password": "abrir-demo"},
+            follow=True,
+        )
+
+        self.assertContains(response, "administrador@jawinsa.test")
+        self.assertContains(response, "mecanico@jawinsa.test")
+        self.assertContains(response, "ClaveCompartida123!")
+
+    @override_settings(TEST_ACCOUNTS_UNLOCK_PASSWORD="")
+    def test_unlock_route_is_unavailable_without_configuration(self):
+        response = self.client.post(
+            reverse("test_accounts_unlock"),
+            {"unlock_password": "abrir-demo"},
+        )
+
+        self.assertEqual(response.status_code, 404)
+
+    def test_login_accepts_email_or_username(self):
+        call_command("setup_roles")
+        user = User.objects.create_user(
+            username="mecanico",
+            email="mecanico@jawinsa.test",
+            password="password",
+        )
+        user.groups.add(Group.objects.get(name=MECHANIC))
+
+        response = self.client.post(
+            reverse("login"),
+            {"username": "mecanico@jawinsa.test", "password": "password"},
+        )
+
+        self.assertRedirects(
+            response, reverse("post_login"), fetch_redirect_response=False
+        )

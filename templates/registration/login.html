@@ -22,9 +22,100 @@
 
         <div class="auth-card">
           <header class="auth-header">
-            <h1 id="login-title">Ingreso interno</h1>
-            <p>Acceda con su usuario asignado.</p>
+            <div>
+              <h1 id="login-title">Ingreso interno</h1>
+              <p>Acceda con su usuario asignado.</p>
+            </div>
+            {% if test_accounts_available %}
+              <button
+                class="button button--secondary auth-info-button"
+                type="button"
+                aria-controls="test-accounts-popup"
+                aria-expanded="false"
+                data-auth-info-toggle
+                title="Ver cuentas de prueba"
+              >
+                <span data-lucide="info" aria-hidden="true"></span>
+                <span class="sr-only">Ver cuentas de prueba</span>
+              </button>
+            {% endif %}
           </header>
+
+          {% if test_accounts_available %}
+            <div
+              id="test-accounts-popup"
+              class="auth-info-popup"
+              data-auth-info-popup
+              hidden
+            >
+              <section
+                class="auth-info-dialog"
+                role="dialog"
+                aria-modal="true"
+                aria-labelledby="test-accounts-title"
+              >
+                <button
+                  class="button button--secondary auth-info-close"
+                  type="button"
+                  data-auth-info-close
+                  title="Cerrar"
+                >
+                  <span data-lucide="x" aria-hidden="true"></span>
+                  <span class="sr-only">Cerrar</span>
+                </button>
+
+                {% if test_accounts_unlocked %}
+                  <div class="auth-info-copy">
+                    <h2 id="test-accounts-title">Cuentas de prueba</h2>
+                    <p>Use cualquiera de estos correos con la misma contrasena.</p>
+                  </div>
+                  <ul class="auth-account-list">
+                    {% for email in test_account_emails %}
+                      <li>
+                        <button
+                          type="button"
+                          data-auth-account-email="{{ email }}"
+                          data-auth-account-password="{{ test_account_password }}"
+                        >
+                          <span data-lucide="user-round" aria-hidden="true"></span>
+                          <span class="mono">{{ email }}</span>
+                        </button>
+                      </li>
+                    {% endfor %}
+                  </ul>
+                  <div class="auth-shared-password">
+                    <span>Contrasena</span>
+                    <strong class="mono">{{ test_account_password }}</strong>
+                  </div>
+                {% else %}
+                  <form class="auth-unlock-form" method="post" action="{% url 'test_accounts_unlock' %}">
+                    {% csrf_token %}
+                    <div class="auth-info-copy">
+                      <h2 id="test-accounts-title">Cuentas de prueba</h2>
+                      <p>Ingrese la clave de acceso para mostrar las credenciales.</p>
+                    </div>
+                    {% if test_accounts_error %}
+                      <div class="form-alert">{{ test_accounts_error }}</div>
+                    {% endif %}
+                    <div class="form-field">
+                      <label for="test-accounts-unlock">Clave de acceso</label>
+                      <input
+                        id="test-accounts-unlock"
+                        name="unlock_password"
+                        type="password"
+                        autocomplete="off"
+                        required
+                      >
+                    </div>
+                    <button class="button button--secondary" type="submit">
+                      <span data-lucide="unlock-keyhole" aria-hidden="true"></span>
+                      Mostrar cuentas
+                    </button>
+                  </form>
+                {% endif %}
+              </section>
+            </div>
+          {% endif %}
 
           <form class="auth-form" method="post">
             {% csrf_token %}
@@ -32,7 +123,7 @@
               <div class="form-alert">{{ form.non_field_errors }}</div>
             {% endif %}
             <div class="form-field">
-              <label for="{{ form.username.id_for_label }}">Usuario</label>
+              <label for="{{ form.username.id_for_label }}">Usuario o correo</label>
               {{ form.username }}
               {% if form.username.errors %}<div class="field-errors">{{ form.username.errors }}</div>{% endif %}
             </div>

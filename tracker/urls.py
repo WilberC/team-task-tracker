@@ -1,22 +1,24 @@
 """Root URL configuration for Team Task Tracker."""
 
 from django.contrib import admin
-from django.contrib.auth.views import LoginView, LogoutView
+from django.contrib.auth.views import LogoutView
 from django.urls import include, path
 from django.views.generic import RedirectView
 
-from src.access.views import PostLoginRedirectView
+from src.access.views import (
+    InternalLoginView,
+    PostLoginRedirectView,
+    TestAccountsUnlockView,
+)
 from src.workshop.views import ClientStatusView
 
 urlpatterns = [
     path("", RedirectView.as_view(pattern_name="login", permanent=False), name="home"),
+    path("accounts/login/", InternalLoginView.as_view(), name="login"),
     path(
-        "accounts/login/",
-        LoginView.as_view(
-            template_name="registration/login.html",
-            redirect_authenticated_user=True,
-        ),
-        name="login",
+        "accounts/test-accounts/unlock/",
+        TestAccountsUnlockView.as_view(),
+        name="test_accounts_unlock",
     ),
     path("accounts/redirect/", PostLoginRedirectView.as_view(), name="post_login"),
     path("accounts/logout/", LogoutView.as_view(), name="logout"),
