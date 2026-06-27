@@ -223,6 +223,118 @@ CLIENT_DATA = (
         "job_status": JobOrderStatus.IN_PROGRESS,
         "days_offset": -4,
     },
+    {
+        "full_name": "Lima Cargo SAC",
+        "phone": "955 720 410",
+        "email": "mantenimiento@limacargo.example.test",
+        "vehicle": {
+            "plate": "KLM-512",
+            "make": "Hino",
+            "model": "300",
+            "year": 2017,
+        },
+        "advisor": "asesor",
+        "description": (
+            "Camion de reparto con pedal de freno bajo, vibracion al arrancar "
+            "y mantenimiento correctivo urgente."
+        ),
+        "service_status": ServiceOrderStatus.APPROVED,
+        "job_status": JobOrderStatus.IN_PROGRESS,
+        "days_offset": -5,
+    },
+    {
+        "full_name": "Sofia Rojas Medina",
+        "phone": "966 481 007",
+        "email": "sofia.rojas@example.test",
+        "vehicle": {
+            "plate": "MNP-908",
+            "make": "Kia",
+            "model": "Rio",
+            "year": 2022,
+        },
+        "advisor": "recepcion",
+        "description": (
+            "Revision preventiva antes de viaje largo y cotizacion de repuestos "
+            "menores."
+        ),
+        "service_status": ServiceOrderStatus.APPROVED,
+        "job_status": JobOrderStatus.OPEN,
+        "days_offset": 0,
+    },
+    {
+        "full_name": "Inversiones Santa Rosa",
+        "phone": "933 118 642",
+        "email": "flota@santarosa.example.test",
+        "vehicle": {
+            "plate": "SRV-332",
+            "make": "Ford",
+            "model": "Transit",
+            "year": 2016,
+        },
+        "advisor": "asesor",
+        "description": (
+            "Mantenimiento mayor de van de reparto con tareas cerradas y "
+            "trabajo no realizado por decision del cliente."
+        ),
+        "service_status": ServiceOrderStatus.CLOSED,
+        "job_status": JobOrderStatus.DONE,
+        "days_offset": -10,
+    },
+    {
+        "full_name": "Diego Paredes",
+        "phone": "988 441 230",
+        "email": "diego.paredes@example.test",
+        "vehicle": {
+            "plate": "DGP-675",
+            "make": "Chevrolet",
+            "model": "Spark",
+            "year": 2015,
+        },
+        "advisor": "asesor",
+        "description": (
+            "Servicio rapido terminado y entregado para mostrar historial de cliente."
+        ),
+        "service_status": ServiceOrderStatus.CLOSED,
+        "job_status": JobOrderStatus.DELIVERED,
+        "days_offset": -14,
+    },
+    {
+        "full_name": "Constructora Norte SAC",
+        "phone": "977 802 654",
+        "email": "equipos@constructoranorte.example.test",
+        "vehicle": {
+            "plate": "CNO-441",
+            "make": "Isuzu",
+            "model": "NPR",
+            "year": 2018,
+        },
+        "advisor": "asesor",
+        "description": (
+            "Unidad de obra con falla intermitente de arranque y carga electrica "
+            "inestable."
+        ),
+        "service_status": ServiceOrderStatus.APPROVED,
+        "job_status": JobOrderStatus.IN_PROGRESS,
+        "days_offset": -8,
+    },
+    {
+        "full_name": "Clinica San Miguel",
+        "phone": "942 664 990",
+        "email": "logistica@clinicasanmiguel.example.test",
+        "vehicle": {
+            "plate": "PRT-116",
+            "make": "Mercedes-Benz",
+            "model": "Sprinter",
+            "year": 2020,
+        },
+        "advisor": "recepcion",
+        "description": (
+            "Ambulancia en inspeccion prioritaria de seguridad, luces y sirena."
+        ),
+        "service_status": ServiceOrderStatus.APPROVED,
+        "job_status": JobOrderStatus.OPEN,
+        "days_offset": -1,
+    },
 )
 
 TASK_DATA = {
@@ -336,6 +448,262 @@ TASK_DATA = {
             ),
         },
     ),
+    "KLM-512": (
+        {
+            "title": "Reparacion de frenos hidraulicos",
+            "description": (
+                "Diagnosticar perdida de presion, purgar lineas y validar frenado "
+                "en carga."
+            ),
+            "area": "Mecanica",
+            "employee": "supervisor",
+            "priority": TaskPriority.CRITICAL,
+            "status": TaskStatus.OVERDUE,
+            "start_offset": -5,
+            "due_offset": -2,
+            "subtasks": (
+                {
+                    "title": "Medicion de discos y tambores",
+                    "description": "Registrar desgaste y deformacion por eje.",
+                    "employee": "mecanico",
+                    "status": TaskStatus.COMPLETED,
+                    "due_offset": -4,
+                },
+                {
+                    "title": "Purgado de circuito hidraulico",
+                    "description": "Eliminar aire del sistema y revisar fugas.",
+                    "employee": "mecanico",
+                    "status": TaskStatus.OVERDUE,
+                    "due_offset": -2,
+                },
+            ),
+        },
+        {
+            "title": "Cambio de embrague",
+            "description": "Reemplazar kit de embrague y revisar reten del ciguenal.",
+            "area": "Mecanica",
+            "team": "Equipo Mecanica Rapida",
+            "priority": TaskPriority.HIGH,
+            "status": TaskStatus.IN_PROGRESS,
+            "start_offset": -3,
+            "due_offset": 2,
+            "subtasks": (
+                {
+                    "title": "Desmontaje de caja",
+                    "description": "Bajar transmision y proteger sensores cercanos.",
+                    "employee": "mecanico",
+                    "status": TaskStatus.IN_PROGRESS,
+                    "due_offset": 1,
+                },
+                {
+                    "title": "Pedido de kit de embrague",
+                    "description": "Confirmar disponibilidad y lote del repuesto.",
+                    "team": "Equipo Mecanica Rapida",
+                    "status": TaskStatus.PENDING,
+                    "due_offset": 1,
+                },
+            ),
+        },
+        {
+            "title": "Prueba final con carga",
+            "description": "Validar frenado, salida y vibraciones con peso simulado.",
+            "area": "Mecanica",
+            "team": "Equipo Mecanica Rapida",
+            "priority": TaskPriority.MEDIUM,
+            "status": TaskStatus.PENDING,
+            "start_offset": 2,
+            "due_offset": 4,
+            "subtasks": (),
+        },
+    ),
+    "MNP-908": (
+        {
+            "title": "Diagnostico preventivo pre viaje",
+            "description": "Revisar niveles, fugas, neumaticos y condicion de frenos.",
+            "area": "Mecanica",
+            "employee": "mecanico",
+            "priority": TaskPriority.MEDIUM,
+            "status": TaskStatus.PENDING,
+            "start_offset": 0,
+            "due_offset": 1,
+            "subtasks": (
+                {
+                    "title": "Checklist de seguridad",
+                    "description": (
+                        "Validar luces, limpiaparabrisas, bocina y extintor."
+                    ),
+                    "employee": "mecanico",
+                    "status": TaskStatus.PENDING,
+                    "due_offset": 1,
+                },
+            ),
+        },
+        {
+            "title": "Cotizacion de repuestos menores",
+            "description": "Preparar presupuesto para plumillas, filtros y pastillas.",
+            "area": "Recepcion",
+            "employee": "asesor",
+            "priority": TaskPriority.LOW,
+            "status": TaskStatus.PENDING,
+            "start_offset": 0,
+            "due_offset": 2,
+            "subtasks": (),
+        },
+    ),
+    "SRV-332": (
+        {
+            "title": "Cambio de kit de distribucion",
+            "description": "Reemplazar faja, poleas y bomba de agua segun kilometraje.",
+            "area": "Mecanica",
+            "team": "Equipo Mecanica Rapida",
+            "priority": TaskPriority.HIGH,
+            "status": TaskStatus.COMPLETED,
+            "start_offset": -10,
+            "due_offset": -8,
+            "subtasks": (
+                {
+                    "title": "Revision de tensionadores",
+                    "description": (
+                        "Comparar tensionadores retirados con repuestos nuevos."
+                    ),
+                    "employee": "supervisor",
+                    "status": TaskStatus.COMPLETED,
+                    "due_offset": -9,
+                },
+                {
+                    "title": "Prueba de sincronizacion",
+                    "description": (
+                        "Encender motor y validar marcha estable sin codigos."
+                    ),
+                    "employee": "mecanico",
+                    "status": TaskStatus.COMPLETED,
+                    "due_offset": -8,
+                },
+            ),
+        },
+        {
+            "title": "Limpieza de inyectores",
+            "description": "Servicio cancelado porque el cliente lo reprogramara.",
+            "area": "Mecanica",
+            "employee": "mecanico",
+            "priority": TaskPriority.MEDIUM,
+            "status": TaskStatus.CANCELLED,
+            "start_offset": -9,
+            "due_offset": -7,
+            "subtasks": (),
+        },
+    ),
+    "DGP-675": (
+        {
+            "title": "Servicio express de entrega",
+            "description": "Cambio de aceite, lavado tecnico y revision visual final.",
+            "area": "Mecanica",
+            "employee": "mecanico",
+            "priority": TaskPriority.LOW,
+            "status": TaskStatus.COMPLETED,
+            "start_offset": -14,
+            "due_offset": -13,
+            "subtasks": (
+                {
+                    "title": "Lavado de motor controlado",
+                    "description": "Proteger conectores antes de limpieza superficial.",
+                    "employee": "mecanico",
+                    "status": TaskStatus.COMPLETED,
+                    "due_offset": -13,
+                },
+                {
+                    "title": "Entrega con checklist firmado",
+                    "description": (
+                        "Registrar conformidad y recomendaciones al cliente."
+                    ),
+                    "employee": "asesor",
+                    "status": TaskStatus.COMPLETED,
+                    "due_offset": -13,
+                },
+            ),
+        },
+    ),
+    "CNO-441": (
+        {
+            "title": "Reparacion de sistema electrico de arranque",
+            "description": (
+                "Ubicar caida de voltaje y falsos contactos en linea principal."
+            ),
+            "area": "Electricidad",
+            "employee": "supervisor",
+            "priority": TaskPriority.CRITICAL,
+            "status": TaskStatus.OVERDUE,
+            "start_offset": -8,
+            "due_offset": -3,
+            "subtasks": (
+                {
+                    "title": "Prueba de bateria y bornes",
+                    "description": "Medir voltaje en reposo y durante arranque.",
+                    "employee": "supervisor",
+                    "status": TaskStatus.COMPLETED,
+                    "due_offset": -5,
+                },
+                {
+                    "title": "Revision de cableado de motor de arranque",
+                    "description": "Inspeccionar terminales sulfatados y aislamiento.",
+                    "employee": "supervisor",
+                    "status": TaskStatus.OVERDUE,
+                    "due_offset": -3,
+                },
+            ),
+        },
+        {
+            "title": "Cambio de alternador",
+            "description": (
+                "Reemplazar alternador y verificar carga con consumidores activos."
+            ),
+            "area": "Electricidad",
+            "team": "Equipo Electricidad y Diagnostico",
+            "priority": TaskPriority.HIGH,
+            "status": TaskStatus.IN_PROGRESS,
+            "start_offset": -2,
+            "due_offset": 1,
+            "subtasks": (),
+        },
+    ),
+    "PRT-116": (
+        {
+            "title": "Inspeccion prioritaria de ambulancia",
+            "description": (
+                "Validar condiciones minimas de seguridad para retorno a servicio."
+            ),
+            "area": "Mecanica",
+            "employee": "supervisor",
+            "priority": TaskPriority.CRITICAL,
+            "status": TaskStatus.PENDING,
+            "start_offset": 0,
+            "due_offset": 0,
+            "subtasks": (
+                {
+                    "title": "Revision de frenos y neumaticos",
+                    "description": (
+                        "Medir desgaste y presion antes de autorizar salida."
+                    ),
+                    "employee": "mecanico",
+                    "status": TaskStatus.PENDING,
+                    "due_offset": 0,
+                },
+            ),
+        },
+        {
+            "title": "Revision de luces y sirena",
+            "description": (
+                "Comprobar balizas, sirena, luces de emergencia y bateria auxiliar."
+            ),
+            "area": "Electricidad",
+            "team": "Equipo Electricidad y Diagnostico",
+            "priority": TaskPriority.MEDIUM,
+            "status": TaskStatus.PENDING,
+            "start_offset": 0,
+            "due_offset": 1,
+            "subtasks": (),
+        },
+    ),
 }
 
 
@@ -374,7 +742,7 @@ class Command(BaseCommand):
         clients, vehicles, service_orders, job_orders = self._seed_front_desk(
             employees,
         )
-        self._seed_tasks(areas, employees, teams, vehicles, job_orders)
+        task_count = self._seed_tasks(areas, employees, teams, vehicles, job_orders)
         self._refresh_job_orders(job_orders)
 
         self.stdout.write(
@@ -385,7 +753,8 @@ class Command(BaseCommand):
                 f"{len(clients)} clientes, "
                 f"{len(vehicles)} vehiculos, "
                 f"{len(service_orders)} ordenes de servicio, "
-                f"{len(job_orders)} ordenes de trabajo."
+                f"{len(job_orders)} ordenes de trabajo, "
+                f"{task_count} tareas."
             )
         )
         self.stdout.write(
@@ -524,8 +893,9 @@ class Command(BaseCommand):
         teams: dict[str, Team],
         vehicles: dict[str, Vehicle],
         job_orders: dict[str, JobOrder],
-    ) -> None:
+    ) -> int:
         today = timezone.localdate()
+        task_count = 0
         for plate, task_rows in TASK_DATA.items():
             job_order = job_orders[plate]
             for row in task_rows:
@@ -542,6 +912,7 @@ class Command(BaseCommand):
                     start_date=today + timedelta(days=row["start_offset"]),
                     due_date=today + timedelta(days=row["due_offset"]),
                 )
+                task_count += 1
                 for subtask_row in row["subtasks"]:
                     self._upsert_task(
                         title=subtask_row["title"],
@@ -556,7 +927,9 @@ class Command(BaseCommand):
                         start_date=today + timedelta(days=row["start_offset"]),
                         due_date=today + timedelta(days=subtask_row["due_offset"]),
                     )
+                    task_count += 1
             vehicles[plate].save(update_fields=["updated_at"])
+        return task_count
 
     def _upsert_task(
         self,
