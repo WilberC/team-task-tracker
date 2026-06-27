@@ -3,9 +3,10 @@
 from datetime import timedelta
 from io import StringIO
 
+from django.conf import settings
 from django.contrib.auth.models import Group, User
 from django.core.management import call_command
-from django.core.management.base import BaseCommand
+from django.core.management.base import BaseCommand, CommandError
 from django.db import transaction
 from django.db.models import Q
 from django.utils import timezone
@@ -27,8 +28,6 @@ from src.teams.models import Team
 from src.vehicles.models import Vehicle
 from src.workshop.models import JobOrder, JobOrderStatus
 from src.workshop.services import refresh_job_order_status
-
-DEFAULT_PASSWORD = "Jawinsa123!"
 
 SEED_USERNAMES = (
     "administrador",
@@ -346,8 +345,8 @@ class Command(BaseCommand):
     def add_arguments(self, parser) -> None:
         parser.add_argument(
             "--password",
-            default=DEFAULT_PASSWORD,
-            help=f"Password for seeded test users. Default: {DEFAULT_PASSWORD}",
+            default=None,
+            help="Password for seeded test users. Defaults to SEED_USER_PASSWORD.",
         )
         parser.add_argument(
             "--reset",
@@ -357,13 +356,17 @@ class Command(BaseCommand):
 
     @transaction.atomic
     def handle(self, *args, **options) -> None:
+        password = options["password"] or settings.SEED_USER_PASSWORD
+        if not password:
+            raise CommandError("Set SEED_USER_PASSWORD or pass --password.")
+
         if options["reset"]:
             self._reset_seed_data()
 
         call_command("setup_roles", stdout=StringIO(), verbosity=0)
 
         areas = self._seed_areas()
-        users = self._seed_users(areas, options["password"])
+        users = self._seed_users(areas, password)
         employees = {
             username: user.employee_profile for username, user in users.items()
         }
@@ -388,7 +391,7 @@ class Command(BaseCommand):
         self.stdout.write(
             "Usuarios de prueba: "
             + ", ".join(SEED_USERNAMES)
-            + f". Contrasena: {options['password']}"
+            + f". Contrasena: {password}"
         )
 
     def _seed_areas(self) -> dict[str, Area]:

@@ -4,7 +4,8 @@ from io import StringIO
 
 from django.contrib.auth.models import Group, User
 from django.core.management import call_command
-from django.test import TestCase
+from django.core.management.base import CommandError
+from django.test import TestCase, override_settings
 
 from src.access.roles import ADMINISTRATOR, MECHANIC, ROLE_GROUPS
 from src.areas.models import Area
@@ -17,6 +18,7 @@ from src.vehicles.models import Vehicle
 from src.workshop.models import JobOrder, JobOrderStatus
 
 
+@override_settings(SEED_USER_PASSWORD="ClaveSemilla123!")
 class SeedCommandTests(TestCase):
     def call_seed(self, *args):
         output = StringIO()
@@ -30,7 +32,7 @@ class SeedCommandTests(TestCase):
         self.assertEqual(Group.objects.filter(name__in=ROLE_GROUPS).count(), 6)
 
         admin = User.objects.get(username="administrador")
-        self.assertTrue(admin.check_password("Jawinsa123!"))
+        self.assertTrue(admin.check_password("ClaveSemilla123!"))
         self.assertTrue(admin.is_staff)
         self.assertTrue(admin.is_superuser)
         self.assertTrue(admin.groups.filter(name=ADMINISTRATOR).exists())
@@ -75,6 +77,20 @@ class SeedCommandTests(TestCase):
         self.assertEqual(self._counts(), counts)
         self.assertTrue(Vehicle.objects.filter(plate="ABC-123").exists())
         self.assertEqual(User.objects.filter(username="administrador").count(), 1)
+
+    def test_seed_password_argument_overrides_setting(self):
+        self.call_seed("--password", "ClaveLocal456!")
+
+        admin = User.objects.get(username="administrador")
+        self.assertTrue(admin.check_password("ClaveLocal456!"))
+
+    @override_settings(SEED_USER_PASSWORD="")
+    def test_seed_requires_password_setting_or_argument(self):
+        with self.assertRaisesMessage(
+            CommandError,
+            "Set SEED_USER_PASSWORD or pass --password.",
+        ):
+            self.call_seed()
 
     def _counts(self):
         return {
