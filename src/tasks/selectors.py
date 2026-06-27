@@ -18,13 +18,17 @@ class TaskProgress:
 
 
 def tasks_list(filters: dict | None = None) -> QuerySet[Task]:
-    queryset = Task.objects.select_related(
-        "job_order__vehicle",
-        "parent_task",
-        "area",
-        "assigned_employee",
-        "assigned_team",
-    ).order_by("due_date", "title")
+    queryset = (
+        Task.objects.select_related(
+            "job_order__vehicle",
+            "parent_task",
+            "area",
+            "assigned_employee",
+            "assigned_team",
+        )
+        .prefetch_related("assigned_team__members")
+        .order_by("due_date", "title")
+    )
     if not filters:
         return queryset
 
@@ -58,6 +62,7 @@ def task_with_subtasks(pk: int | str) -> Task:
             "subtasks__area",
             "subtasks__assigned_employee",
             "subtasks__assigned_team",
+            "subtasks__assigned_team__members",
         )
         .get(pk=pk)
     )

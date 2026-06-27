@@ -47,6 +47,9 @@ class JobOrder(TimeStampedModel):
 
     class Meta:
         ordering = ["-interned_at"]
+        indexes = [
+            models.Index(fields=["status", "interned_at"], name="job_status_date_idx"),
+        ]
         verbose_name = "orden de trabajo"
         verbose_name_plural = "ordenes de trabajo"
 

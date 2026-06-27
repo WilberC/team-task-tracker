@@ -81,6 +81,24 @@ class Task(TimeStampedModel):
 
     class Meta:
         ordering = ["due_date", "priority", "title"]
+        indexes = [
+            models.Index(
+                fields=["job_order", "parent_task", "status", "due_date"],
+                name="task_board_lookup_idx",
+            ),
+            models.Index(
+                fields=["status", "due_date"],
+                name="task_status_due_idx",
+            ),
+            models.Index(
+                fields=["assigned_employee", "status", "due_date"],
+                name="task_employee_load_idx",
+            ),
+            models.Index(
+                fields=["assigned_team", "status", "due_date"],
+                name="task_team_load_idx",
+            ),
+        ]
         verbose_name = "tarea"
         verbose_name_plural = "tareas"
 

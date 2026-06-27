@@ -245,5 +245,12 @@ def _task_is_assigned_to_employee(task: Task, employee) -> bool:
     if task.assigned_employee_id == employee.pk:
         return True
     if task.assigned_team_id:
+        prefetched_members = getattr(
+            task.assigned_team,
+            "_prefetched_objects_cache",
+            {},
+        ).get("members")
+        if prefetched_members is not None:
+            return any(member.pk == employee.pk for member in prefetched_members)
         return task.assigned_team.members.filter(pk=employee.pk).exists()
     return False

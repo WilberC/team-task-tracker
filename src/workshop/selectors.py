@@ -3,9 +3,9 @@
 from dataclasses import dataclass
 from uuid import UUID
 
-from django.db.models import QuerySet
+from django.db.models import Prefetch, QuerySet
 
-from src.tasks.models import TaskStatus
+from src.tasks.models import Task, TaskStatus
 from src.workshop.models import JobOrder, JobOrderStatus
 
 
@@ -48,16 +48,42 @@ def open_job_orders() -> QuerySet[JobOrder]:
 
 
 def job_order_with_tasks(pk: int | str) -> JobOrder:
-    return job_orders_list().prefetch_related("tasks__subtasks").get(pk=pk)
+    task_queryset = Task.objects.select_related(
+        "area",
+        "assigned_employee",
+        "assigned_team",
+        "parent_task",
+    ).prefetch_related(
+        "assigned_team__members",
+        "subtasks",
+    )
+    return (
+        job_orders_list()
+        .prefetch_related(
+            Prefetch("tasks", queryset=task_queryset),
+        )
+        .get(pk=pk)
+    )
 
 
 def client_safe_job_order_status(token: UUID | str) -> ClientSafeJobOrderStatus:
     job_order = (
         JobOrder.objects.select_related("vehicle")
-        .prefetch_related("tasks")
+        .prefetch_related(
+            Prefetch(
+                "tasks",
+                queryset=Task.objects.filter(parent_task__isnull=True).only(
+                    "job_order_id",
+                    "parent_task_id",
+                    "status",
+                    "title",
+                ),
+                to_attr="client_visible_tasks",
+            ),
+        )
         .get(client_status_token=token)
     )
-    tasks = [task for task in job_order.tasks.all() if task.parent_task_id is None]
+    tasks = list(job_order.client_visible_tasks)
     jobs = tuple(
         ClientSafeJob(
             title=task.title,
