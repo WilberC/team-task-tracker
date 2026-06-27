@@ -3,7 +3,7 @@ WORKDIR /app
 RUN corepack enable
 COPY package.json pnpm-lock.yaml ./
 RUN pnpm install --frozen-lockfile
-COPY src/assets ./src/assets
+COPY src ./src
 COPY tsconfig.json vite.config.ts ./
 RUN pnpm build
 
