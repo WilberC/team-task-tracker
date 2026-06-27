@@ -24,23 +24,23 @@
 
 ## Performance
 
-- [ ] Add DB indexes (job_order, parent_task, status, due_date, assignees)
-- [ ] Eliminate N+1 queries in lists/board (`select_related` / `prefetch_related`)
-- [ ] Compress and cache static assets
+- [x] Add DB indexes (job_order, parent_task, status, due_date, assignees)
+- [x] Eliminate N+1 queries in lists/board (`select_related` / `prefetch_related`)
+- [x] Compress and cache static assets
 
 ## Security
 
-- [ ] CSRF, auth on internal screens, permissions for internal vs public routes
-- [ ] Client tokens are unguessable and scoped to one job order
-- [ ] Secrets via env vars; `DEBUG=False` in production
+- [x] CSRF, auth on internal screens, permissions for internal vs public routes
+- [x] Client tokens are unguessable and scoped to one job order
+- [x] Secrets via env vars; `DEBUG=False` in production
 
 ## Deployment
 
-- [ ] Production settings (allowed hosts, static via `collectstatic`, logging)
-- [ ] ASGI server (for optional Channels) and PostgreSQL provisioning
+- [x] Production settings (allowed hosts, static via `collectstatic`, logging)
+- [x] ASGI server (for optional Channels) and PostgreSQL provisioning
 - [ ] CI pipeline: lint, test, build frontend
 - [ ] Run migrations on deploy; smoke-test the live app
-- [ ] Document the deploy and rollback steps
+- [x] Document the deploy and rollback steps
 
 ## Definition of done
 

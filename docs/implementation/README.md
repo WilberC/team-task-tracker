@@ -27,7 +27,7 @@ generate job orders — see [Domain](../domain.md).
 | 6 | [Client status view](phase-6-client-view.md) | Public, read-only vehicle status | ✅ Done |
 | 7 | [Dashboard & reports](phase-7-dashboard-reports.md) | Summary screen and the five reports | ✅ Done |
 | 8 | [User roles & permissions](phase-8-user-roles-permissions.md) | Internal access control and role-gated workflows | ✅ Done |
-| 9 | [Quality & deployment](phase-9-quality-deploy.md) | Tests, accessibility, performance, deploy | ☐ Not started |
+| 9 | [Quality & deployment](phase-9-quality-deploy.md) | Tests, accessibility, performance, deploy | 🔄 In progress |
 
 Update the **Status** column as phases progress (e.g. ☐ → 🔄 In progress → ✅ Done).
 

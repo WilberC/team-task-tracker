@@ -106,6 +106,7 @@ The full specification lives in [`docs/`](docs/), split by concern:
 | [Tech Stack](docs/tech-stack.md)     | Each technology and where it is used |
 | [Architecture](docs/architecture.md) | Repository layout, Django modules, templates, assets (diagram) |
 | [Paradigms](docs/paradigms.md)       | How OOP, functional, and structured programming are applied |
+| [Deployment](docs/deployment.md)     | Production environment, release, smoke-test, and rollback steps |
 | [Implementation Plan](docs/implementation/README.md) | Phased build plan with checkable task lists |
 
 ## Diagrams
