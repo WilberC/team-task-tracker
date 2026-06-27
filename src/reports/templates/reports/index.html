@@ -3,10 +3,16 @@
 {% block title %}Reportes | Jawinsa Repara{% endblock %}
 
 {% block content %}
-  <header class="page-header">
-    <p class="eyebrow">LECTURA OPERATIVA</p>
-    <h1>Reportes</h1>
-    <p class="page-intro">Cinco agregaciones de tareas para revisar estado, vencimientos, carga, productividad y cumplimiento.</p>
+  <header class="page-header page-header--with-action">
+    <div>
+      <p class="eyebrow">LECTURA OPERATIVA</p>
+      <h1>Reportes</h1>
+      <p class="page-intro">Cinco agregaciones de tareas para revisar estado, vencimientos, carga, productividad y cumplimiento.</p>
+    </div>
+    <a class="button button--secondary" href="{% url 'reports:index' %}?{{ export_query }}">
+      <span data-lucide="file-spreadsheet" aria-hidden="true"></span>
+      Exportar XLSX
+    </a>
   </header>
 
   <form class="filter-panel" method="get" action="{% url 'reports:index' %}">
@@ -18,11 +24,36 @@
       <label for="end-date">Hasta</label>
       <input id="end-date" type="date" name="end_date" value="{{ end_date|date:'Y-m-d' }}">
     </div>
-    <button class="button button--primary" type="submit">
-      <span data-lucide="filter" aria-hidden="true"></span>
-      Actualizar
-    </button>
+    <div class="filter-panel__actions">
+      <button class="button button--primary" type="submit">
+        <span data-lucide="filter" aria-hidden="true"></span>
+        Actualizar
+      </button>
+      <a class="button button--secondary" href="{% url 'reports:index' %}?{{ export_query }}">
+        <span data-lucide="download" aria-hidden="true"></span>
+        XLSX
+      </a>
+    </div>
   </form>
+
+  <section class="report-insight-panel" aria-label="Resumen de analisis">
+    <article>
+      <span class="report-insight-panel__label">Periodo</span>
+      <strong>{{ start_date|date:"d/m/Y" }} - {{ end_date|date:"d/m/Y" }}</strong>
+    </article>
+    <article>
+      <span class="report-insight-panel__label">Vencidas abiertas</span>
+      <strong>{{ overdue_tasks|length }}</strong>
+    </article>
+    <article>
+      <span class="report-insight-panel__label">Cumplimiento</span>
+      <strong>{{ deadline.on_time_percent }}%</strong>
+    </article>
+    <article>
+      <span class="report-insight-panel__label">Responsables con carga</span>
+      <strong>{{ workload|length }}</strong>
+    </article>
+  </section>
 
   <section class="report-grid">
     <article class="detail-card report-card">

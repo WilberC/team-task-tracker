@@ -44,7 +44,11 @@ def report_tasks_queryset() -> QuerySet[Task]:
         "area",
         "assigned_employee",
         "assigned_team",
+        "parent_task",
         "job_order__vehicle",
+        "job_order__service_order__client",
+        "parent_task__job_order__vehicle",
+        "parent_task__job_order__service_order__client",
     )
 
 

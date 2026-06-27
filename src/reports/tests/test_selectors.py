@@ -1,11 +1,14 @@
 """Tests for report selector aggregations."""
 
 from datetime import timedelta
+from io import BytesIO
+from zipfile import ZipFile
 
 from django.contrib.auth.models import User
 from django.test import TestCase
 from django.urls import reverse
 from django.utils import timezone
+from openpyxl import load_workbook
 
 from src.areas.models import Area
 from src.clients.models import Client
@@ -223,3 +226,51 @@ class ReportSelectorTests(TestCase):
         self.assertEqual(productivity["Mecanica"], 1)
         self.assertEqual(deadline.on_time_count, 0)
         self.assertEqual(deadline.late_count, 1)
+
+    def test_reports_page_exports_filtered_xlsx_workbook(self):
+        self.make_task(title="Dentro abierta", due_date=self.today)
+        self.make_task(title="Fuera abierta", due_date=self.today + timedelta(days=5))
+
+        response = self.client.get(
+            reverse("reports:index"),
+            {
+                "start_date": self.today.isoformat(),
+                "end_date": self.today.isoformat(),
+                "export": "xlsx",
+            },
+        )
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(
+            response["Content-Type"],
+            "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+        )
+        self.assertIn("reportes-jawinsa", response["Content-Disposition"])
+        with ZipFile(BytesIO(response.content)) as archive:
+            self.assertFalse(
+                any(name.startswith("xl/tables/") for name in archive.namelist())
+            )
+
+        workbook = load_workbook(BytesIO(response.content))
+
+        self.assertEqual(
+            workbook.sheetnames,
+            [
+                "Resumen",
+                "Tareas por estado",
+                "Detalle tareas",
+                "Tareas vencidas",
+                "Carga",
+                "Productividad",
+                "Cumplimiento",
+            ],
+        )
+        task_titles = [
+            row[0]
+            for row in workbook["Detalle tareas"].iter_rows(
+                min_row=6,
+                values_only=True,
+            )
+        ]
+        self.assertIn("Dentro abierta", task_titles)
+        self.assertNotIn("Fuera abierta", task_titles)
