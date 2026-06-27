@@ -31,7 +31,7 @@ COPY tracker ./tracker
 COPY src ./src
 COPY templates ./templates
 
-RUN python manage.py collectstatic --noinput
+RUN DJANGO_SECRET_KEY=build-only-collectstatic python manage.py collectstatic --noinput
 
 USER app
 EXPOSE 8000

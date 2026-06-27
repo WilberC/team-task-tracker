@@ -3,6 +3,7 @@
 import secrets
 
 from django.conf import settings
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.views import LoginView
 from django.core.exceptions import PermissionDenied
 from django.http import Http404
@@ -29,7 +30,7 @@ class InternalLoginView(LoginView):
         return context
 
 
-class PostLoginRedirectView(View):
+class PostLoginRedirectView(LoginRequiredMixin, View):
     def get(self, request):
         flags = access_flags(request.user)
         if flags.can_view_dashboard:

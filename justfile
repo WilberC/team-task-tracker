@@ -23,6 +23,15 @@ lint:
     uv run ruff check .
     uv run ruff format --check .
 
+test:
+    uv run python manage.py test
+
+check:
+    uv run python manage.py check --deploy
+
+collectstatic:
+    uv run python manage.py collectstatic --noinput
+
 format:
     uv run ruff check --fix .
     uv run ruff format .
