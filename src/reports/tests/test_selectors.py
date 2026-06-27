@@ -175,3 +175,51 @@ class ReportSelectorTests(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, "1. Tareas por estado")
         self.assertContains(response, "5. Cumplimiento de fechas")
+
+    def test_reports_page_applies_selected_date_range_to_all_reports(self):
+        start_date = self.today - timedelta(days=2)
+        end_date = self.today - timedelta(days=1)
+        self.make_task(title="Dentro abierta", due_date=end_date)
+        self.make_task(title="Fuera abierta", due_date=self.today + timedelta(days=5))
+        self.make_task(title="Fuera vencida", due_date=self.today - timedelta(days=3))
+        self.make_task(
+            title="Dentro completada",
+            status=TaskStatus.COMPLETED,
+            due_date=start_date,
+            completion_date=end_date,
+        )
+        self.make_task(
+            title="Fuera completada",
+            status=TaskStatus.COMPLETED,
+            due_date=self.today - timedelta(days=3),
+            completion_date=self.today - timedelta(days=3),
+        )
+
+        response = self.client.get(
+            reverse("reports:index"),
+            {
+                "start_date": start_date.isoformat(),
+                "end_date": end_date.isoformat(),
+            },
+        )
+
+        status_counts = {
+            item.status: item.count for item in response.context["status_counts"]
+        }
+        overdue_titles = [task.title for task in response.context["overdue_tasks"]]
+        workload = {
+            (item.kind, item.assignee): item.count
+            for item in response.context["workload"]
+        }
+        productivity = {
+            item.area: item.completed for item in response.context["productivity"]
+        }
+        deadline = response.context["deadline"]
+
+        self.assertEqual(status_counts[TaskStatus.PENDING], 1)
+        self.assertEqual(status_counts[TaskStatus.COMPLETED], 1)
+        self.assertEqual(overdue_titles, ["Dentro abierta"])
+        self.assertEqual(workload[("Empleado", "Carlos Ramos")], 1)
+        self.assertEqual(productivity["Mecanica"], 1)
+        self.assertEqual(deadline.on_time_count, 0)
+        self.assertEqual(deadline.late_count, 1)

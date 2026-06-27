@@ -27,7 +27,7 @@
   <section class="report-grid">
     <article class="detail-card report-card">
       <h2>1. Tareas por estado</h2>
-      <p class="report-note">Cantidad total de tareas agrupadas por estado operativo.</p>
+      <p class="report-note">Tareas con fecha limite dentro del rango seleccionado, agrupadas por estado operativo.</p>
       <div class="status-stack">
         {% for item in status_counts %}
           <div class="status-row">
@@ -40,7 +40,7 @@
 
     <article class="detail-card report-card">
       <h2>2. Tareas vencidas</h2>
-      <p class="report-note">Trabajos que pasaron su fecha limite y siguen abiertos.</p>
+      <p class="report-note">Trabajos del rango seleccionado que pasaron su fecha limite y siguen abiertos.</p>
       <strong class="report-number">{{ overdue_tasks|length }}</strong>
       {% if overdue_tasks %}
         <div class="table-wrap">
@@ -68,7 +68,7 @@
 
     <article class="detail-card report-card">
       <h2>3. Carga por mecanico o equipo</h2>
-      <p class="report-note">Tareas abiertas asignadas a cada responsable.</p>
+      <p class="report-note">Tareas abiertas del rango seleccionado asignadas a cada responsable.</p>
       {% if workload %}
         <div class="workload-list">
           {% for item in workload %}

@@ -13,6 +13,7 @@ from src.reports.selectors import (
     overdue_tasks,
     productivity_by_area,
     tasks_by_status,
+    tasks_due_between,
     workload_by_assignee,
 )
 
@@ -29,14 +30,18 @@ class ReportsView(RoleRequiredMixin, TemplateView):
         start_date = start_date or end_date - timedelta(days=30)
         if start_date > end_date:
             start_date, end_date = end_date, start_date
+        due_date_tasks = tasks_due_between(start_date, end_date)
 
         context.update(
             {
                 "start_date": start_date,
                 "end_date": end_date,
-                "status_counts": tasks_by_status(),
-                "overdue_tasks": overdue_tasks(),
-                "workload": workload_by_assignee(),
+                "status_counts": tasks_by_status(due_date_tasks),
+                "overdue_tasks": overdue_tasks(
+                    start_date=start_date,
+                    end_date=end_date,
+                ),
+                "workload": workload_by_assignee(due_date_tasks),
                 "productivity": productivity_by_area(start_date, end_date),
                 "deadline": deadline_compliance(start_date, end_date),
             }

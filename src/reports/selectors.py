@@ -48,6 +48,10 @@ def report_tasks_queryset() -> QuerySet[Task]:
     )
 
 
+def tasks_due_between(start_date: date, end_date: date) -> QuerySet[Task]:
+    return report_tasks_queryset().filter(due_date__range=(start_date, end_date))
+
+
 def tasks_by_status(tasks: Iterable[Task] | None = None) -> tuple[StatusCount, ...]:
     task_items = list(tasks if tasks is not None else report_tasks_queryset())
     counts = Counter(task.status for task in task_items)
@@ -57,20 +61,24 @@ def tasks_by_status(tasks: Iterable[Task] | None = None) -> tuple[StatusCount, .
     )
 
 
-def overdue_tasks(today: date | None = None) -> QuerySet[Task]:
+def overdue_tasks(
+    today: date | None = None,
+    *,
+    start_date: date | None = None,
+    end_date: date | None = None,
+) -> QuerySet[Task]:
     current_day = today or timezone.localdate()
-    return (
-        report_tasks_queryset()
-        .filter(
-            due_date__lt=current_day,
-            status__in=[
-                TaskStatus.PENDING,
-                TaskStatus.IN_PROGRESS,
-                TaskStatus.OVERDUE,
-            ],
-        )
-        .order_by("due_date", "priority", "title")
+    queryset = report_tasks_queryset().filter(
+        due_date__lt=current_day,
+        status__in=[
+            TaskStatus.PENDING,
+            TaskStatus.IN_PROGRESS,
+            TaskStatus.OVERDUE,
+        ],
     )
+    if start_date and end_date:
+        queryset = queryset.filter(due_date__range=(start_date, end_date))
+    return queryset.order_by("due_date", "priority", "title")
 
 
 def workload_by_assignee(
