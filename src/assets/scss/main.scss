@@ -990,6 +990,39 @@ tbody tr:last-child td {
   align-self: end;
 }
 
+.filter-panel__actions {
+  display: flex;
+  align-items: end;
+  gap: 8px;
+  align-self: end;
+  min-width: 0;
+}
+
+.filter-panel__actions--active {
+  grid-column: span 2;
+}
+
+.filter-panel__actions .button {
+  flex: 1 1 0;
+  min-width: 112px;
+}
+
+.filter-panel__status {
+  min-height: 44px;
+  display: inline-flex;
+  flex: 0 0 auto;
+  align-items: center;
+  padding: 0 10px;
+  border: 1px solid var(--steel-200);
+  border-radius: 2px;
+  background: var(--steel-50);
+  color: var(--steel-600);
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
 .progress-bar {
   height: 8px;
   overflow: hidden;
@@ -1448,6 +1481,19 @@ tbody tr:last-child td {
 
   .filter-panel {
     grid-template-columns: 1fr;
+  }
+
+  .filter-panel__actions--active {
+    grid-column: auto;
+    flex-wrap: wrap;
+  }
+
+  .filter-panel__actions--active .filter-panel__status {
+    min-height: auto;
+    flex-basis: 100%;
+    padding: 0;
+    border: 0;
+    background: transparent;
   }
 
   .kanban-board {

@@ -95,17 +95,19 @@ class TaskListView(RoleRequiredMixin, ListView):
 
     def get_queryset(self):
         self.filter_form = TaskFilterForm(self.request.GET or None)
+        self.active_filters = _task_filters(self.filter_form)
         allowed_ids = task_queryset_for_user(self.request.user).values("pk")
-        return tasks_list(_task_filters(self.filter_form)).filter(pk__in=allowed_ids)
+        return tasks_list(self.active_filters).filter(pk__in=allowed_ids)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context["filter_form"] = self.filter_form
+        context["has_active_filters"] = bool(self.active_filters)
         return context
 
     def get_template_names(self):
         if _is_htmx(self.request):
-            return ["tasks/partials/task_table.html"]
+            return ["tasks/partials/task_list_workspace.html"]
         return [self.template_name]
 
 
@@ -133,10 +135,11 @@ class TaskKanbanView(RoleRequiredMixin, View):
                 {"status": status, "label": label, "tasks": restricted_columns[status]}
                 for status, label in TaskStatus.choices
             ],
+            "has_active_filters": bool(filters),
             "status_choices": TaskStatus.choices,
         }
         template_name = (
-            "tasks/partials/kanban_board.html"
+            "tasks/partials/kanban_workspace.html"
             if _is_htmx(request)
             else "tasks/kanban.html"
         )

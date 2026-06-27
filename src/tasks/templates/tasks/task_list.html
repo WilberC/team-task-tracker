@@ -21,26 +21,5 @@
     </div>
   </header>
 
-  <form
-    class="filter-panel"
-    method="get"
-    action="{% url 'tasks:list' %}"
-    hx-get="{% url 'tasks:list' %}"
-    hx-target="#task-results"
-    hx-push-url="true"
-    hx-trigger="change delay:200ms, submit"
-  >
-    {% for field in filter_form %}
-      <div class="form-field{% if field.field.widget.input_type == 'checkbox' %} form-field--checkbox{% endif %}">
-        <label for="{{ field.id_for_label }}">{{ field.label }}</label>
-        {{ field }}
-      </div>
-    {% endfor %}
-    <button class="button button--primary" type="submit">
-      <span data-lucide="filter" aria-hidden="true"></span>
-      Filtrar
-    </button>
-  </form>
-
-  {% include "tasks/partials/task_table.html" %}
+  {% include "tasks/partials/task_list_workspace.html" %}
 {% endblock %}

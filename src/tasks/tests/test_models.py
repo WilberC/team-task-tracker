@@ -320,6 +320,65 @@ class TaskViewTests(TaskTestCase):
         self.assertContains(response, "Vencida")
         self.assertNotContains(response, "<strong>Pendiente</strong>", html=True)
 
+    def test_task_list_ignores_blank_query_params(self):
+        early = self.make_task(
+            title="Entrega cercana",
+            due_date=timezone.localdate() + timedelta(days=1),
+        )
+        later = self.make_task(
+            title="Entrega posterior",
+            due_date=timezone.localdate() + timedelta(days=4),
+        )
+
+        response = self.client.get(
+            reverse("tasks:list"),
+            {
+                "job_order": "",
+                "area": "",
+                "assigned_employee": "",
+                "assigned_team": "",
+                "status": "",
+                "priority": "",
+                "due_date": "",
+            },
+        )
+
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, early.title)
+        self.assertContains(response, later.title)
+        self.assertNotContains(response, "Filtros activos")
+
+    def test_task_list_filters_by_due_date_when_date_present(self):
+        selected_date = timezone.localdate() + timedelta(days=1)
+        self.make_task(title="Entrega cercana", due_date=selected_date)
+        self.make_task(
+            title="Entrega posterior",
+            due_date=timezone.localdate() + timedelta(days=4),
+        )
+
+        response = self.client.get(
+            reverse("tasks:list"),
+            {
+                "job_order": "",
+                "area": "",
+                "assigned_employee": "",
+                "assigned_team": "",
+                "status": "",
+                "priority": "",
+                "due_date": selected_date.isoformat(),
+            },
+        )
+
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "Entrega cercana")
+        self.assertNotContains(
+            response,
+            "<strong>Entrega posterior</strong>",
+            html=True,
+        )
+        self.assertContains(response, "Filtros activos")
+        self.assertContains(response, "Limpiar")
+
     def test_kanban_board_groups_tasks_by_status(self):
         self.make_task(title="Tarea pendiente")
         self.make_task(title="Tarea vencida", status=TaskStatus.OVERDUE)
@@ -343,10 +402,47 @@ class TaskViewTests(TaskTestCase):
         )
 
         self.assertEqual(response.status_code, 200)
+        self.assertContains(response, 'id="task-workspace"')
         self.assertContains(response, 'id="task-results"')
         self.assertContains(response, "Vencida")
+        self.assertContains(response, "Filtros activos")
+        self.assertContains(response, "Limpiar")
         self.assertNotContains(response, "site-shell")
         self.assertNotContains(response, "<strong>Pendiente</strong>", html=True)
+
+    def test_htmx_task_list_without_filters_hides_clear_action(self):
+        self.make_task(title="Pendiente")
+
+        response = self.client.get(
+            reverse("tasks:list"),
+            HTTP_HX_REQUEST="true",
+        )
+
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, 'id="task-workspace"')
+        self.assertContains(response, "Pendiente")
+        self.assertNotContains(response, "Filtros activos")
+        self.assertNotContains(response, "Limpiar")
+        self.assertNotContains(response, "site-shell")
+
+    def test_htmx_kanban_filters_refresh_workspace(self):
+        self.make_task(title="Tarea pendiente")
+        self.make_task(title="Tarea vencida", status=TaskStatus.OVERDUE)
+
+        response = self.client.get(
+            reverse("tasks:kanban"),
+            {"status": TaskStatus.OVERDUE},
+            HTTP_HX_REQUEST="true",
+        )
+
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, 'id="kanban-workspace"')
+        self.assertContains(response, 'id="kanban-board"')
+        self.assertContains(response, "Tarea vencida")
+        self.assertContains(response, "Filtros activos")
+        self.assertContains(response, "Limpiar")
+        self.assertNotContains(response, "site-shell")
+        self.assertNotContains(response, "Tarea pendiente")
 
     def test_status_update_json_persists(self):
         task = self.make_task()

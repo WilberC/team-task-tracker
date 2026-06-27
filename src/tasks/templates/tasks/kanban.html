@@ -21,26 +21,5 @@
     </div>
   </header>
 
-  <form
-    class="filter-panel"
-    method="get"
-    action="{% url 'tasks:kanban' %}"
-    hx-get="{% url 'tasks:kanban' %}"
-    hx-target="#kanban-board"
-    hx-push-url="true"
-    hx-trigger="change delay:200ms, submit"
-  >
-    {% for field in filter_form %}
-      <div class="form-field{% if field.field.widget.input_type == 'checkbox' %} form-field--checkbox{% endif %}">
-        <label for="{{ field.id_for_label }}">{{ field.label }}</label>
-        {{ field }}
-      </div>
-    {% endfor %}
-    <button class="button button--primary" type="submit">
-      <span data-lucide="filter" aria-hidden="true"></span>
-      Filtrar
-    </button>
-  </form>
-
-  {% include "tasks/partials/kanban_board.html" %}
+  {% include "tasks/partials/kanban_workspace.html" %}
 {% endblock %}

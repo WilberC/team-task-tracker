@@ -1,0 +1,41 @@
+<div id="kanban-workspace">
+  <form
+    class="filter-panel"
+    method="get"
+    action="{% url 'tasks:kanban' %}"
+    hx-get="{% url 'tasks:kanban' %}"
+    hx-target="#kanban-workspace"
+    hx-swap="outerHTML"
+    hx-push-url="true"
+    hx-trigger="change delay:200ms, submit"
+  >
+    {% for field in filter_form %}
+      <div class="form-field{% if field.field.widget.input_type == 'checkbox' %} form-field--checkbox{% endif %}">
+        <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+        {{ field }}
+      </div>
+    {% endfor %}
+    <div class="filter-panel__actions{% if has_active_filters %} filter-panel__actions--active{% endif %}">
+      {% if has_active_filters %}<span class="filter-panel__status">Filtros activos</span>{% endif %}
+      <button class="button button--primary" type="submit">
+        <span data-lucide="filter" aria-hidden="true"></span>
+        Filtrar
+      </button>
+      {% if has_active_filters %}
+        <a
+          class="button button--secondary"
+          href="{% url 'tasks:kanban' %}"
+          hx-get="{% url 'tasks:kanban' %}"
+          hx-target="#kanban-workspace"
+          hx-swap="outerHTML"
+          hx-push-url="true"
+        >
+          <span data-lucide="x" aria-hidden="true"></span>
+          Limpiar
+        </a>
+      {% endif %}
+    </div>
+  </form>
+
+  {% include "tasks/partials/kanban_board.html" %}
+</div>
