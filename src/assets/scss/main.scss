@@ -1200,7 +1200,7 @@ tbody tr:last-child td {
 
 .kanban-card__status {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) auto;
+  grid-template-columns: 1fr;
   gap: 8px;
 }
 
@@ -1214,10 +1214,15 @@ tbody tr:last-child td {
 }
 
 .kanban-card__status select {
+  width: 100%;
   min-height: 40px;
   border: 1px solid var(--steel-300);
   border-radius: 2px;
   background: var(--paper-pure);
+}
+
+.kanban-card__status .button {
+  width: 100%;
 }
 
 .kanban-card__link {
