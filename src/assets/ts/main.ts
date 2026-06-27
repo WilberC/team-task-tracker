@@ -17,6 +17,32 @@ document.body.addEventListener("htmx:afterSwap", () => {
   window.lucide?.createIcons();
 });
 
+const testAccountsUnlockStorageKey = "jawinsa.testAccountsUnlockPassword";
+
+const readStoredUnlockPassword = () => {
+  try {
+    return localStorage.getItem(testAccountsUnlockStorageKey) ?? "";
+  } catch {
+    return "";
+  }
+};
+
+const storeUnlockPassword = (password: string) => {
+  try {
+    localStorage.setItem(testAccountsUnlockStorageKey, password);
+  } catch {
+    // localStorage can be unavailable in restrictive browser modes.
+  }
+};
+
+const clearStoredUnlockPassword = () => {
+  try {
+    localStorage.removeItem(testAccountsUnlockStorageKey);
+  } catch {
+    // localStorage can be unavailable in restrictive browser modes.
+  }
+};
+
 document.querySelectorAll<HTMLElement>("[data-auth-info-toggle]").forEach((toggle) => {
   const panelId = toggle.getAttribute("aria-controls");
   const popup = panelId ? document.getElementById(panelId) : null;
@@ -24,6 +50,10 @@ document.querySelectorAll<HTMLElement>("[data-auth-info-toggle]").forEach((toggl
     return;
   }
   const closeButtons = popup.querySelectorAll<HTMLElement>("[data-auth-info-close]");
+  const unlockForm = popup.querySelector<HTMLFormElement>("[data-auth-unlock-form]");
+  const unlockInput = unlockForm?.querySelector<HTMLInputElement>(
+    "input[name='unlock_password']",
+  );
   const accountButtons = popup.querySelectorAll<HTMLButtonElement>(
     "[data-auth-account-email]",
   );
@@ -34,6 +64,27 @@ document.querySelectorAll<HTMLElement>("[data-auth-info-toggle]").forEach((toggl
     ".auth-form input[name='password']",
   );
   const submitButton = document.querySelector<HTMLButtonElement>(".auth-submit");
+  const unlockState = popup.dataset.authUnlockState ?? "locked";
+
+  if (unlockState === "error") {
+    clearStoredUnlockPassword();
+  }
+
+  if (unlockForm && unlockInput) {
+    unlockForm.addEventListener("submit", () => {
+      if (unlockInput.value) {
+        storeUnlockPassword(unlockInput.value);
+      }
+    });
+  }
+
+  if (unlockState === "locked" && unlockForm && unlockInput) {
+    const storedPassword = readStoredUnlockPassword();
+    if (storedPassword) {
+      unlockInput.value = storedPassword;
+      unlockForm.requestSubmit();
+    }
+  }
 
   const openPopup = () => {
     popup.hidden = false;

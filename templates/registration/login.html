@@ -46,6 +46,7 @@
               id="test-accounts-popup"
               class="auth-info-popup"
               data-auth-info-popup
+              data-auth-unlock-state="{% if test_accounts_unlocked %}unlocked{% elif test_accounts_error %}error{% else %}locked{% endif %}"
               hidden
             >
               <section
@@ -88,7 +89,12 @@
                     <strong class="mono">{{ test_account_password }}</strong>
                   </div>
                 {% else %}
-                  <form class="auth-unlock-form" method="post" action="{% url 'test_accounts_unlock' %}">
+                  <form
+                    class="auth-unlock-form"
+                    method="post"
+                    action="{% url 'test_accounts_unlock' %}"
+                    data-auth-unlock-form
+                  >
                     {% csrf_token %}
                     <div class="auth-info-copy">
                       <h2 id="test-accounts-title">Cuentas de prueba</h2>

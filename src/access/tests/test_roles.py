@@ -227,6 +227,7 @@ class LoginTestAccountsTests(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, "Cuentas de prueba")
         self.assertContains(response, "Clave de acceso")
+        self.assertContains(response, 'data-auth-unlock-state="locked"')
         self.assertNotContains(response, "administrador@jawinsa.test")
         self.assertNotContains(response, "ClaveCompartida123!")
 
@@ -250,6 +251,7 @@ class LoginTestAccountsTests(TestCase):
         self.assertContains(response, "administrador@jawinsa.test")
         self.assertContains(response, "mecanico@jawinsa.test")
         self.assertContains(response, "ClaveCompartida123!")
+        self.assertContains(response, 'data-auth-unlock-state="unlocked"')
 
     @override_settings(TEST_ACCOUNTS_UNLOCK_PASSWORD="")
     def test_unlock_route_is_unavailable_without_configuration(self):
